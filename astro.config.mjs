@@ -10,6 +10,10 @@ export default defineConfig({
   site: 'https://stroomperformance.com',
   adapter: vercel(),
   trailingSlash: 'never',
+  // Dev-only overlay 504s under this Vite/Astro version pairing (unrelated
+  // to the site itself — production build is unaffected). Disabled to keep
+  // the dev console clean; safe to re-enable if a future Astro bump fixes it.
+  devToolbar: { enabled: false },
   integrations: [
     sitemap(),
     react(),

@@ -19,14 +19,16 @@ const {
   title,
   description,
   schema,
-  ogImage = '/og-default.svg',
+  ogImage,
   ogType = 'website',
   canonicalUrl = Astro.url.href,
 } = Astro.props;
 
 const ogSub = 'High-Altitude Performance Parts · No Prep / Index';
-const ogImageUrl = ogImage.startsWith('http')
-  ? ogImage
+// Default: per-page dynamic OG card via /api/og. Pages can override with a
+// static image (e.g. ogImage="/og-default.svg") to skip the dynamic render.
+const ogImageUrl = ogImage
+  ? ogImage.startsWith('http') ? ogImage : `${site.url}${ogImage}`
   : `${site.url}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(ogSub)}`;
 ---
 
@@ -36,10 +38,10 @@ const ogImageUrl = ogImage.startsWith('http')
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts: Chakra Petch (technical/motorsport display) + Barlow (industrial body) -->
+    <!-- Fonts: Archivo (expanded width axis, technical/motorsport display) + Hanken Grotesk (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght,wdth@0,600..900,100..125;1,600..900,100..125&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <meta name="view-transition" content="same-origin" />
 
@@ -65,7 +67,7 @@ const ogImageUrl = ogImage.startsWith('http')
     <meta name="twitter:image" content={ogImageUrl} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#12161c" />
+    <meta name="theme-color" content="#16171a" />
 
     <!-- WebMCP polyfill — exposes the store's object model to AI agents -->
     <script src="https://unpkg.com/@mcp-b/global/dist/index.min.js" is:inline></script>

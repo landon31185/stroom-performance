@@ -1,9 +1,10 @@
 import { ImageResponse } from '@vercel/og';
 import type { APIRoute } from 'astro';
+import { brandColors } from '../../lib/site';
 
 export const prerender = false;
 
-// Dark, technical OG card matching the Stroom brand (electric accent on charcoal).
+// Dark, technical OG card matching the Stroom brand (Moto Stencil: orange on near-black).
 export const GET: APIRoute = async ({ url }) => {
   const title = url.searchParams.get('title') || 'Stroom Performance';
   const sub = url.searchParams.get('description') || 'High-Altitude Performance Parts';
@@ -19,7 +20,7 @@ export const GET: APIRoute = async ({ url }) => {
           width: '100%',
           height: '100%',
           padding: '72px 80px',
-          background: 'oklch(0.17 0.012 250)',
+          background: brandColors.ink,
           fontFamily: 'system-ui, sans-serif',
         },
         children: [
@@ -31,18 +32,18 @@ export const GET: APIRoute = async ({ url }) => {
                 {
                   type: 'span',
                   props: {
-                    style: { color: 'white', fontSize: '22px', fontWeight: '700', letterSpacing: '0.02em', textTransform: 'uppercase' },
+                    style: { color: brandColors.paper, fontSize: '22px', fontWeight: '700', letterSpacing: '0.02em', textTransform: 'uppercase' },
                     children: 'Stroom',
                   },
                 },
                 {
                   type: 'span',
-                  props: { style: { color: 'oklch(0.74 0.15 230)', fontSize: '22px', fontWeight: '700' }, children: '/' },
+                  props: { style: { color: brandColors.orange, fontSize: '22px', fontWeight: '700' }, children: '/' },
                 },
                 {
                   type: 'span',
                   props: {
-                    style: { color: 'white', fontSize: '22px', fontWeight: '700', letterSpacing: '0.02em', textTransform: 'uppercase' },
+                    style: { color: brandColors.paper, fontSize: '22px', fontWeight: '700', letterSpacing: '0.02em', textTransform: 'uppercase' },
                     children: 'Performance',
                   },
                 },
@@ -58,7 +59,7 @@ export const GET: APIRoute = async ({ url }) => {
                   type: 'div',
                   props: {
                     style: {
-                      color: 'white',
+                      color: brandColors.paper,
                       fontSize: title.length > 40 ? '52px' : '66px',
                       fontWeight: '800',
                       lineHeight: '1.05',
@@ -72,7 +73,7 @@ export const GET: APIRoute = async ({ url }) => {
                 {
                   type: 'div',
                   props: {
-                    style: { color: 'oklch(0.74 0.15 230)', fontSize: '26px', fontWeight: '500', letterSpacing: '0.01em' },
+                    style: { color: brandColors.orange, fontSize: '26px', fontWeight: '500', letterSpacing: '0.01em' },
                     children: sub,
                   },
                 },
@@ -89,8 +90,9 @@ export const GET: APIRoute = async ({ url }) => {
                   props: {
                     style: {
                       padding: '10px 22px',
-                      background: 'oklch(0.74 0.15 230)',
-                      color: 'oklch(0.17 0.012 250)',
+                      background: brandColors.orange,
+                      // Text ON solid orange must be dark ink, never white/paper (contrast rule).
+                      color: brandColors.ink,
                       fontSize: '16px',
                       fontWeight: '700',
                       textTransform: 'uppercase',
@@ -101,7 +103,7 @@ export const GET: APIRoute = async ({ url }) => {
                 },
                 {
                   type: 'span',
-                  props: { style: { color: 'oklch(0.74 0.010 250)', fontSize: '16px' }, children: 'stroomperformance.com' },
+                  props: { style: { color: brandColors.muted, fontSize: '16px' }, children: 'stroomperformance.com' },
                 },
               ],
             },

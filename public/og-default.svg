@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!--
+    Static fallback OG card (used only if a page explicitly opts out of the
+    dynamic /api/og render). Mirrors src/pages/api/og.ts — keep colors in
+    sync with src/lib/site.ts brandColors if the palette changes.
+  -->
+  <style>
+    :root {
+      --stroom-ink: #16171a;
+      --stroom-paper: #f1efec;
+      --stroom-orange: #e8672e;
+      --stroom-muted: #8b8b8b;
+    }
+    .wordmark { font-family: Archivo, Arial, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; fill: var(--stroom-paper); }
+    .slash { font-family: Archivo, Arial, sans-serif; font-weight: 700; font-size: 22px; fill: var(--stroom-orange); }
+    .title { font-family: Archivo, Arial, sans-serif; font-weight: 800; font-size: 60px; letter-spacing: -0.02em; text-transform: uppercase; fill: var(--stroom-paper); }
+    .tagline { font-family: Hanken Grotesk, Arial, sans-serif; font-weight: 500; font-size: 26px; fill: var(--stroom-orange); }
+    .badge-text { font-family: Archivo, Arial, sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.03em; text-transform: uppercase; fill: var(--stroom-ink); }
+    .domain { font-family: Hanken Grotesk, Arial, sans-serif; font-size: 16px; fill: var(--stroom-muted); }
+  </style>
+
+  <rect width="1200" height="630" fill="var(--stroom-ink)" />
+
+  <text x="80" y="112" class="wordmark">STROOM</text>
+  <text x="222" y="112" class="slash">/</text>
+  <text x="240" y="112" class="wordmark">PERFORMANCE</text>
+
+  <text x="80" y="330" class="title">HIGH-ALTITUDE</text>
+  <text x="80" y="398" class="title">PERFORMANCE PARTS</text>
+  <text x="80" y="448" class="tagline">No Prep / Index drag racing, proven at density altitude.</text>
+
+  <rect x="80" y="500" width="384" height="42" fill="var(--stroom-orange)" />
+  <text x="100" y="527" class="badge-text">NO PREP · INDEX · DENSITY ALTITUDE</text>
+  <text x="490" y="527" class="domain">stroomperformance.com</text>
+</svg>

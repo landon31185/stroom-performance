@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    Placeholder mark — "04 Moto Stencil" direction (dark badge + orange slash).
+    Swap this file wholesale once Jake's real logo asset is ready; colors are
+    tokenized below so a palette tweak only needs one edit.
+  -->
+  <style>
+    :root {
+      --stroom-ink: #16171a;
+      --stroom-orange: #e8672e;
+      --stroom-paper: #f1efec;
+    }
+  </style>
+  <path d="M3 3h22l4 4v22H7l-4-4z" fill="var(--stroom-ink)" />
+  <path d="M3 22l7 7h19v-7z" fill="var(--stroom-orange)" />
+  <text x="13" y="19" text-anchor="middle" font-family="Archivo, Arial, sans-serif" font-weight="800" font-size="15" fill="var(--stroom-paper)">S</text>
+</svg>

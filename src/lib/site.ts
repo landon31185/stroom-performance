@@ -1,6 +1,20 @@
 // Single source of truth for brand identity + facet taxonomy.
 // TODO(stroom): confirm domain, YouTube URL, and contact email with Jake.
 
+// Brand color tokens. Mirrors the CSS custom properties in
+// src/styles/global.css (--color-ink, --color-paper, --color-orange,
+// --color-muted) — update both places together. This copy exists because
+// @vercel/og (Satori) can't read CSS custom properties, so anywhere that
+// generates images outside the page (e.g. api/og.ts) imports from here
+// instead of hardcoding hex values.
+export const brandColors = {
+  ink: '#16171a',
+  paper: '#f1efec',
+  orange: '#e8672e',
+  orangeInk: '#b8480e',
+  muted: '#8b8b8b',
+} as const;
+
 export const site = {
   name: 'Stroom Performance',
   // TODO(stroom): real production domain (placeholder until registered).

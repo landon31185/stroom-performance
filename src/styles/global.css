@@ -1,29 +1,35 @@
 @import "tailwindcss";
 
 /* ─── Design Tokens ──────────────────────────────────────────────────
-   Stroom = Dutch for "electric current." Dark industrial base with a
-   charged-electric accent, plus a hazard amber reserved for the
-   altitude / density-altitude callouts that define the niche.
-   Colors in OKLCH. Contrast verified against WCAG 2.1 AA on the dark base.
+   Brand: "04 Moto Stencil" — dark SP badge + orange accent slash.
+   Authentic motorsport/decal energy. Dark-forward chrome (header, footer,
+   hero) with a single orange accent; the altitude/DA moat callouts reuse
+   that same orange rather than a second hue. See Brand Tokens note.
+   Rule: text ON solid orange must be dark ink, never white/paper
+   (black-on-orange ≈ 6.4:1 AA pass; white-on-orange ≈ 3.3:1 fails).
 ──────────────────────────────────────────────────────────────────── */
 
 @theme {
-  --color-base:        oklch(0.17 0.012 250);   /* page background — deep charcoal */
-  --color-surface:     oklch(0.21 0.014 250);   /* cards / panels */
-  --color-surface-2:   oklch(0.25 0.016 250);   /* raised panels */
-  --color-line:        oklch(0.31 0.015 250);   /* borders / dividers */
-  --color-ink:         oklch(0.96 0.005 250);   /* primary text (≈16:1 on base) */
-  --color-ink-muted:   oklch(0.74 0.010 250);   /* secondary text (≈6:1 on base) */
+  --color-ink:          #16171a;   /* primitive near-black — dark badge/wordmark/sections */
+  --color-paper:        #f1efec;   /* primitive warm off-white — light content sections */
+  --color-orange:       #e8672e;   /* primitive brand orange — mark, accents, headings */
+  --color-orange-ink:   #b8480e;   /* orange text on light bg (AA-safe, small text) */
+  --color-muted:        #8b8b8b;   /* secondary/labels, both modes */
 
-  --color-accent:      oklch(0.74 0.150 230);   /* electric blue — the "current" */
-  --color-accent-hi:   oklch(0.82 0.140 230);   /* hover / emphasis */
-  --color-accent-dim:  oklch(0.40 0.090 230);   /* subtle accent surfaces */
+  --color-base:         var(--color-ink);      /* page background — dark-forward */
+  --color-surface:      #1d1e22;                /* cards / panels */
+  --color-surface-2:    #26272c;                /* raised panels */
+  --color-line:         #313236;                /* borders / dividers */
+  --color-ink-text:      var(--color-paper);     /* primary text on dark (≈16:1) */
+  --color-ink-muted:    var(--color-muted);     /* secondary text on dark */
 
-  --color-hazard:      oklch(0.80 0.150 80);    /* altitude / DA callouts only */
-  --color-hazard-dim:  oklch(0.34 0.070 80);
+  --color-accent:       var(--color-orange);
+  --color-accent-hi:    #f0824f;                /* hover / emphasis, lighter orange */
+  --color-accent-dim:   #6b3216;                /* subtle accent surfaces on dark */
+  --color-accent-ink:   var(--color-ink);       /* required text color ON solid orange */
 
-  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Chakra Petch", "Barlow", ui-sans-serif, sans-serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "Hanken Grotesk", ui-sans-serif, sans-serif;
 }
 
 /* ─── Base ───────────────────────────────────────────────────────── */
@@ -33,13 +39,14 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-sans);
   background-color: var(--color-base);
-  color: var(--color-ink);
+  color: var(--color-ink-text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
+  font-stretch: 125%;
   text-wrap: balance;
   letter-spacing: -0.01em;
 }
@@ -82,12 +89,12 @@ a { color: inherit; }
   text-transform: uppercase;
 }
 .accent { color: var(--color-accent); }
-.hazard { color: var(--color-hazard); }
+.hazard { color: var(--color-accent); }
 .muted { color: var(--color-ink-muted); }
 
 /* Monospaced tech readout, e.g. "6,600 ft DA" */
 .readout {
-  font-family: "Chakra Petch", ui-monospace, monospace;
+  font-family: ui-monospace, "SF Mono", monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
 }
@@ -105,7 +112,7 @@ a { color: inherit; }
   gap: 0.5rem;
   padding: 0.8125rem 1.75rem;
   background: var(--color-accent);
-  color: var(--color-base);
+  color: var(--color-accent-ink);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -125,7 +132,7 @@ a { color: inherit; }
   gap: 0.5rem;
   padding: 0.8125rem 1.75rem;
   background: transparent;
-  color: var(--color-ink);
+  color: var(--color-ink-text);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -163,17 +170,17 @@ a { color: inherit; }
   border: 1px solid var(--color-accent-dim);
 }
 .tag-hazard {
-  color: var(--color-hazard);
-  background: color-mix(in oklab, var(--color-hazard) 12%, transparent);
-  border-color: var(--color-hazard-dim);
+  color: var(--color-accent);
+  background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+  border-color: var(--color-accent-dim);
 }
 
 /* ─── Altitude / Fitment callout ─────────────────────────────────── */
 
 .altitude-panel {
-  background: color-mix(in oklab, var(--color-hazard) 8%, var(--color-surface));
-  border: 1px solid var(--color-hazard-dim);
-  border-left: 3px solid var(--color-hazard);
+  background: color-mix(in oklab, var(--color-accent) 8%, var(--color-surface));
+  border: 1px solid var(--color-accent-dim);
+  border-left: 3px solid var(--color-accent);
   padding: 1.25rem 1.5rem;
 }
 
@@ -201,11 +208,12 @@ a { color: inherit; }
 .wordmark {
   font-family: var(--font-display);
   font-weight: 700;
+  font-stretch: 125%;
   font-size: 1.125rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--color-ink);
+  color: var(--color-ink-text);
 }
 .wordmark .spark { color: var(--color-accent); }
 
@@ -227,7 +235,7 @@ a { color: inherit; }
 .menu-line {
   display: block;
   height: 2px;
-  background: var(--color-ink);
+  background: var(--color-ink-text);
   transform-origin: center;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, width 0.3s ease, background 0.3s ease;
 }
@@ -275,7 +283,7 @@ a { color: inherit; }
   text-transform: uppercase;
   line-height: 1.15;
   padding: 0.5rem 0;
-  color: var(--color-ink);
+  color: var(--color-ink-text);
   text-decoration: none;
   border-bottom: 1px solid var(--color-line);
   transition: color 0.15s ease;
@@ -303,7 +311,7 @@ a { color: inherit; }
 .breadcrumb li { display: flex; align-items: center; gap: 0.375rem; }
 .breadcrumb a { text-decoration: none; transition: color 0.15s ease; }
 .breadcrumb a:hover { color: var(--color-accent); }
-.breadcrumb [aria-current="page"] { color: var(--color-ink); }
+.breadcrumb [aria-current="page"] { color: var(--color-ink-text); }
 .breadcrumb .sep { color: var(--color-line); }
 
 /* ─── Prose (guides / long-form) ─────────────────────────────────── */
