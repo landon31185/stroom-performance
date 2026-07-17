@@ -7,6 +7,19 @@
    that same orange rather than a second hue. See Brand Tokens note.
    Rule: text ON solid orange must be dark ink, never white/paper
    (black-on-orange ≈ 6.4:1 AA pass; white-on-orange ≈ 3.3:1 fails).
+
+   Two layers, on purpose:
+   1. Primitives (--color-ink/-paper/-orange/-muted) — the raw palette.
+      Swapping the brand later means editing only these five lines.
+   2. Semantic roles (--color-base, --color-surface, --color-ink-text, ...)
+      — what components actually use. Nothing outside this block, and no
+      component, should reference a primitive directly (--color-accent-ink
+      and --color-base are the two intentional exceptions, since the brand
+      rule ties them to the ink primitive regardless of theme).
+   This split is also what makes a light mode cheap later: a
+   `:root[data-theme="light"] { --color-base: var(--color-paper); ... }`
+   override block only needs to reassign the semantic layer — components
+   never change.
 ──────────────────────────────────────────────────────────────────── */
 
 @theme {
@@ -26,7 +39,7 @@
   --color-accent:       var(--color-orange);
   --color-accent-hi:    #f0824f;                /* hover / emphasis, lighter orange */
   --color-accent-dim:   #6b3216;                /* subtle accent surfaces on dark */
-  --color-accent-ink:   var(--color-ink);       /* required text color ON solid orange */
+  --color-accent-ink:   var(--color-ink);       /* required text color ON solid orange — always the ink primitive, not theme-dependent */
 
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Archivo", "Hanken Grotesk", ui-sans-serif, sans-serif;
@@ -144,6 +157,17 @@ a { color: inherit; }
   text-decoration: none;
 }
 .btn-outline:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* ─── Form fields ────────────────────────────────────────────────── */
+
+.form-field {
+  background: var(--color-base);
+  border: 1px solid var(--color-line);
+  color: var(--color-ink-text);
+  padding: 0.65rem 0.75rem;
+  font-family: var(--font-sans);
+}
+textarea.form-field { resize: vertical; }
 
 /* ─── Cards ──────────────────────────────────────────────────────── */
 
