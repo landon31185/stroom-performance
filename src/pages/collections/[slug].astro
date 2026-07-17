@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('categories');
+  const products = await getCollection('products');
+  return categories.map((cat) => {
+    const slug = cat.id;
+    const inFacet = products
+      .filter((p) =>
+        cat.data.facet === 'system'
+          ? p.data.system === slug
+          : p.data.raceStyles.includes(slug as never),
+      )
+      .sort((a, b) => a.data.order - b.data.order);
+    return { params: { slug }, props: { category: cat.data, slug, products: inFacet } };
+  });
+}
+
+const { category, slug, products } = Astro.props;
+const facetLabel = category.facet === 'system' ? 'System' : 'Racing Style';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${category.name} — Stroom Performance`,
+  url: `${site.url}/collections/${slug}`,
+  description: category.description,
+  isPartOf: { '@id': `${site.url}/#store` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.data.title,
+      url: `${site.url}/products/${p.id}`,
+    })),
+  },
+});
+---
+
+<BaseLayout
+  title={`${category.name} Parts | Stroom Performance`}
+  description={category.description}
+  schema={`<script type="application/ld+json">${schema}<\/script>`}
+>
+  <section class="wrap" style="padding-block:3rem 2rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: category.name }]} />
+    <p class="label-small accent">{facetLabel}</p>
+    <h1 class="heading-section" style="margin-top:0.5rem;">{category.name}</h1>
+    <p class="muted" style="margin-top:0.75rem;max-width:62ch;line-height:1.7;">{category.description}</p>
+  </section>
+
+  <section class="wrap" style="padding-bottom:4rem;">
+    {products.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {products.map((p) => (
+          <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+        ))}
+      </div>
+    ) : (
+      <div class="altitude-panel">
+        <p class="heading-card">Parts coming soon</p>
+        <p class="muted" style="margin-top:0.5rem;max-width:52ch;">
+          We're opening supplier accounts for this category now. Are you a
+          manufacturer or distributor? <a href="/wholesale" style="color:var(--color-accent);">Start a wholesale inquiry →</a>
+        </p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

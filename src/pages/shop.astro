@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { systems, raceStyles, site } from '../lib/site';
+
+const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Shop All Parts — Stroom Performance',
+  url: `${site.url}/shop`,
+  isPartOf: { '@id': `${site.url}/#store` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.data.title,
+      url: `${site.url}/products/${p.id}`,
+    })),
+  },
+});
+---
+
+<BaseLayout
+  title="Shop All Parts | Stroom Performance"
+  description="Browse Stroom Performance parts by system (Fuel, Engine, Drivetrain, Electronics, Safety) and racing style (No Prep, Index, Street/Strip). Catalog launching soon."
+  schema={`<script type="application/ld+json">${schema}<\/script>`}
+>
+  <section class="wrap" style="padding-block:3rem 2rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop' }]} />
+    <h1 class="heading-section">Shop All Parts</h1>
+    <p class="muted" style="margin-top:0.75rem;max-width:60ch;">
+      Curated for high-altitude drag racing. Live pricing and checkout arrive as
+      supplier accounts open — every listing carries Stroom-authored fitment and
+      density-altitude notes.
+    </p>
+  </section>
+
+  <section class="wrap" style="padding-bottom:2.5rem;">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">By System</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          {systems.map((s) => (
+            <a href={`/collections/${s.slug}`} class="tag" style="text-decoration:none;">{s.name}</a>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">By Racing Style</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          {raceStyles.map((r) => (
+            <a href={`/collections/${r.slug}`} class="tag tag-hazard" style="text-decoration:none;">{r.name}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:4rem;">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {products.map((p) => (
+        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

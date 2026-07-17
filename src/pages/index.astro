@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { site, systems, raceStyles } from '../lib/site';
+
+const products = await getCollection('products');
+const featured = products.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
+const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
+---
+
+<BaseLayout
+  title="Stroom Performance — High-Altitude Drag Racing Parts"
+  description="Performance parts curated for high-altitude No-Prep and Index drag racing. Fuel, boost, converters, and tuning proven at density altitude by the Stroom Performance channel."
+>
+  <!-- Hero -->
+  <section style="position:relative;overflow:hidden;border-bottom:1px solid var(--color-line);">
+    <div class="wrap" style="padding-block:clamp(4rem,10vw,7rem);position:relative;z-index:1;">
+      <p class="label-small accent reveal">No Prep · Index · Density Altitude</p>
+      <h1 class="heading-hero reveal" style="margin-top:1rem;max-width:16ch;">
+        Parts proven where the <span class="accent">air runs thin</span>.
+      </h1>
+      <p class="body-large muted reveal" style="margin-top:1.5rem;max-width:52ch;">
+        Stroom Performance is a specialist store for high-altitude drag racing —
+        where density altitude, hypoxia, and un-prepped surfaces change every
+        tuning decision. Built on the runs, not a catalog someone handed us.
+      </p>
+      <div class="reveal" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2rem;">
+        <a href="/wholesale" class="btn-primary">Become a Dealer</a>
+        <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">Watch the Builds</a>
+      </div>
+      <p class="muted reveal" style="margin-top:1.25rem;font-size:0.8125rem;">
+        Storefront launching soon — <a href="/wholesale" style="color:var(--color-accent);">suppliers & wholesalers start here</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Credibility strip -->
+  <section class="wrap" style="padding-block:2.5rem;border-bottom:1px solid var(--color-line);">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="reveal">
+        <p class="heading-card accent">A YouTube-first following</p>
+        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">The audience already exists. The channel documents real builds, real failures, and real fixes at altitude.</p>
+      </div>
+      <div class="reveal">
+        <p class="heading-card accent">6,600 ft home DA</p>
+        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">Every part earns its place on a car that races where thin air is the default, not the exception.</p>
+      </div>
+      <div class="reveal">
+        <p class="heading-card accent">The altitude moat</p>
+        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">Nobody else answers "will this work at my density altitude?" — that's the whole reason Stroom exists.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop by System -->
+  <section class="wrap" style="padding-block:4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.75rem;">
+      <h2 class="heading-section">Shop by System</h2>
+      <a href="/shop" class="nav-link accent">All parts →</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {systems.map((s) => (
+        <a href={`/collections/${s.slug}`} class="card reveal" style="padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:0.5rem;">
+          <h3 class="heading-card">{s.name}</h3>
+          <p class="muted" style="font-size:0.9375rem;line-height:1.55;">{s.blurb}</p>
+          <span class="nav-link accent" style="margin-top:auto;padding-top:0.5rem;">Browse {s.name} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Shop by Racing Style -->
+  <section style="background:var(--color-surface);border-block:1px solid var(--color-line);">
+    <div class="wrap" style="padding-block:4rem;">
+      <h2 class="heading-section" style="margin-bottom:1.75rem;">Shop by Racing Style</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {raceStyles.map((r) => (
+          <a href={`/collections/${r.slug}`} class="card reveal" style="padding:1.5rem;text-decoration:none;background:var(--color-surface-2);display:flex;flex-direction:column;gap:0.5rem;">
+            <span class="tag tag-hazard">{r.name}</span>
+            <p class="muted" style="font-size:0.9375rem;line-height:1.55;margin-top:0.25rem;">{r.blurb}</p>
+            <span class="nav-link accent" style="margin-top:auto;padding-top:0.5rem;">Browse →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Representative parts -->
+  <section class="wrap" style="padding-block:4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:0.5rem;">
+      <h2 class="heading-section">Representative Parts</h2>
+      <a href="/shop" class="nav-link accent">See all →</a>
+    </div>
+    <p class="muted" style="margin-bottom:1.75rem;max-width:60ch;">
+      A preview of the kind of parts Stroom will carry. Catalog and live pricing
+      arrive as supplier accounts open — these show the fitment and altitude
+      detail every listing will get.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {featured.map((p) => (
+        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Guides teaser -->
+  <section style="background:var(--color-surface);border-block:1px solid var(--color-line);">
+    <div class="wrap" style="padding-block:4rem;">
+      <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.75rem;">
+        <h2 class="heading-section">Guides & How-To</h2>
+        <a href="/guides" class="nav-link accent">All guides →</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {guides.map((g) => (
+          <a href={`/guides/${g.id}`} class="card" style="padding:1.5rem;text-decoration:none;background:var(--color-surface-2);">
+            <span class="tag">{g.data.difficulty}</span>
+            <h3 class="heading-card" style="margin-top:0.75rem;">{g.data.title}</h3>
+            <p class="muted" style="font-size:0.9375rem;line-height:1.55;margin-top:0.5rem;">{g.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Wholesale CTA band -->
+  <section class="wrap" style="padding-block:4.5rem;">
+    <div class="altitude-panel" style="display:flex;flex-direction:column;gap:1rem;align-items:start;">
+      <span class="tag tag-hazard">For Suppliers & Wholesalers</span>
+      <h2 class="heading-section" style="max-width:22ch;">Want your parts in front of the altitude-racing crowd?</h2>
+      <p class="muted" style="max-width:60ch;line-height:1.7;">
+        Stroom brings an engaged, high-intent audience and a niche nobody else
+        owns. We're opening drop-ship and dealer accounts now. Tell us what you
+        build and let's talk terms.
+      </p>
+      <a href="/wholesale" class="btn-primary">Start a Wholesale Inquiry</a>
+    </div>
+  </section>
+</BaseLayout>

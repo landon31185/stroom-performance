@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { site, systems } from '../lib/site';
+
+const valueProps = [
+  { h: 'A built-in audience', p: 'The Stroom Performance YouTube channel already has a following of high-intent altitude racers — the exact buyers for your parts.' },
+  { h: 'A niche nobody owns', p: 'No competitor answers "will this work at my density altitude?" We do. Your parts get positioned against a real, defensible differentiator.' },
+  { h: 'Content that sells', p: 'Every part can be featured in a build or guide video — proof of the part working at altitude, wired straight to a shoppable listing.' },
+  { h: 'Lean drop-ship model', p: 'We carry the audience and the fitment expertise; you keep the inventory and fulfillment. Clean drop-ship terms, no dead stock on our side.' },
+];
+---
+
+<BaseLayout
+  title="Wholesale & Dealer Inquiries | Stroom Performance"
+  description="Manufacturers and distributors: put your performance parts in front of the high-altitude No-Prep and Index racing audience. Stroom is opening drop-ship and dealer accounts now."
+>
+  <section class="wrap" style="padding-block:3rem 1rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Wholesale' }]} />
+    <span class="tag tag-hazard">For Suppliers & Manufacturers</span>
+    <h1 class="heading-hero" style="margin-top:1rem;max-width:16ch;font-size:clamp(2.25rem,6vw,4rem);">
+      Sell to the <span class="accent">altitude crowd</span>.
+    </h1>
+    <p class="body-large muted" style="margin-top:1.25rem;max-width:56ch;">
+      Stroom Performance is building the go-to store for high-altitude drag
+      racing parts. We're opening drop-ship and dealer accounts now — before the
+      public catalog launches. If you build fuel, boost, converter, EFI, or
+      safety parts that survive thin air, let's talk.
+    </p>
+  </section>
+
+  <!-- Value props -->
+  <section class="wrap" style="padding-block:3rem;">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {valueProps.map((v) => (
+        <div class="card" style="padding:1.5rem;">
+          <h2 class="heading-card accent">{v.h}</h2>
+          <p class="muted" style="margin-top:0.5rem;line-height:1.6;">{v.p}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Inquiry form -->
+  <section class="wrap" style="padding-block:2rem 5rem;">
+    <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10">
+      <div>
+        <h2 class="heading-section">Start an inquiry</h2>
+        <p class="muted" style="margin-top:0.75rem;line-height:1.7;">
+          Tell us what you make and how you prefer to work. We'll follow up to
+          set up a dealer or drop-ship account.
+        </p>
+        <p class="muted" style="margin-top:1.5rem;font-size:0.9375rem;">
+          Prefer email? Reach us directly at
+          <a href={`mailto:${site.wholesaleEmail}`} style="color:var(--color-accent);">{site.wholesaleEmail}</a>.
+        </p>
+      </div>
+
+      <!--
+        TODO(stroom): this form is not wired to a backend yet. Options:
+          - Formspree / Basin / Web3Forms (set `action` to the endpoint), or
+          - a Vercel serverless function under src/pages/api/ that emails Jake.
+        Until then it falls back to the mailto above.
+      -->
+      <form action={`mailto:${site.wholesaleEmail}`} method="post" enctype="text/plain" class="card" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:grid;gap:0.35rem;">
+          <label for="company" class="label-small muted">Company / Brand</label>
+          <input id="company" name="company" type="text" required style="background:var(--color-base);border:1px solid var(--color-line);color:var(--color-ink);padding:0.65rem 0.75rem;font-family:var(--font-sans);" />
+        </div>
+        <div style="display:grid;gap:0.35rem;">
+          <label for="email" class="label-small muted">Email</label>
+          <input id="email" name="email" type="email" required style="background:var(--color-base);border:1px solid var(--color-line);color:var(--color-ink);padding:0.65rem 0.75rem;font-family:var(--font-sans);" />
+        </div>
+        <div style="display:grid;gap:0.35rem;">
+          <label for="systems" class="label-small muted">What do you build?</label>
+          <select id="systems" name="systems" style="background:var(--color-base);border:1px solid var(--color-line);color:var(--color-ink);padding:0.65rem 0.75rem;font-family:var(--font-sans);">
+            {systems.map((s) => <option value={s.slug}>{s.name}</option>)}
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div style="display:grid;gap:0.35rem;">
+          <label for="message" class="label-small muted">Tell us about your parts & terms</label>
+          <textarea id="message" name="message" rows="4" style="background:var(--color-base);border:1px solid var(--color-line);color:var(--color-ink);padding:0.65rem 0.75rem;font-family:var(--font-sans);resize:vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="justify-content:center;">Send inquiry</button>
+        <p class="muted" style="font-size:0.75rem;text-align:center;">TODO(stroom): connect to a real form endpoint before launch.</p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

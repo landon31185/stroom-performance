@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout
+  title="About | Stroom Performance"
+  description="Stroom Performance started on YouTube, wrenching on a real high-altitude drag car. The store exists to sell the parts that actually work where the air runs thin."
+>
+  <section class="wrap" style="padding-block:3rem 2rem;max-width:48rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+    <h1 class="heading-section">Built on the runs, not a catalog.</h1>
+
+    <div class="prose-section" style="margin-top:1.5rem;border-bottom:none;">
+      <p>
+        Stroom Performance started where a lot of good things do — on the
+        internet, wrenching on a race car and posting the results. Cutting a trap
+        door with the "Death Wheel" to service a fuel pump. Chasing a converter
+        that would actually flash right at altitude. Reading data logs to figure
+        out why a run went sideways on an un-prepped surface.
+      </p>
+      <p>
+        That's the whole idea behind the store. Most performance shops assume sea
+        level. We don't. Racing at high <span class="hazard">density altitude</span>
+        changes everything — the engine fights hypoxia, the converter behaves
+        differently, and the fuel math moves. The parts we'll sell are the parts
+        that survived those conditions on our own car first.
+      </p>
+      <h2>Why the niche matters</h2>
+      <p>
+        Ask most stores for a torque converter and they ask for your car. We ask
+        for your car <em>and your altitude</em>. That single question — "will this
+        work at my DA?" — is something nobody else answers well. It's the reason
+        Stroom exists, and it's the thread that runs through every listing,
+        guide, and build on this site.
+      </p>
+      <h2>What's next</h2>
+      <p>
+        The storefront is launching in stages as supplier accounts come online.
+        In the meantime, the <a href="/guides">guides</a> and
+        <a href="/builds">builds</a> carry the expertise, and the
+        <a href={site.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>
+        keeps documenting the work. Manufacturers and distributors who want in
+        can <a href="/wholesale">start a wholesale inquiry</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+import { raceStyleName } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const builds = await getCollection('builds');
+  const products = await getCollection('products');
+  return builds.map((b) => {
+    const parts = products.filter((p) => b.data.partsUsed.includes(p.id));
+    return { params: { slug: b.id }, props: { build: b, parts } };
+  });
+}
+
+const { build, parts } = Astro.props;
+const d = build.data;
+const { Content } = await render(build);
+---
+
+<BaseLayout title={`${d.title} | Stroom Performance`} description={d.description} ogType="article">
+  <div class="wrap" style="padding-block:3rem 4rem;max-width:52rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Builds', href: '/builds' }, { label: d.title }]} />
+
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+      {d.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
+      {d.videoUrl && <a href={d.videoUrl} target="_blank" rel="noopener noreferrer" class="tag" style="text-decoration:none;">YouTube</a>}
+    </div>
+    <h1 class="heading-section">{d.title}</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-4" style="margin-top:1.5rem;max-width:28rem;">
+      <div class="card" style="padding:1rem;">
+        <p class="muted label-small">Vehicle</p>
+        <p style="margin-top:0.25rem;">{d.vehicle}</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <p class="muted label-small">Home DA</p>
+        <p class="readout" style="margin-top:0.25rem;">{d.altitude}</p>
+      </div>
+    </div>
+
+    <div class="prose-section" style="margin-top:2rem;border-top:1px solid var(--color-line);padding-top:2rem;border-bottom:none;">
+      <Content />
+    </div>
+
+    {parts.length > 0 && (
+      <div class="altitude-panel">
+        <p class="label-small hazard">Parts on this build</p>
+        <ul style="margin-top:0.75rem;list-style:none;padding:0;">
+          {parts.map((p) => (
+            <li style="margin-bottom:0.5rem;">
+              <a href={`/products/${p.id}`} class="nav-link accent" style="text-transform:none;letter-spacing:0;font-size:0.9375rem;">{p.data.title} →</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+</BaseLayout>

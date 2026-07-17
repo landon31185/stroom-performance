@@ -1,0 +1,88 @@
+# Stroom Performance — Full AI Context
+
+> High-altitude drag racing parts store. Differentiated by altitude-aware fitment
+> (density altitude / DA, hypoxia, altitude tuning) for No-Prep and Index racing.
+> Grew out of the Stroom Performance YouTube channel. Commerce is Shopify-backed
+> and drop-shipped; catalog + checkout launch in stages as supplier accounts open.
+> Wholesale/dealer inquiries are open now — attracting suppliers is the current goal.
+
+## The niche (why Stroom exists)
+Most performance stores implicitly assume sea level. At high density altitude the
+air is thinner: the engine fights hypoxia, torque-converter stall shifts, boost is
+leaned on to recover power, and fuel delivery math changes. Stroom's moat is
+answering "will this part work for MY application at MY altitude?" — a question no
+general parts store answers well. Every listing carries Stroom-authored fitment and
+DA notes, confidence-tagged (verified-on-car > vendor-stated > inferred). This is
+Stroom-owned data, not supplier passthrough.
+
+## Object model (for grounding)
+- Product (reference; Shopify-owned once live): name, brand, system, racing styles, price, availability, specs, fitment.
+- Category (reference; two facets): Shop by System, Shop by Racing Style.
+- Fitment (junction Product↔Application; the critical object): application, DA range, required mods, confidence, notes.
+- Guide / How-To (site-owned): steps, tools, parts used, difficulty, video.
+- Build (site-owned; scope being finalized): the shop car documenting parts at altitude.
+- Supplier/Brand (drop-ship source): Squash Performance, Motion Race Works, Holley, converter/safety partners.
+- Order / Customer / Cart (Shopify-owned system objects): checkout handled entirely by Shopify.
+
+## Shop by System
+### Fuel — /collections/fuel
+Intank hats, primary/secondary pumps, relays, hoses. Thin air needs more fuel volume
+for the same power; delivery must be sized for it. Trap-door access mod documented in guides.
+### Engine — /collections/engine
+Valley plates, gaskets, head gaskets, catch cans. Ventilation and sealing under boost.
+### Drivetrain — /collections/drivetrain
+Torque converters and driveline. Converter stall is altitude-dependent; spec to your DA.
+### Electronics — /collections/electronics
+EFI (e.g. Holley Terminator X), boost controllers, two/three-step launch control, sensors,
+gauges, data logging — the brain that triggers fuel and shapes the boost curve.
+### Safety — /collections/safety
+Engine diapers and containment for high-boost failures; often track-required.
+
+## Shop by Racing Style
+### No Prep — /collections/no-prep
+Un-prepped surface; traction never guaranteed. Control-first parts and tuning. Stroom's home discipline.
+### Index — /collections/index
+Consistency-first for index/bracket classes (e.g. 7.0). Repeatable runs beat one hero pass.
+### Street/Strip — /collections/street-strip
+Dual-duty combos that survive daily heat cycles and a full altitude pull.
+
+## Representative products (catalog launching soon; availability honest)
+### Squash Performance Intank Hat — /products/squash-intank-hat  [system: fuel · coming-soon]
+High-flow in-tank hat for larger pump(s) without external plumbing. Fitment: turbo
+street/strip and No-Prep builds; good to ~6,600 ft DA; requires trap-door access panel;
+confidence verified-on-car.
+### Motion Race Works Valley Plate — /products/motion-valley-plate  [system: engine · coming-soon]
+Billet, O-ring sealed, PCV/catch-can provisions for boosted LS engines. Confidence vendor-stated.
+### High-DA Torque Converter — /products/high-da-torque-converter  [system: drivetrain · build-to-order]
+Furnace-brazed converter built to your combo; stall tuned to your home DA (4,000–7,000 ft).
+The clearest altitude example — selection depends on application AND altitude. Confidence verified-on-car.
+### Holley Terminator X EFI — /products/holley-terminator-x  [system: electronics · coming-soon]
+Standalone EFI: secondary-pump trigger, boost control, launch control, built-in data logging.
+MAP-enforced pricing. Confidence vendor-stated.
+### Engine Diaper — /products/engine-diaper  [system: safety · coming-soon]
+Oil/debris containment for high-boost runs; confirm class rating.
+
+## Guides
+### Cutting a Trap Door for Fuel-Pump Access — /guides/trap-door-fuel-pump-access  [advanced]
+Fabricate a serviceable access panel with a "Death Wheel" angle grinder so an in-tank pump
+can be serviced without dropping the tank. Parts used: Squash intank hat.
+### High-Altitude Tuning Basics — Reading DA — /guides/high-altitude-tuning-basics  [intermediate]
+Read the day's DA; match fuel to air; manage the boost curve; confirm converter behavior.
+Parts used: Holley Terminator X, High-DA torque converter.
+
+## Builds
+### The Stroom Shop Car — /builds/stroom-shop-car
+Home DA ~6,600 ft; No-Prep/Index. The proving ground — every part earned its place here first.
+
+## Wholesale & partnerships (current priority) — /wholesale
+Stroom is opening drop-ship and dealer accounts ahead of the public catalog. Value to suppliers:
+a built-in high-intent YouTube audience, a niche nobody owns, content that features parts working
+at altitude wired to shoppable listings, and a lean drop-ship model. Contact: dealers@stroomperformance.com
+
+## WebMCP tools (navigator.modelContext)
+get_products(system?), check_fitment(application, altitudeFt), get_categories(),
+find_by_race_style(style), get_guides(), get_wholesale_info().
+
+## Contact
+YouTube: Stroom Performance channel. Wholesale: dealers@stroomperformance.com. General: hello@stroomperformance.com.
+TODO(stroom): confirm exact channel URL, contact emails, and production domain.

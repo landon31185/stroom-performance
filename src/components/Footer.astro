@@ -1,0 +1,50 @@
+---
+import { site, systems, raceStyles } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer style="background:var(--color-surface);border-top:1px solid var(--color-line);">
+  <div class="wrap" style="padding-block:3.5rem;">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-10" style="border-bottom:1px solid var(--color-line);">
+
+      <div>
+        <a href="/" class="wordmark" style="font-size:1rem;">Stroom<span class="spark">/</span>Performance</a>
+        <p class="muted" style="margin-top:0.75rem;font-size:0.875rem;line-height:1.6;max-width:24ch;">{site.tagline}</p>
+        <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="nav-link" style="display:inline-block;margin-top:1rem;color:var(--color-accent);">Watch on YouTube →</a>
+      </div>
+
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">Shop by System</p>
+        <ul style="font-size:0.875rem;line-height:2;">
+          {systems.map((s) => (
+            <li><a href={`/collections/${s.slug}`} class="nav-link" style="text-transform:none;letter-spacing:0;">{s.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">Racing Style</p>
+        <ul style="font-size:0.875rem;line-height:2;">
+          {raceStyles.map((r) => (
+            <li><a href={`/collections/${r.slug}`} class="nav-link" style="text-transform:none;letter-spacing:0;">{r.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">Company</p>
+        <ul style="font-size:0.875rem;line-height:2;">
+          <li><a href="/about" class="nav-link" style="text-transform:none;letter-spacing:0;">About</a></li>
+          <li><a href="/guides" class="nav-link" style="text-transform:none;letter-spacing:0;">Guides</a></li>
+          <li><a href="/builds" class="nav-link" style="text-transform:none;letter-spacing:0;">Builds</a></li>
+          <li><a href="/wholesale" class="nav-link" style="text-transform:none;letter-spacing:0;">Wholesale & Dealers</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-8 flex flex-col sm:flex-row justify-between gap-4" style="font-size:0.75rem;">
+      <p class="muted">&copy; {year} {site.name}. All rights reserved.</p>
+      <p class="muted">Catalog launching soon — parts proven at density altitude.</p>
+    </div>
+  </div>
+</footer>

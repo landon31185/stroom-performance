@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+import { site, systemName, raceStyleName } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((p) => ({ params: { slug: p.id }, props: { product: p } }));
+}
+
+const { product } = Astro.props;
+const d = product.data;
+const { Content } = await render(product);
+
+const availabilityMap: Record<string, string> = {
+  'in-stock': 'https://schema.org/InStock',
+  'build-to-order': 'https://schema.org/BackOrder',
+  'coming-soon': 'https://schema.org/PreOrder',
+};
+const availLabel: Record<string, string> = {
+  'in-stock': 'In stock',
+  'build-to-order': 'Build to order — lead time applies',
+  'coming-soon': 'Coming soon',
+};
+const confidenceLabel: Record<string, string> = {
+  'verified-on-car': 'Verified on our car',
+  'vendor-stated': 'Vendor-stated',
+  'inferred': 'Inferred — confirm before purchase',
+};
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: d.title,
+  description: d.summary,
+  brand: { '@type': 'Brand', name: d.brand },
+  category: systemName(d.system),
+  offers: {
+    '@type': 'Offer',
+    availability: availabilityMap[d.availability],
+    url: `${site.url}/products/${product.id}`,
+    seller: { '@id': `${site.url}/#store` },
+    ...(d.price ? { price: d.price.toFixed(2), priceCurrency: 'USD' } : {}),
+  },
+});
+---
+
+<BaseLayout
+  title={`${d.title} | Stroom Performance`}
+  description={d.summary}
+  ogType="article"
+  schema={`<script type="application/ld+json">${schema}<\/script>`}
+>
+  <div class="wrap" style="padding-block:3rem 4rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(d.system), href: `/collections/${d.system}` }, { label: d.title }]} />
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10">
+      <!-- Left: detail -->
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+          <span class="tag">{systemName(d.system)}</span>
+          {d.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
+        </div>
+        <p class="muted" style="text-transform:uppercase;letter-spacing:0.08em;font-size:0.8125rem;">{d.brand}</p>
+        <h1 class="heading-section" style="margin-top:0.25rem;">{d.title}</h1>
+        <p class="body-large muted" style="margin-top:1rem;">{d.summary}</p>
+
+        <div class="prose-section" style="margin-top:2rem;border-top:1px solid var(--color-line);padding-top:2rem;">
+          <Content />
+        </div>
+
+        {d.specs.length > 0 && (
+          <div style="margin-top:1rem;">
+            <h2 class="heading-card" style="margin-bottom:0.75rem;">Specs</h2>
+            <ul class="muted" style="line-height:1.9;font-size:0.9375rem;list-style:none;padding:0;">
+              {d.specs.map((s) => <li style="padding-left:1rem;border-left:2px solid var(--color-accent-dim);margin-bottom:0.375rem;">{s}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <!-- Right: buy box + fitment -->
+      <aside>
+        <div class="card" style="padding:1.5rem;position:sticky;top:5rem;">
+          <p class="readout accent" style="font-size:1.5rem;font-weight:700;">{d.price ? `$${d.price.toFixed(2)}` : 'Pricing soon'}</p>
+          <p class="muted" style="font-size:0.875rem;margin-top:0.25rem;">{availLabel[d.availability]}</p>
+
+          <!-- TODO(stroom): wire to Shopify cart once Storefront API + product exist. -->
+          <button class="btn-primary" style="width:100%;justify-content:center;margin-top:1rem;opacity:0.6;cursor:not-allowed;" disabled aria-disabled="true">
+            {d.availability === 'coming-soon' ? 'Notify me' : 'Add to cart'}
+          </button>
+          <p class="muted" style="font-size:0.75rem;margin-top:0.5rem;text-align:center;">Checkout via Shopify — launching soon</p>
+
+          <!-- Fitment / altitude: the differentiator -->
+          {d.fitment && (
+            <div class="altitude-panel" style="margin-top:1.5rem;">
+              <p class="label-small hazard">Fitment & Altitude</p>
+              <dl style="margin-top:0.75rem;font-size:0.875rem;line-height:1.6;">
+                <dt class="muted" style="text-transform:uppercase;font-size:0.6875rem;letter-spacing:0.06em;">Application</dt>
+                <dd style="margin:0 0 0.75rem;">{d.fitment.application}</dd>
+                {d.fitment.daRange && (
+                  <>
+                    <dt class="muted" style="text-transform:uppercase;font-size:0.6875rem;letter-spacing:0.06em;">Density Altitude</dt>
+                    <dd class="readout" style="margin:0 0 0.75rem;">{d.fitment.daRange}</dd>
+                  </>
+                )}
+                {d.fitment.requiredMods.length > 0 && (
+                  <>
+                    <dt class="muted" style="text-transform:uppercase;font-size:0.6875rem;letter-spacing:0.06em;">Required Mods</dt>
+                    <dd style="margin:0 0 0.75rem;">{d.fitment.requiredMods.join('; ')}</dd>
+                  </>
+                )}
+                <dt class="muted" style="text-transform:uppercase;font-size:0.6875rem;letter-spacing:0.06em;">Confidence</dt>
+                <dd style="margin:0;">{confidenceLabel[d.fitment.confidence]}</dd>
+              </dl>
+              {d.fitment.notes && <p class="muted" style="font-size:0.8125rem;margin-top:0.75rem;font-style:italic;">{d.fitment.notes}</p>}
+            </div>
+          )}
+
+          <p class="muted" style="font-size:0.8125rem;margin-top:1rem;line-height:1.5;">
+            Not sure it fits your setup and altitude? <a href="/wholesale" style="color:var(--color-accent);">Ask us</a> — that's what we're built for.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

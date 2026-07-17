@@ -1,0 +1,210 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../lib/site';
+import { systems, raceStyles } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  canonicalUrl?: string;
+}
+
+const {
+  title,
+  description,
+  schema,
+  ogImage = '/og-default.svg',
+  ogType = 'website',
+  canonicalUrl = Astro.url.href,
+} = Astro.props;
+
+const ogSub = 'High-Altitude Performance Parts · No Prep / Index';
+const ogImageUrl = ogImage.startsWith('http')
+  ? ogImage
+  : `${site.url}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(ogSub)}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Fonts: Chakra Petch (technical/motorsport display) + Barlow (industrial body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <meta name="view-transition" content="same-origin" />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={site.name} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#12161c" />
+
+    <!-- WebMCP polyfill — exposes the store's object model to AI agents -->
+    <script src="https://unpkg.com/@mcp-b/global/dist/index.min.js" is:inline></script>
+
+    <!-- Global org schema — fires on every page for entity association -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'OnlineStore',
+      '@id': `${site.url}/#store`,
+      name: site.name,
+      url: site.url,
+      description: site.description,
+      slogan: site.tagline,
+      knowsAbout: [
+        'High-altitude drag racing',
+        'Density altitude tuning',
+        'No Prep racing',
+        'Index drag racing',
+        'Forced-induction fuel systems',
+        'Torque converter selection',
+      ],
+      sameAs: [site.youtube],
+    })} />
+
+    <!-- Per-page schema -->
+    {schema && <Fragment set:html={schema} />}
+
+    <ClientRouter />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content" data-pagefind-body class="pt-14 lg:pt-16">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- IntersectionObserver fallback for scroll reveals -->
+    <script is:inline>
+      if (!CSS.supports('animation-timeline', 'view()')) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); }),
+          { threshold: 0.1 }
+        );
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      }
+    </script>
+
+    <!-- WebMCP tool registration -->
+    <script src="/scripts/webmcp.js" is:inline></script>
+
+    <!-- Mobile hamburger — fixed body-level element, outside header stacking context -->
+    <button
+      id="mobile-hamburger"
+      transition:persist
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav-panel"
+      style="position:fixed;top:0;right:0;z-index:200;width:2.5rem;height:3.5rem;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;background:transparent;border:none;cursor:pointer;padding:0 0.75rem 0 0;touch-action:none;"
+    >
+      <span class="menu-line menu-line-top"></span>
+      <span class="menu-line menu-line-mid"></span>
+      <span class="menu-line menu-line-bot"></span>
+    </button>
+
+    <!-- Mobile nav overlay -->
+    <div id="mobile-nav-panel" transition:persist role="dialog" aria-modal="true" aria-label="Navigation menu" style="display:none;" class="mobile-nav-overlay">
+      <div style="position:sticky;top:0;z-index:1;display:flex;justify-content:flex-end;padding-top:1.25rem;padding-bottom:0.5rem;margin:0 -1.5rem 1rem;padding-left:1.5rem;padding-right:1.5rem;background:var(--color-base);">
+        <button
+          id="mobile-nav-close"
+          aria-label="Close navigation menu"
+          style="width:2.5rem;height:2.5rem;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:var(--color-ink);"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <nav aria-label="Mobile navigation">
+        <div class="mobile-nav-group" style="padding-top:0;">
+          <p class="label-small mobile-nav-group-label">Shop by System</p>
+          {systems.map((s) => (
+            <a href={`/collections/${s.slug}`} class="mobile-nav-item">{s.name}</a>
+          ))}
+        </div>
+        <div class="mobile-nav-group">
+          <p class="label-small mobile-nav-group-label">Shop by Racing Style</p>
+          {raceStyles.map((r) => (
+            <a href={`/collections/${r.slug}`} class="mobile-nav-item">{r.name}</a>
+          ))}
+        </div>
+        <div class="mobile-nav-group">
+          <p class="label-small mobile-nav-group-label">Learn</p>
+          <a href="/guides" class="mobile-nav-item">Guides</a>
+          <a href="/builds" class="mobile-nav-item">Builds</a>
+          <a href="/about" class="mobile-nav-item">About</a>
+          <a href="/wholesale" class="mobile-nav-item">Wholesale</a>
+        </div>
+      </nav>
+
+      <div style="margin-top:auto;padding-top:2rem;">
+        <a href="/wholesale" class="btn-primary" style="width:100%;justify-content:center;">Become a Dealer</a>
+        <p style="margin-top:1rem;text-align:center;font-size:0.8125rem;" class="muted">
+          Follow the builds on <a href={site.youtube} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);">YouTube</a>
+        </p>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var hamburger = document.getElementById('mobile-hamburger');
+        var panel     = document.getElementById('mobile-nav-panel');
+        var closeBtn  = document.getElementById('mobile-nav-close');
+        if (!hamburger || !panel || !closeBtn) return;
+
+        function openNav() {
+          panel.classList.remove('is-leaving');
+          panel.style.display = 'flex';
+          hamburger.setAttribute('aria-expanded', 'true');
+          hamburger.classList.add('is-open');
+          closeBtn.focus();
+        }
+        function closeNav() {
+          hamburger.setAttribute('aria-expanded', 'false');
+          hamburger.classList.remove('is-open');
+          panel.classList.add('is-leaving');
+          panel.addEventListener('animationend', function done() {
+            panel.style.display = 'none';
+            panel.classList.remove('is-leaving');
+            panel.removeEventListener('animationend', done);
+          });
+        }
+        hamburger.addEventListener('touchstart', function (e) { e.preventDefault(); e.stopPropagation(); openNav(); }, { passive: false });
+        hamburger.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') return; e.preventDefault(); e.stopPropagation(); openNav(); });
+        closeBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); closeNav(); });
+        panel.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', function () { closeNav(); }); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && panel.style.display !== 'none') closeNav(); });
+      })();
+    </script>
+  </body>
+</html>

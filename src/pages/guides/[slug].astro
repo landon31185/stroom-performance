@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  const products = await getCollection('products');
+  return guides.map((g) => {
+    const parts = products.filter((p) => g.data.partsUsed.includes(p.id));
+    return { params: { slug: g.id }, props: { guide: g, parts } };
+  });
+}
+
+const { guide, parts } = Astro.props;
+const d = guide.data;
+const { Content } = await render(guide);
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: d.title,
+  description: d.description,
+  ...(d.tools.length ? { tool: d.tools.map((t) => ({ '@type': 'HowToTool', name: t })) } : {}),
+  ...(d.steps.length
+    ? {
+        step: d.steps.map((s, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: s.name,
+          text: s.text,
+        })),
+      }
+    : {}),
+  publisher: { '@id': `${site.url}/#store` },
+});
+---
+
+<BaseLayout
+  title={`${d.title} | Stroom Performance Guides`}
+  description={d.description}
+  ogType="article"
+  schema={`<script type="application/ld+json">${schema}<\/script>`}
+>
+  <div class="wrap" style="padding-block:3rem 4rem;max-width:52rem;">
+    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Guides', href: '/guides' }, { label: d.title }]} />
+
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+      <span class="tag">{d.difficulty}</span>
+      {d.videoUrl && <a href={d.videoUrl} target="_blank" rel="noopener noreferrer" class="tag tag-hazard" style="text-decoration:none;">Watch on YouTube</a>}
+    </div>
+    <h1 class="heading-section">{d.title}</h1>
+    <p class="body-large muted" style="margin-top:1rem;">{d.description}</p>
+
+    <div class="prose-section" style="margin-top:2rem;border-top:1px solid var(--color-line);padding-top:2rem;border-bottom:none;">
+      <Content />
+    </div>
+
+    {d.tools.length > 0 && (
+      <div style="margin-bottom:2.5rem;">
+        <h2 class="heading-card" style="margin-bottom:0.75rem;">Tools</h2>
+        <ul class="muted" style="line-height:1.9;font-size:0.9375rem;list-style:none;padding:0;">
+          {d.tools.map((t) => <li style="padding-left:1rem;border-left:2px solid var(--color-accent-dim);margin-bottom:0.375rem;">{t}</li>)}
+        </ul>
+      </div>
+    )}
+
+    {d.steps.length > 0 && (
+      <div style="margin-bottom:2.5rem;">
+        <h2 class="heading-card" style="margin-bottom:1rem;">Steps</h2>
+        <ol class="steps-list">
+          {d.steps.map((s) => (
+            <li><div><strong style="color:var(--color-ink);">{s.name}.</strong> {s.text}</div></li>
+          ))}
+        </ol>
+      </div>
+    )}
+
+    {parts.length > 0 && (
+      <div class="altitude-panel">
+        <p class="label-small hazard">Parts used in this guide</p>
+        <ul style="margin-top:0.75rem;list-style:none;padding:0;">
+          {parts.map((p) => (
+            <li style="margin-bottom:0.5rem;">
+              <a href={`/products/${p.id}`} class="nav-link accent" style="text-transform:none;letter-spacing:0;font-size:0.9375rem;">{p.data.title} →</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+</BaseLayout>

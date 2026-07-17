@@ -1,0 +1,52 @@
+---
+const navLinks = [
+  { label: 'Shop', href: '/shop' },
+  { label: 'Guides', href: '/guides' },
+  { label: 'Builds', href: '/builds' },
+  { label: 'About', href: '/about' },
+  { label: 'Wholesale', href: '/wholesale' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header id="site-header" class="site-header">
+  <div class="wrap flex items-center justify-between gap-8 h-14 lg:h-16">
+    <a href="/" class="wordmark" aria-label="Stroom Performance home">
+      Stroom<span class="spark">/</span>Performance
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-7 ml-auto" aria-label="Primary navigation">
+      {navLinks.map(({ label, href }) => (
+        <a href={href} class="nav-link" aria-current={currentPath === href ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <div class="hidden lg:block">
+        <a href="/wholesale" class="btn-primary text-sm" style="padding:0.5rem 1.1rem;">Become a Dealer</a>
+      </div>
+      <!-- Spacer: actual hamburger button lives in BaseLayout -->
+      <div class="lg:hidden w-10 h-10 flex-shrink-0" aria-hidden="true"></div>
+    </div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    const header = document.getElementById('site-header');
+    if (!header) return;
+    if ((window as any).__headerScrollHandler) {
+      window.removeEventListener('scroll', (window as any).__headerScrollHandler);
+    }
+    const onScroll = () => {
+      const scrolled = window.scrollY >= 20;
+      header.classList.toggle('scrolled', scrolled);
+      document.getElementById('mobile-hamburger')?.classList.toggle('scrolled', scrolled);
+    };
+    (window as any).__headerScrollHandler = onScroll;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+  initHeader();
+  document.addEventListener('astro:page-load', initHeader);
+</script>
