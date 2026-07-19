@@ -1598,11 +1598,15 @@ textarea.form-field { resize: vertical; }
   }
   .home-hero__wrap {
     grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 29rem);
-    align-items: end;
+    align-items: start;
     gap: 2.5rem;
   }
+  .home-hero__copy {
+    align-self: start;
+  }
   .home-hero-panel {
-    margin-top: 29rem;
+    align-self: start;
+    margin-top: clamp(32rem, 64vh, 48rem);
   }
   .home-proof,
   .home-credibility__grid,
