@@ -7,18 +7,21 @@ const year = new Date().getFullYear();
   <div class="wrap site-footer__wrap">
     <div class="site-footer__top">
       <div class="site-footer__pitch">
-        <p class="label-small accent">Stroom Positioning</p>
+        <p class="label-small accent">Stroom Performance</p>
         <a href="/" class="wordmark site-footer__wordmark">Stroom<span class="spark">/</span>Performance</a>
         <p class="muted site-footer__body">{site.tagline}</p>
         <p class="site-footer__thesis">
-          A specialist outlet for racers and suppliers who care whether a setup
-          still works when density altitude changes the pass.
+          Premium performance parts, cleaner category entry points, and
+          guidance built to make choosing the right setup feel less random.
         </p>
-        <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="nav-link site-footer__yt">Watch on YouTube →</a>
+        <div class="site-footer__actions">
+          <a href="/shop" class="btn-primary site-footer__cta">Shop the Catalog</a>
+          <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="nav-link site-footer__yt">Watch on YouTube →</a>
+        </div>
       </div>
 
       <div class="site-footer__nav-group">
-        <p class="label-small muted site-footer__label">Shop by System</p>
+        <p class="label-small muted site-footer__label">Shop Systems</p>
         <ul class="site-footer__nav-list">
           {systems.map((s) => (
             <li><a href={`/collections/${s.slug}`} class="nav-link site-footer__link">{s.name}</a></li>
@@ -27,7 +30,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div class="site-footer__nav-group">
-        <p class="label-small muted site-footer__label">Racing Style</p>
+        <p class="label-small muted site-footer__label">Browse By Use</p>
         <ul class="site-footer__nav-list">
           {raceStyles.map((r) => (
             <li><a href={`/collections/${r.slug}`} class="nav-link site-footer__link">{r.name}</a></li>
@@ -36,19 +39,19 @@ const year = new Date().getFullYear();
       </div>
 
       <div class="site-footer__nav-group">
-        <p class="label-small muted site-footer__label">Company</p>
+        <p class="label-small muted site-footer__label">Learn & Company</p>
         <ul class="site-footer__nav-list">
           <li><a href="/about" class="nav-link site-footer__link">About</a></li>
           <li><a href="/guides" class="nav-link site-footer__link">Guides</a></li>
           <li><a href="/builds" class="nav-link site-footer__link">Builds</a></li>
-          <li><a href="/wholesale" class="nav-link site-footer__link">Wholesale & Dealers</a></li>
+          <li><a href="/wholesale" class="nav-link site-footer__link">Wholesale</a></li>
         </ul>
       </div>
     </div>
 
     <div class="site-footer__bottom">
       <p class="muted">&copy; {year} {site.name}. All rights reserved.</p>
-      <p class="muted">Catalog launching soon — parts proven at density altitude.</p>
+      <p class="muted">Consumer storefront direction locked. Catalog structure ready to scale.</p>
     </div>
   </div>
 </footer>

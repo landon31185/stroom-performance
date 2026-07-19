@@ -19,9 +19,9 @@ export const site = {
   name: 'Stroom Performance',
   // TODO(stroom): real production domain (placeholder until registered).
   url: 'https://stroomperformance.com',
-  tagline: 'High-altitude performance parts, proven at density altitude.',
+  tagline: 'Curated performance parts with fitment-minded guidance.',
   description:
-    'Stroom Performance is a specialist performance-parts store built for high-altitude No-Prep and Index drag racing. We curate parts proven to work where thin air, density altitude, and hypoxia change the rules — fuel, boost, converters, and tuning dialed in at 6,600 ft.',
+    'Stroom Performance is a premium performance-parts storefront built around curated systems, fitment-minded guidance, and real-world product judgment. Shop fuel, engine, drivetrain, electronics, and race support with more confidence and less guesswork.',
   // Credibility engine: the existing YouTube following comes first.
   youtube: 'https://www.youtube.com/@StroomPerformance', // TODO(stroom): confirm exact channel URL
   // TODO(stroom): real inbox for supplier/wholesale inquiries.
@@ -37,11 +37,11 @@ export const site = {
 
 // ── Shop by System (Category facet — from the ORCA object map) ──
 export const systems = [
-  { slug: 'fuel', name: 'Fuel', blurb: 'Intank hats, pumps, relays, and delivery sized for thin-air fueling.' },
-  { slug: 'engine', name: 'Engine', blurb: 'Valley plates, gaskets, catch cans, and the parts that survive boost.' },
-  { slug: 'drivetrain', name: 'Drivetrain', blurb: 'Torque converters and driveline matched to your density altitude.' },
-  { slug: 'electronics', name: 'Electronics', blurb: 'EFI, boost control, launch control, sensors, and data logging.' },
-  { slug: 'safety', name: 'Safety', blurb: 'Engine diapers and containment for when a run goes wrong.' },
+  { slug: 'fuel', name: 'Fuel', blurb: 'Pumps, hats, plumbing, and delivery parts for stable fueling under load.' },
+  { slug: 'engine', name: 'Engine', blurb: 'Hard parts and supporting hardware for boosted combinations that need to hold up.' },
+  { slug: 'drivetrain', name: 'Drivetrain', blurb: 'Converters and driveline pieces chosen around repeatability, launch, and use case.' },
+  { slug: 'electronics', name: 'Electronics', blurb: 'EFI, boost control, sensors, and data tools for cleaner decision-making.' },
+  { slug: 'safety', name: 'Safety', blurb: 'Containment and race support essentials for serious builds and harder passes.' },
 ] as const;
 
 // ── Shop by Racing Style (Category facet) ──

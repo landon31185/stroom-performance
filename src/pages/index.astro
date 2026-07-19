@@ -4,177 +4,174 @@ import ProductCard from '../components/ProductCard.astro';
 import HeroAtmosphere from '../components/HeroAtmosphere';
 import HeroFilmLayer from '../components/HeroFilmLayer.astro';
 import { getCollection } from 'astro:content';
-import { site, systems, raceStyles } from '../lib/site';
+import { site, systems } from '../lib/site';
 
 const products = await getCollection('products');
 const featured = products.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
-const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
+const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
 
-const heroProof = [
-  { label: 'Home DA', value: '6,600 ft', note: 'thin air is the baseline' },
-  { label: 'Surface', value: 'No Prep', note: 'traction changes every call' },
-  { label: 'Mode', value: 'Index + Street', note: 'repeatable, not theoretical' },
+const heroHighlights = [
+  { label: 'Curated systems', value: 'Fuel to data' },
+  { label: 'Selection lens', value: 'Fitment first' },
+  { label: 'Store promise', value: 'Less guesswork' },
 ];
 
-const runSheet = [
-  { key: 'Track condition', value: 'un-prepped / changing lane' },
-  { key: 'Altitude problem', value: 'fuel, boost, converter, launch' },
-  { key: 'Stroom filter', value: 'only parts that still make sense at DA' },
-  { key: 'Current mission', value: 'win supplier trust before catalog launch' },
+const trustPillars = [
+  {
+    title: 'Curated instead of crowded',
+    body: 'The store should feel like a focused shelf of parts worth considering, not a giant feed with no judgment behind it.',
+  },
+  {
+    title: 'Guidance tied to what you buy',
+    body: 'Guides, builds, and product notes should reduce wrong turns before checkout, not live as disconnected content.',
+  },
+  {
+    title: 'Real-world perspective',
+    body: 'Stroom still gets to use race-day experience as proof, but now it supports the store instead of taking over the whole homepage.',
+  },
 ];
 
-const wholesaleReasons = [
-  'Existing YouTube audience gives supplier brands immediate context and reach.',
-  'Altitude-fitment framing creates a niche that generic performance stores do not own.',
-  'Guides, builds, and race-day proof create better product stories than catalog copy alone.',
-];
+const featuredSpotlight = featured[0];
+const supportSpotlights = featured.slice(1, 3);
 ---
 
 <BaseLayout
-  title="Stroom Performance — High-Altitude Drag Racing Parts"
-  description="Performance parts curated for high-altitude No-Prep and Index drag racing. Fuel, boost, converters, and tuning proven at density altitude by the Stroom Performance channel."
+  title="Stroom Performance — Premium Performance Parts"
+  description="Curated performance parts, fitment-minded guidance, and cleaner category entry points for builders who want more confidence and less guesswork."
 >
   <section class="home-hero">
     {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
     <HeroAtmosphere client:load />
     <div class="wrap home-hero__wrap">
       <div class="home-hero__copy">
-        <p class="label-small accent reveal">High-Altitude Drag Racing Parts</p>
-        <p class="home-kicker reveal">High-altitude parts for no-prep and index racers.</p>
+        <p class="label-small accent reveal">Premium Performance Storefront</p>
         <h1 class="heading-hero home-hero__title reveal">
-          Built for the runs where
-          <span class="home-hero__title-accent">thin air exposes bad parts.</span>
+          Serious parts.
+          <span class="home-hero__title-accent">Clearer choices.</span>
         </h1>
         <p class="body-large muted reveal home-hero__body">
-          Not the biggest catalog. The right parts when altitude and surface
-          conditions punish bad choices.
+          A curated performance storefront built around systems, fitment-minded
+          guidance, and product judgment that scales as the real catalog comes
+          into focus.
         </p>
         <div class="home-hero__actions reveal">
-          <a href="/wholesale" class="btn-primary">Become a Dealer</a>
-          <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">Watch the Builds</a>
+          <a href="/shop" class="btn-primary">Shop Parts</a>
+          <a href="/guides" class="btn-outline">Browse Guides</a>
         </div>
-        <div class="home-proof reveal">
-          {heroProof.map((item) => (
+        <div class="home-proof reveal" aria-label="Homepage highlights">
+          {heroHighlights.map((item) => (
             <div class="home-proof__item">
               <p class="home-proof__label">{item.label}</p>
               <p class="home-proof__value">{item.value}</p>
-              <p class="home-proof__note">{item.note}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <aside class="home-run-sheet reveal" aria-label="Stroom run sheet">
-        <div class="home-run-sheet__top">
-          <p class="home-run-sheet__eyebrow">Stroom Run Sheet</p>
-          <p class="home-run-sheet__stamp">01 / Current Positioning</p>
+      <aside class="home-hero-panel reveal" aria-label="Featured focus">
+        <div class="home-hero-panel__top">
+          <p class="home-hero-panel__eyebrow">Featured Focus</p>
+          <p class="home-hero-panel__stamp">01 / Store Thesis</p>
         </div>
-        <div class="home-run-sheet__divider"></div>
-        <div class="home-run-sheet__headline">
-          <span>Race-day proof</span>
-          <span>Supplier trust</span>
-          <span>Altitude moat</span>
+        <div class="home-hero-panel__divider"></div>
+        <div class="home-hero-panel__headline">
+          <span>Built to scale</span>
+          <span>like a real catalog.</span>
         </div>
-        <div class="home-run-sheet__rows">
-          {runSheet.map((item) => (
-            <div class="home-run-sheet__row">
-              <p class="home-run-sheet__key">{item.key}</p>
-              <p class="home-run-sheet__value">{item.value}</p>
-            </div>
-          ))}
-        </div>
-        <p class="home-run-sheet__footer">
-          Storefront launching soon. Right now the homepage has one job:
-          convince suppliers that Stroom knows exactly who it serves.
+        <p class="home-hero-panel__body">
+          The homepage now leads with product discovery, trust, and clearer
+          entry points instead of a niche wholesale pitch.
         </p>
+        <div class="home-hero-panel__stack">
+          <a href="/shop" class="home-hero-panel__card">
+            <span class="home-hero-panel__card-label">Shop by system</span>
+            <strong>Fuel, engine, drivetrain, electronics, and safety.</strong>
+          </a>
+          <a href="/guides" class="home-hero-panel__card">
+            <span class="home-hero-panel__card-label">Start with guidance</span>
+            <strong>Use guides and setup notes when you know the problem, not the part.</strong>
+          </a>
+          <a href="/builds" class="home-hero-panel__card">
+            <span class="home-hero-panel__card-label">See proof in context</span>
+            <strong>Builds and examples keep the store grounded in real use.</strong>
+          </a>
+        </div>
       </aside>
     </div>
   </section>
 
-  <section class="home-marquee">
-    <div class="wrap home-marquee__wrap reveal">
-      <p class="home-marquee__lead">Current strategic frame</p>
-      <p class="home-marquee__text">
-        A credibility engine first. A storefront second. A generic parts catalog
-        never wins this niche.
-      </p>
+  <section class="home-system-rail">
+    <div class="wrap home-system-rail__wrap">
+      <div class="home-section-heading reveal home-section-heading--split home-section-heading--inline">
+        <div>
+          <p class="label-small accent">Shop Systems</p>
+          <h2 class="heading-section">Start with the part of the build you are solving.</h2>
+        </div>
+        <a href="/shop" class="nav-link accent">View all categories →</a>
+      </div>
+      <div class="home-system-rail__grid">
+        {systems.map((s, index) => (
+          <a href={`/collections/${s.slug}`} class="home-system-tile reveal">
+            <span class="home-system-tile__index">{String(index + 1).padStart(2, '0')}</span>
+            <div class="home-system-tile__content">
+              <p class="home-system-tile__meta">Collection</p>
+              <h3 class="heading-card">{s.name}</h3>
+              <p class="muted">{s.blurb}</p>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
   <section class="home-credibility">
     <div class="wrap">
       <div class="home-section-heading reveal">
-        <p class="label-small accent">Why This Can Win</p>
-        <h2 class="heading-section">A more believable specialist story than “we sell performance parts.”</h2>
+        <p class="label-small accent">Why Stroom</p>
+        <h2 class="heading-section">A premium store should make the next choice feel easier.</h2>
       </div>
-      <div class="home-credibility__grid">
-        <div class="home-editorial-card reveal">
-          <p class="home-card-index">01</p>
-          <h3 class="heading-card">The channel is the proof layer</h3>
-          <p class="muted">
-            Stroom already has a story engine: builds, passes, failures, and
-            fixes documented in public. That makes supplier outreach feel earned,
-            not invented.
-          </p>
-        </div>
-        <div class="home-editorial-card reveal">
-          <p class="home-card-index">02</p>
-          <h3 class="heading-card">Density altitude is the wedge</h3>
-          <p class="muted">
-            Most stores stop at fitment. Stroom can talk about whether a setup
-            still behaves at altitude, which is where the niche becomes useful.
-          </p>
-        </div>
-        <div class="home-editorial-card reveal">
-          <p class="home-card-index">03</p>
-          <h3 class="heading-card">The site sells judgment, not inventory volume</h3>
-          <p class="muted">
-            The goal is not to look gigantic. The goal is to look like the right
-            specialist for a specific racing audience suppliers want to reach.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="home-systems">
-    <div class="wrap home-systems__wrap">
-      <div class="home-section-heading reveal">
-        <p class="label-small accent">Catalog Structure</p>
-        <h2 class="heading-section">The future store should feel ordered like a pit table, not a random shelf.</h2>
-      </div>
-      <div class="home-systems__grid">
-        {systems.map((s) => (
-          <a href={`/collections/${s.slug}`} class="home-system-card reveal">
-            <p class="home-system-card__meta">System</p>
-            <h3 class="heading-card">{s.name}</h3>
-            <p class="muted">{s.blurb}</p>
-            <span class="nav-link accent">Browse {s.name} →</span>
-          </a>
+      <div class="home-credibility__grid home-credibility__grid--wide">
+        {trustPillars.map((item, index) => (
+          <div class="home-editorial-card reveal">
+            <p class="home-card-index">{String(index + 1).padStart(2, '0')}</p>
+            <h3 class="heading-card">{item.title}</h3>
+            <p class="muted">{item.body}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="home-race-styles">
-    <div class="wrap home-race-styles__wrap">
-      <div class="home-race-styles__intro reveal">
-        <p class="label-small accent">Use Context</p>
-        <h2 class="heading-section">Parts make more sense when the race format is explicit.</h2>
-        <p class="muted">
-          Stroom should organize by the realities racers actually care about:
-          surface, consistency, launch behavior, and whether the combo still
-          behaves in altitude.
-        </p>
+  <section class="home-spotlight">
+    <div class="wrap home-spotlight__wrap">
+      <div class="home-section-heading reveal home-section-heading--split home-section-heading--inline">
+        <div>
+          <p class="label-small accent">Featured Spotlight</p>
+          <h2 class="heading-section">Highlight one strong product family at a time.</h2>
+        </div>
+        <div class="home-spotlight__controls reveal" aria-hidden="true">
+          <span class="home-spotlight__arrow">←</span>
+          <span class="home-spotlight__arrow">→</span>
+        </div>
       </div>
-      <div class="home-race-styles__grid">
-        {raceStyles.map((r) => (
-          <a href={`/collections/${r.slug}`} class="home-race-card reveal">
-            <span class="tag tag-hazard">{r.name}</span>
-            <p class="home-race-card__text">{r.blurb}</p>
-            <span class="nav-link accent">Open collection →</span>
+      <div class="home-spotlight__grid">
+        {featuredSpotlight && (
+          <a href={`/products/${featuredSpotlight.id}`} class="home-spotlight__feature reveal">
+            <p class="home-spotlight__label">{featuredSpotlight.data.system}</p>
+            <h3 class="home-spotlight__title">{featuredSpotlight.data.title}</h3>
+            <p class="home-spotlight__body">{featuredSpotlight.data.summary}</p>
+            <span class="home-spotlight__cta">View product →</span>
           </a>
-        ))}
+        )}
+        <div class="home-spotlight__stack">
+          {supportSpotlights.map((p) => (
+            <a href={`/products/${p.id}`} class="home-spotlight__mini reveal">
+              <p class="home-spotlight__mini-label">{p.data.system}</p>
+              <h3 class="heading-card">{p.data.title}</h3>
+              <p class="muted">{p.data.summary}</p>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -183,15 +180,15 @@ const wholesaleReasons = [
     <div class="wrap">
       <div class="home-section-heading reveal home-section-heading--split">
         <div>
-          <p class="label-small accent">Representative Parts</p>
-          <h2 class="heading-section">Placeholder catalog, real content model.</h2>
+          <p class="label-small accent">Featured Products</p>
+          <h2 class="heading-section">The catalog can stay lean and still feel complete.</h2>
         </div>
         <a href="/shop" class="nav-link accent">See all →</a>
       </div>
       <p class="muted home-section-copy reveal">
-        These listings are still illustrative, but the shape is right: every
-        product should eventually explain the system, use case, and altitude
-        relevance instead of reading like copy pasted distributor text.
+        These are still placeholders, but the model is the point: every product
+        should eventually explain the system, use case, and setup context more
+        clearly than generic distributor copy ever will.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {featured.map((p) => (
@@ -205,8 +202,8 @@ const wholesaleReasons = [
     <div class="wrap home-guides__wrap">
       <div class="home-section-heading reveal home-section-heading--split">
         <div>
-          <p class="label-small accent">Guides & Builds</p>
-          <h2 class="heading-section">Content is the conversion bridge between race-day proof and future commerce.</h2>
+          <p class="label-small accent">Guides & Fitment Help</p>
+          <h2 class="heading-section">When the customer knows the problem, the site should point them forward.</h2>
         </div>
         <a href="/guides" class="nav-link accent">All guides →</a>
       </div>
@@ -219,33 +216,43 @@ const wholesaleReasons = [
             </div>
             <h3 class="heading-card">{g.data.title}</h3>
             <p class="muted">{g.data.description}</p>
+            <span class="home-guide-card__link">Open guide →</span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="home-wholesale">
+  <section class="home-assortment">
     <div class="wrap">
-      <div class="home-wholesale__panel reveal">
-        <div class="home-wholesale__intro">
-          <span class="tag tag-hazard">For Suppliers & Wholesalers</span>
-          <h2 class="heading-section">A smaller site can still feel like the right commercial partner.</h2>
+      <div class="home-assortment__panel reveal">
+        <div class="home-assortment__intro">
+          <p class="label-small accent">Ready To Scale</p>
+          <h2 class="heading-section">The storefront structure is in place before the full inventory is.</h2>
           <p class="muted">
-            The right brands do not need another generic reseller. They need a
-            focused outlet with a real audience, a point of view, and better
-            product storytelling than a raw feed can provide.
+            That is the win right now: category rails, featured product moments,
+            fitment entry points, and guidance paths that can absorb a real
+            catalog later without redesigning the whole experience.
           </p>
         </div>
-        <div class="home-wholesale__reasons">
-          {wholesaleReasons.map((reason, index) => (
-            <div class="home-wholesale__reason">
-              <p class="home-card-index">{String(index + 1).padStart(2, '0')}</p>
-              <p>{reason}</p>
-            </div>
-          ))}
+        <div class="home-assortment__grid">
+          <a href="/shop" class="home-assortment__cell">
+            <span class="home-assortment__label">Collections</span>
+            <strong>Shop by system, not by guesswork.</strong>
+          </a>
+          <a href="/guides" class="home-assortment__cell">
+            <span class="home-assortment__label">Guides</span>
+            <strong>Use content as a buying tool, not background noise.</strong>
+          </a>
+          <a href="/builds" class="home-assortment__cell">
+            <span class="home-assortment__label">Builds</span>
+            <strong>Keep proof and product context connected.</strong>
+          </a>
         </div>
-        <a href="/wholesale" class="btn-primary">Start a Wholesale Inquiry</a>
+        <div class="home-assortment__footer">
+          <a href="/about" class="btn-outline">See the approach</a>
+          <a href="/wholesale" class="nav-link accent">Wholesale stays available →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -254,9 +261,8 @@ const wholesaleReasons = [
     <div class="wrap home-postscript__wrap reveal">
       <div class="home-postscript__rule"></div>
       <p class="home-postscript__text">
-        The goal is not to look like a massive generic store. The goal is to
-        look like the one specialist brand a serious supplier should want in
-        front of altitude racers.
+        Premium enough to stand alone now. Structured enough to carry the real
+        catalog later.
       </p>
     </div>
   </section>
