@@ -242,6 +242,7 @@ textarea.form-field { resize: vertical; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   opacity: 0.16;
   filter: grayscale(1) contrast(1.05) brightness(0.38);
 }
@@ -249,8 +250,8 @@ textarea.form-field { resize: vertical; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, color-mix(in oklab, var(--color-base) 94%, transparent) 0 30%, transparent 62% 100%),
-    linear-gradient(180deg, color-mix(in oklab, var(--color-base) 12%, transparent), color-mix(in oklab, var(--color-base) 46%, transparent));
+    linear-gradient(90deg, color-mix(in oklab, var(--color-base) 96%, transparent) 0 36%, transparent 62% 100%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-base) 12%, transparent), color-mix(in oklab, var(--color-base) 50%, transparent));
 }
 .hero-atmosphere {
   position: absolute;
@@ -263,7 +264,7 @@ textarea.form-field { resize: vertical; }
   width: 100%;
   height: 100%;
   display: block;
-  opacity: 0.82;
+  opacity: 0.68;
 }
 .hero-atmosphere__hud {
   position: absolute;

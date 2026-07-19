@@ -5,6 +5,7 @@ import {
   OffthreadVideo,
   interpolate,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
@@ -69,11 +70,13 @@ export const StroomHeroTelemetry: React.FC<Props> = ({ headline, kicker, clipSrc
     [height, width],
   );
 
+  const resolvedClipSrc = clipSrc ?? staticFile('media/stroom-short-source.mp4');
+
   return (
     <AbsoluteFill style={{ backgroundColor: palette.base, fontFamily: 'Archivo, Hanken Grotesk, sans-serif' }}>
-      {clipSrc ? (
+      {resolvedClipSrc ? (
         <AbsoluteFill style={{ opacity: 0.18, filter: 'grayscale(1) contrast(1.05) brightness(0.45)' }}>
-          <OffthreadVideo src={clipSrc} muted />
+          <OffthreadVideo src={resolvedClipSrc} muted />
         </AbsoluteFill>
       ) : null}
 

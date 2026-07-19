@@ -15,7 +15,7 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           headline: ['BUILT FOR THE RUNS WHERE', 'THIN AIR EXPOSES BAD PARTS.'],
           kicker: 'High-altitude no-prep and index racing',
-          clipSrc: null,
+          clipSrc: '/media/stroom-short-source.mp4',
         }}
       />
     </>

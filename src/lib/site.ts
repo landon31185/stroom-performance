@@ -29,8 +29,8 @@ export const site = {
   contactEmail: 'hello@stroomperformance.com',
   owner: 'Jake',
   heroFilm: {
-    enabled: false,
-    src: '/media/stroom-hero-loop.mp4',
+    enabled: true,
+    src: '/media/stroom-short-source.mp4',
     poster: '/og-default.svg',
   },
 } as const;
