@@ -1,15 +1,13 @@
 # Stroom Performance
 
-Astro site for **Stroom Performance** — Jake's high-altitude No-Prep / Index drag racing performance-parts store (Shopify drop-ship). The niche moat is **fitment/altitude awareness**: whether a part actually works at a given density altitude (DA). Nobody else in this space answers that question.
+Astro site for **Stroom Performance**, a direct-to-consumer performance-parts store for GM LS and Gen III Hemi builds. Shopify will own commerce while this frontend owns product discovery, fitment guidance, guides, and builds.
 
 **Live:** https://stroom-performance.vercel.app (production, deploys automatically on push to `main`)
 **Repo:** github.com/landon31185/stroom-performance
 
-## Current strategic frame — read this first
+## Current strategic frame - read this first
 
-The site is currently a **pitch to win wholesalers, not a live store**. There is no product catalog or checkout yet — commerce is "coming soon." The goal right now is credibility: brand, the existing YouTube following, and the altitude-fitment differentiator. `/wholesale` is the dealer-inquiry funnel and is the most important page on the site today.
-
-Do not add checkout/cart functionality or treat the `src/content/products/*` files as a real catalog — they're placeholder copy demonstrating what a listing *will* look like once supplier accounts open.
+The site is consumer-facing. Four verified GM LS reference products live in `src/content/products/`; Gen III Hemi specifics are pending. Do not invent price, inventory, shipping, or compatibility. Until Shopify is connected, product pages must clearly remain `coming-soon` while still providing useful specifications and fitment context.
 
 ## Stack
 
@@ -29,7 +27,7 @@ npm run build    # verify before pushing — see gotchas below
 
 Dark badge + orange accent slash. Authentic motorsport/decal energy, dark-forward chrome with a single orange accent.
 
-**The current logo, favicon, and OG image are placeholders** — a simple geometric badge, not Jake's real mark. Expect these to be replaced wholesale. Don't over-invest polishing them further.
+**The current logo, favicon, and OG image are temporary** - a simple geometric badge, not Jake's final mark. Replace them completely when final identity assets arrive.
 
 ### Token architecture (why it's split this way)
 
@@ -60,6 +58,7 @@ Colors are duplicated in `src/lib/site.ts` (`brandColors`) because `@vercel/og` 
 
 ## Unblocked next work
 
-- Wire the wholesale inquiry form to a real backend — it currently falls back to a `mailto:` link. See the TODO comment in `src/pages/wholesale.astro`.
-- SEO/GEO content cluster — was blocked on the site existing, now unblocked.
-- `public/llms.txt`, `llms-full.txt`, and the WebMCP tool script (`public/scripts/webmcp.js`) exist and are AI-crawler/agent-ready, but reflect the placeholder catalog — revisit once real products/domain exist.
+- Connect the Shopify Storefront API and map live variants, pricing, availability, cart, and checkout.
+- Add client-confirmed Gen III Hemi products and fitment details.
+- Add product photography without changing product URLs or the content-object model.
+- Expand SEO/GEO content around the verified product and platform taxonomy.

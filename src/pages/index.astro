@@ -11,9 +11,9 @@ const featured = products.filter((p) => p.data.featured).sort((a, b) => a.data.o
 const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
 
 const heroHighlights = [
-  { label: 'Curated systems', value: 'Fuel to data' },
-  { label: 'Selection lens', value: 'Fitment first' },
-  { label: 'Store promise', value: 'Less guesswork' },
+  { label: 'Current platform', value: 'GM LS' },
+  { label: 'Current systems', value: 'Engine + EFI' },
+  { label: 'Next platform', value: 'Gen III Hemi' },
 ];
 
 const trustPillars = [
@@ -50,9 +50,8 @@ const supportSpotlights = featured.slice(1, 3);
           </h1>
           <p class="body-large muted reveal home-hero__body">
             <span class="home-hero__body-desktop">
-              A curated performance storefront built around systems, fitment-minded
-              guidance, and product judgment that scales as the real catalog comes
-              into focus.
+              Explore verified GM LS components with the fitment details and
+              system context needed to make a confident choice.
             </span>
             <span class="home-hero__body-mobile">
               Fitment-minded parts and guidance for GM LS and Gen III Hemi builds.
@@ -76,30 +75,28 @@ const supportSpotlights = featured.slice(1, 3);
       {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
 
       <aside class="home-hero-panel reveal" aria-label="Featured focus">
-        <div class="home-hero-panel__top">
-          <p class="home-hero-panel__stamp">Store thesis</p>
-        </div>
+        <div class="home-hero-panel__top"><p class="home-hero-panel__stamp">Choose a platform</p></div>
         <div class="home-hero-panel__divider"></div>
         <div class="home-hero-panel__headline">
-          <span>Built to scale</span>
-          <span>like a real catalog.</span>
+          <span>Start with</span>
+          <span>your build.</span>
         </div>
         <p class="home-hero-panel__body">
-          The homepage now leads with product discovery, trust, and clearer
-          entry points instead of a niche wholesale pitch.
+          Find compatible parts by platform first, then narrow the choice by
+          system, use case, and the rest of the combination.
         </p>
         <div class="home-hero-panel__stack">
-          <a href="/shop" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">Shop by system</span>
-            <strong>Fuel, engine, drivetrain, electronics, and safety.</strong>
+          <a href="/shop#gm-ls" class="home-hero-panel__card">
+            <span class="home-hero-panel__card-label">Verified first</span>
+            <strong>Shop GM LS parts and fitment details.</strong>
           </a>
-          <a href="/guides" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">Start with guidance</span>
-            <strong>Use guides and setup notes when you know the problem, not the part.</strong>
+          <a href="/shop#gen3-hemi" class="home-hero-panel__card">
+            <span class="home-hero-panel__card-label">Next platform</span>
+            <strong>Explore the Gen III Hemi collection as it grows.</strong>
           </a>
           <a href="/builds" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">See proof in context</span>
-            <strong>Builds and examples keep the store grounded in real use.</strong>
+            <span class="home-hero-panel__card-label">Build context</span>
+            <strong>See how parts work together before choosing one.</strong>
           </a>
         </div>
       </aside>
@@ -149,7 +146,7 @@ const supportSpotlights = featured.slice(1, 3);
     <div class="wrap home-spotlight__wrap">
       <div class="home-section-heading reveal home-section-heading--split home-section-heading--inline">
         <div>
-          <h2 class="heading-section">Highlight one strong product family at a time.</h2>
+          <h2 class="heading-section">Parts selected around the complete build.</h2>
         </div>
         <div class="home-spotlight__controls reveal" aria-hidden="true">
           <span class="home-spotlight__arrow">←</span>
@@ -180,14 +177,13 @@ const supportSpotlights = featured.slice(1, 3);
     <div class="wrap">
       <div class="home-section-heading reveal home-section-heading--split">
         <div>
-          <h2 class="heading-section">The catalog can stay lean and still feel complete.</h2>
+          <h2 class="heading-section">Start with verified GM LS components.</h2>
         </div>
         <a href="/shop" class="nav-link">See all →</a>
       </div>
       <p class="muted home-section-copy reveal">
-        These are still placeholders, but the model is the point: every product
-        should eventually explain the system, use case, and setup context more
-        clearly than generic distributor copy ever will.
+        Review manufacturer part numbers, core specifications, and combination-dependent
+        fitment notes before these products become available to purchase through Stroom.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {featured.map((p) => (
@@ -221,11 +217,11 @@ const supportSpotlights = featured.slice(1, 3);
     <div class="wrap">
       <div class="home-assortment__panel reveal">
         <div class="home-assortment__intro">
-          <h2 class="heading-section">The storefront structure is in place before the full inventory is.</h2>
+          <h2 class="heading-section">Build around the system, not a random parts list.</h2>
           <p class="muted">
-            That is the win right now: category rails, featured product moments,
-            fitment entry points, and guidance paths that can absorb a real
-            catalog later without redesigning the whole experience.
+            Start with the platform and problem you are solving. Stroom connects
+            individual parts to the engine, fuel, electronics, and drivetrain
+            decisions that determine whether the combination works.
           </p>
         </div>
         <div class="home-assortment__grid">
@@ -240,8 +236,8 @@ const supportSpotlights = featured.slice(1, 3);
           </a>
         </div>
         <div class="home-assortment__footer">
-          <a href="/about" class="btn-outline">See the approach</a>
-          <a href="/wholesale" class="nav-link">Wholesale stays available →</a>
+          <a href="/about" class="btn-outline">Why Stroom</a>
+          <a href="/shop" class="nav-link">Browse all parts →</a>
         </div>
       </div>
     </div>
@@ -251,8 +247,7 @@ const supportSpotlights = featured.slice(1, 3);
     <div class="wrap home-postscript__wrap reveal">
       <div class="home-postscript__rule"></div>
       <p class="home-postscript__text">
-        Premium enough to stand alone now. Structured enough to carry the real
-        catalog later.
+        Serious parts. Clear fitment. Better decisions before checkout.
       </p>
     </div>
   </section>

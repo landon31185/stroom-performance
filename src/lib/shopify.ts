@@ -1,18 +1,18 @@
 /**
  * Shopify Storefront API client — STUB.
  *
- * TODO(stroom): Stroom has no live catalog yet (wholesalers want to see the
- * site before granting drop-ship accounts). When products exist:
+ * TODO(stroom): Stroom has verified reference products but no live Shopify
+ * inventory yet. When the commerce catalog is ready:
  *   1. Create a Shopify store, add products + the "Shop by System" /
  *      "Shop by Racing Style" collections.
  *   2. Generate a Storefront API access token (read-only, public-safe).
  *   3. Fill SHOPIFY_STORE_DOMAIN + SHOPIFY_STOREFRONT_TOKEN in `.env`
  *      (see .env.example).
- *   4. Replace the placeholder returns below with real GraphQL calls.
+ *   4. Replace the seed-content fallback below with real GraphQL calls.
  *
  * Per the object model, Shopify OWNS commerce (Product, Variant, Order,
  * Customer, Cart). This site only READS it. The two things Shopify cannot
- * model — altitude-aware Fitment and drop-ship Supplier structure — live in
+ * model — including Stroom-authored fitment guidance — lives in
  * Astro content collections + (eventually) Shopify Metaobjects, NOT here.
  */
 

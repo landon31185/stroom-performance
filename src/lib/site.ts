@@ -24,8 +24,6 @@ export const site = {
     'Stroom Performance is a premium performance-parts storefront built around curated systems, fitment-minded guidance, and real-world product judgment. Shop fuel, engine, drivetrain, electronics, and race support with more confidence and less guesswork.',
   // Credibility engine: the existing YouTube following comes first.
   youtube: 'https://www.youtube.com/@StroomPerformance', // TODO(stroom): confirm exact channel URL
-  // TODO(stroom): real inbox for supplier/wholesale inquiries.
-  wholesaleEmail: 'dealers@stroomperformance.com',
   contactEmail: 'hello@stroomperformance.com',
   owner: 'Jake',
   heroFilm: {

@@ -8,10 +8,9 @@ const PLATFORMS = ['gm-ls', 'gen3-hemi'] as const;
 
 /**
  * Product (reference — Shopify-owned once live).
- * Seed entries are REPRESENTATIVE placeholders so the IA renders before any
- * real catalog exists. `availability: coming-soon` is the default — no
- * fabricated in-stock inventory. The Fitment/altitude fields are Stroom-owned
- * data (the moat), NOT supplier passthrough.
+ * Entries represent products the client intends to sell. `availability:
+ * coming-soon` is the default until Shopify provides real price and inventory.
+ * Fitment and altitude fields remain Stroom-authored guidance.
  */
 const products = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/products' }),

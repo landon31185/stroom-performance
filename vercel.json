@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/wholesale",
+      "destination": "/shop",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/_astro/(.*)",

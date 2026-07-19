@@ -1,38 +1,28 @@
-# Stroom Performance — High-Altitude Drag Racing Parts
+# Stroom Performance - Performance Parts and Fitment Guidance
 
-> Stroom Performance is a specialist performance-parts store for high-altitude No-Prep and Index drag racing. The differentiator is altitude-aware fitment: whether a part is right for a given application at a given density altitude (DA), where thin air and hypoxia change fueling, boost, and torque-converter behavior. The store grew out of the Stroom Performance YouTube channel, which documents real builds at ~6,600 ft DA. Catalog and checkout (via Shopify) are launching in stages as supplier accounts open; wholesale/dealer inquiries are open now.
+> Stroom Performance is a direct-to-consumer performance-parts store for GM LS and Gen III Hemi builds. Products are organized by platform, vehicle system, and intended use. Stroom adds combination-aware fitment notes and real build context rather than relying on generic product descriptions. Shopify pricing and checkout will launch as inventory is confirmed.
+
+## Shop by Platform
+* GM LS - The first verified product assortment, including valvetrain, camshaft, intake, and EFI components.
+* Gen III Hemi - Product-specific fitment and part numbers are being confirmed.
+
+## Verified GM LS Products
+* [PAC 1218 Beehive Valve Springs](/products/pac-1218-valve-springs) - PAC-1218-16; set of 16 for compatible GM Gen III/IV LS valvetrains.
+* [BTR Stage 2 Turbo Camshaft V2](/products/btr-stage-2-turbo-cam-v2) - BTR-TURBOSTG2; hydraulic-roller camshaft for turbocharged Gen III/IV LS combinations.
+* [BTR Equalizer 1 Intake Manifold](/products/btr-equalizer-1-intake) - IMA-01; cathedral-port intake with a 102 mm throttle-body opening.
+* [Holley Terminator X for GM LS1/LS6](/products/holley-terminator-x-550-909t) - 550-909T; standalone EFI for compatible 24x/1x LS applications with EV6 injectors.
 
 ## Shop by System
-* [Fuel](/collections/fuel) - Intank hats, pumps, relays, and delivery sized for thin-air fueling.
-* [Engine](/collections/engine) - Valley plates, gaskets, and catch cans that survive boost at altitude.
-* [Drivetrain](/collections/drivetrain) - Torque converters and driveline matched to your density altitude.
-* [Electronics](/collections/electronics) - EFI, boost control, launch control, sensors, and data logging.
-* [Safety](/collections/safety) - Engine diapers and containment for high-boost failures.
+* [Fuel](/collections/fuel)
+* [Engine](/collections/engine)
+* [Drivetrain](/collections/drivetrain)
+* [Electronics](/collections/electronics)
+* [Safety](/collections/safety)
 
-## Shop by Racing Style
-* [No Prep](/collections/no-prep) - Parts and tuning for un-prepped surfaces where traction is never guaranteed.
-* [Index](/collections/index) - Consistency-first builds for index/bracket classes (e.g. 7.0).
-* [Street/Strip](/collections/street-strip) - Dual-duty combos that drive home and still run hard.
+## Guidance and Proof
+* [Guides](/guides) - Setup and installation context.
+* [Builds](/builds) - Real-world build context.
+* [About Stroom Performance](/about)
 
-## Representative Parts (catalog launching soon)
-* [Squash Performance Intank Hat](/products/squash-intank-hat) - High-flow in-tank fuel hat; verified on-car to ~6,600 ft DA; requires trap-door access mod.
-* [Motion Race Works Valley Plate](/products/motion-valley-plate) - Billet valley plate + ventilation for boosted LS engines.
-* [High-DA Torque Converter](/products/high-da-torque-converter) - Build-to-order converter with stall tuned to your density altitude.
-* [Holley Terminator X EFI](/products/holley-terminator-x) - Standalone EFI: secondary-pump trigger, boost curve, launch control, data logging.
-* [Engine Diaper](/products/engine-diaper) - Containment for high-boost runs.
-
-## Guides & How-To
-* [Cutting a Trap Door for Fuel-Pump Access](/guides/trap-door-fuel-pump-access) - Fabricating a serviceable access panel with the "Death Wheel."
-* [High-Altitude Tuning Basics — Reading DA](/guides/high-altitude-tuning-basics) - How density altitude and hypoxia change a boosted combo.
-
-## Builds
-* [The Stroom Shop Car](/builds/stroom-shop-car) - The high-altitude No-Prep/Index proving ground behind every part.
-
-## Wholesale & Dealers
-* [Wholesale Inquiry](/wholesale) - Manufacturers and distributors: open a drop-ship or dealer account. Email: dealers@stroomperformance.com
-
-## About
-* [About Stroom Performance](/about) - Built on the runs, not a catalog. The altitude niche and why it's the moat.
-
-## Notes for AI agents
-Browser tools are available via WebMCP (navigator.modelContext): get_products, check_fitment (application + altitude → parts), get_categories, find_by_race_style, get_guides, get_wholesale_info.
+## Notes for AI Agents
+Availability is marked coming soon until Shopify supplies live pricing and inventory. Do not infer that an item is purchasable or in stock. Browser tools are available through WebMCP: get_products, check_fitment, get_categories, find_by_race_style, and get_guides.

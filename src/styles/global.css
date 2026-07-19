@@ -711,16 +711,14 @@ textarea.form-field { resize: vertical; }
 .home-editorial-card,
 .home-guide-card,
 .home-system-card,
-.home-race-card,
-.home-wholesale__reason {
+.home-race-card {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
 }
 .home-editorial-card {
   padding: 1.4rem;
 }
-.home-editorial-card h3,
-.home-wholesale__reason p:last-child {
+.home-editorial-card h3 {
   margin-top: 0.9rem;
 }
 .home-editorial-card .muted {
@@ -800,171 +798,6 @@ textarea.form-field { resize: vertical; }
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
-}
-
-/* ─── Wholesale page ────────────────────────────────────────────── */
-
-.wholesale-hero {
-  position: relative;
-  overflow: clip;
-  border-bottom: 1px solid var(--color-line);
-}
-.wholesale-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(112deg, transparent 0 58%, color-mix(in oklab, var(--color-accent) 11%, transparent) 58% 62%, transparent 62% 100%),
-    linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 8%, transparent), transparent 32%);
-  opacity: 0.9;
-  pointer-events: none;
-}
-.wholesale-hero__wrap {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 2rem;
-  padding-block: 3rem 3.5rem;
-}
-.wholesale-hero__title {
-  margin-top: 1rem;
-  max-width: 13ch;
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
-}
-.wholesale-hero__accent {
-  display: block;
-  color: var(--color-accent);
-}
-.wholesale-hero__body {
-  max-width: 40rem;
-  margin-top: 1.25rem;
-}
-.wholesale-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
-}
-.wholesale-sheet {
-  background:
-    linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 10%, transparent), transparent 24%),
-    var(--color-surface);
-  border: 1px solid var(--color-line);
-  padding: 1.25rem;
-}
-.wholesale-sheet__eyebrow,
-.wholesale-value-card__label {
-  color: var(--color-accent);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.wholesale-sheet__divider {
-  width: 100%;
-  height: 0.35rem;
-  margin-block: 0.9rem 1.1rem;
-  background: linear-gradient(90deg, var(--color-accent) 0 58%, transparent 58% 100%);
-}
-.wholesale-sheet__headline {
-  display: grid;
-  gap: 0.3rem;
-  margin-bottom: 1.3rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
-  line-height: 0.98;
-  text-transform: uppercase;
-}
-.wholesale-sheet__list {
-  border-top: 1px solid var(--color-line);
-}
-.wholesale-sheet__row {
-  display: grid;
-  grid-template-columns: minmax(0, 9rem) 1fr;
-  gap: 1rem;
-  padding-block: 0.8rem;
-  border-bottom: 1px solid var(--color-line);
-}
-.wholesale-sheet__key {
-  color: var(--color-ink-muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.wholesale-sheet__value {
-  font-size: 0.94rem;
-  line-height: 1.58;
-}
-.wholesale-value,
-.wholesale-form-section {
-  padding-block: clamp(3.5rem, 8vw, 5rem);
-}
-.wholesale-value__grid {
-  display: grid;
-  gap: 1rem;
-}
-.wholesale-value-card {
-  padding: 1.25rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-}
-.wholesale-value-card h2 {
-  margin-top: 0.75rem;
-}
-.wholesale-value-card .muted {
-  margin-top: 0.75rem;
-  line-height: 1.7;
-}
-.wholesale-process {
-  background: var(--color-surface);
-  border-block: 1px solid var(--color-line);
-}
-.wholesale-process__wrap {
-  display: grid;
-  gap: 1.5rem;
-  padding-block: clamp(3.5rem, 8vw, 4.75rem);
-}
-.wholesale-process__intro {
-  display: grid;
-  gap: 0.85rem;
-  max-width: 36rem;
-}
-.wholesale-form-section__wrap {
-  display: grid;
-  gap: 1.5rem;
-}
-.wholesale-form-copy {
-  display: grid;
-  gap: 0.85rem;
-  max-width: 34rem;
-}
-.wholesale-form-copy__small {
-  font-size: 0.92rem;
-}
-.wholesale-form {
-  display: grid;
-  gap: 1rem;
-  background:
-    linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 8%, transparent), transparent 20%),
-    var(--color-surface);
-  border: 1px solid var(--color-line);
-  padding: 1.35rem;
-}
-.wholesale-form__grid {
-  display: grid;
-  gap: 1rem;
-}
-.wholesale-form__field {
-  display: grid;
-  gap: 0.35rem;
-}
-.wholesale-form__footer {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 0.75rem;
-}
-.wholesale-form__note {
-  font-size: 0.75rem;
 }
 
 /* ─── Collections / resources / about / product templates ───────── */
@@ -1077,8 +910,7 @@ textarea.form-field { resize: vertical; }
   margin-top: 0.6rem;
 }
 
-.resource-card-grid,
-.wholesale-value__grid {
+.resource-card-grid {
   display: grid;
   gap: 1rem;
 }
@@ -1326,7 +1158,7 @@ textarea.form-field { resize: vertical; }
   line-height: 1;
   text-transform: uppercase;
 }
-.header-dealer-cta { padding: 0.5rem 1.1rem; }
+.header-shop-cta { padding: 0.5rem 1.1rem; }
 
 .nav-link {
   font-family: var(--font-display);
@@ -1595,11 +1427,7 @@ textarea.form-field { resize: vertical; }
   .home-spotlight__grid,
   .home-assortment__grid,
   .site-footer__top,
-  .wholesale-value__grid,
   .resource-card-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .wholesale-form__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .site-footer__bottom {
@@ -1642,7 +1470,6 @@ textarea.form-field { resize: vertical; }
   .home-system-rail__grid,
   .home-assortment__grid,
   .site-footer__top,
-  .wholesale-value__grid,
   .resource-card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1655,17 +1482,6 @@ textarea.form-field { resize: vertical; }
   }
   .site-footer__pitch {
     grid-column: span 2;
-  }
-  .wholesale-hero__wrap,
-  .wholesale-form-section__wrap,
-  .wholesale-process__wrap {
-    grid-template-columns: minmax(0, 1fr) minmax(18rem, 27rem);
-    align-items: start;
-  }
-  .wholesale-hero__copy,
-  .wholesale-form-copy,
-  .wholesale-process__intro {
-    max-width: none;
   }
   .collection-hero__wrap,
   .resource-hero__wrap,
@@ -1700,17 +1516,6 @@ textarea.form-field { resize: vertical; }
   }
   .home-race-styles__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .home-wholesale__panel {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-    align-items: start;
-  }
-  .home-wholesale__intro {
-    grid-column: 1 / 2;
-  }
-  .home-wholesale__reasons {
-    grid-column: 2 / 3;
-    grid-row: 1 / span 2;
   }
 }
 @media (max-width: 959px) {

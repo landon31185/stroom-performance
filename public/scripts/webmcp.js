@@ -1,147 +1,89 @@
-/**
- * Stroom Performance — WebMCP browser tools.
- *
- * Exposes the store's object model to in-browser AI agents via
- * navigator.modelContext. Tools map directly onto the ORCA object map:
- *   get_products       → Product (reference / Shopify-owned once live)
- *   check_fitment      → Fitment junction (the altitude/DA differentiator)
- *   get_categories     → Category (Shop by System + Shop by Racing Style)
- *   find_by_race_style  → Product filtered by racing-style facet
- *   get_guides         → Guide / How-To (content→commerce)
- *   get_wholesale_info → operator/supplier acquisition path (immediate goal)
- *
- * TODO(stroom): the product data below is a representative placeholder set that
- * mirrors src/content/products. Once the Shopify Storefront API is live, replace
- * PRODUCTS with a fetch to the Storefront GraphQL endpoint (see src/lib/shopify.ts)
- * so get_products / check_fitment / find_by_race_style return the real catalog.
- */
+/** Stroom Performance browser tools for AI-assisted product discovery. */
 if (typeof window !== 'undefined' && window.navigator?.modelContext) {
   const mcp = window.navigator.modelContext;
 
-  // Representative catalog — NOT a live/complete product list. Availability is
-  // honest: mostly "coming-soon" until supplier accounts open.
+  // Keep this reference data aligned with src/content/products until Shopify is live.
   const PRODUCTS = [
     {
-      slug: 'squash-intank-hat', title: 'Squash Performance Intank Hat', brand: 'Squash Performance',
-      system: 'fuel', raceStyles: ['no-prep', 'index'], availability: 'coming-soon',
-      url: '/products/squash-intank-hat',
-      fitment: { application: 'Turbo street/strip and No-Prep builds needing more fuel volume', daRange: 'up to ~6,600 ft DA', requiredMods: ['trap-door access panel'], confidence: 'verified-on-car' },
+      slug: 'pac-1218-valve-springs', title: 'PAC 1218 Beehive Valve Springs',
+      brand: 'PAC Racing Springs', partNumber: 'PAC-1218-16', system: 'engine',
+      platforms: ['gm-ls'], raceStyles: ['street-strip', 'index', 'no-prep'],
+      availability: 'coming-soon', url: '/products/pac-1218-valve-springs',
+      fitment: 'GM Gen III/IV LS applications using compatible retainers, seats, and installed height',
     },
     {
-      slug: 'motion-valley-plate', title: 'Motion Race Works Valley Plate', brand: 'Motion Race Works',
-      system: 'engine', raceStyles: ['no-prep', 'street-strip'], availability: 'coming-soon',
-      url: '/products/motion-valley-plate',
-      fitment: { application: 'Boosted LS-based engines', daRange: null, requiredMods: [], confidence: 'vendor-stated' },
+      slug: 'btr-stage-2-turbo-cam-v2', title: 'BTR Stage 2 Turbo Camshaft V2',
+      brand: 'Brian Tooley Racing', partNumber: 'BTR-TURBOSTG2', system: 'engine',
+      platforms: ['gm-ls'], raceStyles: ['street-strip', 'index', 'no-prep'],
+      availability: 'coming-soon', url: '/products/btr-stage-2-turbo-cam-v2',
+      fitment: 'Turbocharged GM Gen III/IV LS engines; complete combination review required',
     },
     {
-      slug: 'high-da-torque-converter', title: 'High-DA Torque Converter', brand: 'TODO: converter partner',
-      system: 'drivetrain', raceStyles: ['no-prep', 'index'], availability: 'build-to-order',
-      url: '/products/high-da-torque-converter',
-      fitment: { application: 'Automatic-trans boosted cars racing at elevation', daRange: 'stall tuned to your home DA (4,000–7,000 ft)', requiredMods: [], confidence: 'verified-on-car' },
+      slug: 'btr-equalizer-1-intake', title: 'BTR Equalizer 1 Intake Manifold',
+      brand: 'Brian Tooley Racing', partNumber: 'IMA-01', system: 'engine',
+      platforms: ['gm-ls'], raceStyles: ['street-strip', 'index', 'no-prep'],
+      availability: 'coming-soon', url: '/products/btr-equalizer-1-intake',
+      fitment: 'Cathedral-port GM LS combinations; confirm accessories, fuel system, and throttle control',
     },
     {
-      slug: 'holley-terminator-x', title: 'Holley Terminator X EFI', brand: 'Holley',
-      system: 'electronics', raceStyles: ['street-strip', 'index', 'no-prep'], availability: 'coming-soon',
-      url: '/products/holley-terminator-x',
-      fitment: { application: 'EFI conversions and boosted combos needing programmable control', daRange: null, requiredMods: [], confidence: 'vendor-stated' },
-    },
-    {
-      slug: 'engine-diaper', title: 'Engine Diaper', brand: 'TODO: safety supplier',
-      system: 'safety', raceStyles: ['no-prep', 'index', 'street-strip'], availability: 'coming-soon',
-      url: '/products/engine-diaper',
-      fitment: { application: 'Any high-boost car subject to containment rules', daRange: null, requiredMods: [], confidence: 'inferred' },
+      slug: 'holley-terminator-x-550-909t', title: 'Holley Terminator X for GM LS1/LS6',
+      brand: 'Holley EFI', partNumber: '550-909T', system: 'electronics',
+      platforms: ['gm-ls'], raceStyles: ['street-strip', 'index', 'no-prep'],
+      availability: 'coming-soon', url: '/products/holley-terminator-x-550-909t',
+      fitment: 'GM LS1/LS6 with 24x crank, 1x cam signal, and EV6 high-impedance injectors',
     },
   ];
 
   const CATEGORIES = {
-    system: [
-      { slug: 'fuel', name: 'Fuel', url: '/collections/fuel' },
-      { slug: 'engine', name: 'Engine', url: '/collections/engine' },
-      { slug: 'drivetrain', name: 'Drivetrain', url: '/collections/drivetrain' },
-      { slug: 'electronics', name: 'Electronics', url: '/collections/electronics' },
-      { slug: 'safety', name: 'Safety', url: '/collections/safety' },
+    platform: [
+      { slug: 'gm-ls', name: 'GM LS', state: 'verified-products' },
+      { slug: 'gen3-hemi', name: 'Gen III Hemi', state: 'products-being-confirmed' },
     ],
-    raceStyle: [
-      { slug: 'no-prep', name: 'No Prep', url: '/collections/no-prep' },
-      { slug: 'index', name: 'Index', url: '/collections/index' },
-      { slug: 'street-strip', name: 'Street/Strip', url: '/collections/street-strip' },
-    ],
+    system: ['fuel', 'engine', 'drivetrain', 'electronics', 'safety'].map((slug) => ({ slug, url: `/collections/${slug}` })),
+    raceStyle: ['no-prep', 'index', 'street-strip'].map((slug) => ({ slug, url: `/collections/${slug}` })),
   };
 
   const GUIDES = [
-    { slug: 'trap-door-fuel-pump-access', title: 'Cutting a Trap Door for Fuel-Pump Access', difficulty: 'advanced', url: '/guides/trap-door-fuel-pump-access' },
-    { slug: 'high-altitude-tuning-basics', title: 'High-Altitude Tuning Basics — Reading DA', difficulty: 'intermediate', url: '/guides/high-altitude-tuning-basics' },
+    { slug: 'trap-door-fuel-pump-access', title: 'Cutting a Trap Door for Fuel-Pump Access', url: '/guides/trap-door-fuel-pump-access' },
+    { slug: 'high-altitude-tuning-basics', title: 'High-Altitude Tuning Basics - Reading DA', url: '/guides/high-altitude-tuning-basics' },
   ];
 
   mcp.registerTool('get_products', {
-    description: 'Returns Stroom Performance parts (representative catalog; live catalog launching via Shopify). Each includes system, racing styles, availability, and URL.',
+    description: 'Returns verified Stroom reference products. Coming-soon items do not have live price or inventory.',
     parameters: {
-      system: { type: 'string', description: 'Optional system filter: fuel, engine, drivetrain, electronics, safety' },
+      system: { type: 'string', description: 'Optional system filter' },
+      platform: { type: 'string', description: 'Optional platform filter: gm-ls or gen3-hemi' },
     },
-    execute: ({ system } = {}) => {
-      const list = system ? PRODUCTS.filter((p) => p.system === system) : PRODUCTS;
-      return list.map(({ slug, title, brand, system, raceStyles, availability, url }) => ({ slug, title, brand, system, raceStyles, availability, url }));
-    },
+    execute: ({ system, platform } = {}) => PRODUCTS.filter((product) =>
+      (!system || product.system === system) && (!platform || product.platforms.includes(platform)),
+    ),
   });
 
   mcp.registerTool('check_fitment', {
-    description: 'The altitude differentiator. Given a vehicle/application and a density altitude, returns Stroom parts likely to fit with altitude notes and a confidence level. Stub logic over the representative catalog until Shopify + the Fitment data layer are live.',
-    parameters: {
-      application: { type: 'string', description: 'The build/application in plain language, e.g. "boosted LS automatic drag car"' },
-      altitudeFt: { type: 'number', description: 'Home density altitude in feet, e.g. 6600' },
-    },
-    execute: ({ application = '', altitudeFt } = {}) => {
-      const q = String(application).toLowerCase();
-      const high = typeof altitudeFt === 'number' && altitudeFt >= 4000;
-      const matches = PRODUCTS.filter((p) => {
-        const app = p.fitment?.application?.toLowerCase() || '';
-        // naive keyword overlap on application; real logic will use fitment metaobjects
-        return q === '' || app.split(/\W+/).some((w) => w.length > 3 && q.includes(w));
-      });
-      return {
-        note: high
-          ? 'High density altitude detected — converter stall, boost, and fueling all shift. Confirm each part against your actual DA.'
-          : 'Provide a density altitude (altitudeFt) for altitude-specific guidance — that is where Stroom adds value.',
-        results: (matches.length ? matches : PRODUCTS).map((p) => ({
-          title: p.title, url: p.url, system: p.system, availability: p.availability,
-          altitudeNote: p.fitment?.daRange || 'no altitude note yet', confidence: p.fitment?.confidence || 'inferred',
-        })),
-        disclaimer: 'TODO(stroom): stub logic. Real fitment comes from the Stroom-authored Fitment data layer (Shopify Metaobjects) — not supplier passthrough.',
-      };
-    },
+    description: 'Returns candidate products and fitment notes for a described application. Final compatibility must be verified before purchase.',
+    parameters: { application: { type: 'string', description: 'Build or application in plain language' } },
+    execute: ({ application = '' } = {}) => ({
+      application,
+      results: PRODUCTS.map(({ title, partNumber, url, fitment, availability }) => ({ title, partNumber, url, fitment, availability })),
+      disclaimer: 'Compatibility depends on the complete vehicle and component combination. Coming-soon does not mean in stock.',
+    }),
   });
 
   mcp.registerTool('get_categories', {
-    description: 'Returns the Stroom category facets: Shop by System (Fuel, Engine, Drivetrain, Electronics, Safety) and Shop by Racing Style (No Prep, Index, Street/Strip).',
+    description: 'Returns platform, system, and racing-style discovery facets.',
     parameters: {},
     execute: () => CATEGORIES,
   });
 
   mcp.registerTool('find_by_race_style', {
-    description: 'Returns parts suited to a racing style: no-prep, index, or street-strip.',
-    parameters: {
-      style: { type: 'string', description: 'Racing style: no-prep, index, or street-strip' },
-    },
-    execute: ({ style } = {}) => {
-      if (!style) return { error: 'Provide a style: no-prep, index, or street-strip' };
-      return PRODUCTS.filter((p) => p.raceStyles.includes(style)).map(({ title, url, system, availability }) => ({ title, url, system, availability }));
-    },
+    description: 'Returns reference products associated with a racing style.',
+    parameters: { style: { type: 'string', description: 'no-prep, index, or street-strip' } },
+    execute: ({ style } = {}) => PRODUCTS.filter((product) => product.raceStyles.includes(style)),
   });
 
   mcp.registerTool('get_guides', {
-    description: 'Returns Stroom Performance how-to guides (fabrication, high-altitude tuning, data-log analysis).',
+    description: 'Returns Stroom setup and installation guides.',
     parameters: {},
     execute: () => GUIDES,
-  });
-
-  mcp.registerTool('get_wholesale_info', {
-    description: 'For suppliers/manufacturers/distributors: how to become a Stroom dealer or drop-ship partner. Stroom is opening accounts now, ahead of the public catalog launch.',
-    parameters: {},
-    execute: () => ({
-      pitch: 'Stroom brings a high-intent, high-altitude drag-racing audience and a niche nobody else owns. Drop-ship terms, no dead stock on our side.',
-      wantedSystems: ['fuel', 'engine', 'drivetrain', 'electronics', 'safety'],
-      inquiryUrl: '/wholesale',
-      email: 'dealers@stroomperformance.com',
-    }),
   });
 }

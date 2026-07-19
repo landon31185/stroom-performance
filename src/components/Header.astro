@@ -4,7 +4,6 @@ const navLinks = [
   { label: 'Guides', href: '/guides' },
   { label: 'Builds', href: '/builds' },
   { label: 'About', href: '/about' },
-  { label: 'Wholesale', href: '/wholesale' },
 ];
 const currentPath = Astro.url.pathname;
 ---
@@ -25,7 +24,7 @@ const currentPath = Astro.url.pathname;
 
     <div class="flex items-center gap-3">
       <div class="hidden lg:block">
-        <a href="/shop" class="btn-primary text-sm header-dealer-cta">Shop Parts</a>
+        <a href="/shop" class="btn-primary text-sm header-shop-cta">Shop Parts</a>
       </div>
       <!-- Spacer: actual hamburger button lives in BaseLayout -->
       <div class="lg:hidden w-10 h-10 flex-shrink-0" aria-hidden="true"></div>
