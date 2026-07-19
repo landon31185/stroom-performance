@@ -10,8 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "remotion:studio": "remotion studio remotion/index.ts",
-    "remotion:render:hero": "remotion render remotion/index.ts StroomHeroTelemetry out/stroom-hero-telemetry.mp4"
+    "remotion:studio": "remotion studio remotion/index.ts --public-dir public",
+    "remotion:render:hero": "remotion render remotion/index.ts StroomHeroTelemetry out/stroom-hero-telemetry.mp4 --public-dir public"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.0",

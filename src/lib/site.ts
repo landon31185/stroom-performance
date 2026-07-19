@@ -30,7 +30,7 @@ export const site = {
   owner: 'Jake',
   heroFilm: {
     enabled: true,
-    src: '/media/stroom-short-source.mp4',
+    src: '/media/stroom-hero-loop.mp4',
     poster: '/og-default.svg',
   },
 } as const;

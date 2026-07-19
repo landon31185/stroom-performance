@@ -2,6 +2,8 @@ import React from 'react';
 import { Composition } from 'remotion';
 import { StroomHeroTelemetry } from './compositions/StroomHeroTelemetry';
 
+const sourceClip = 'file:///Users/landonburch/Projects/stroom-performance/public/media/stroom-short-source.mp4';
+
 export const RemotionRoot: React.FC = () => {
   return (
     <>
@@ -15,7 +17,7 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           headline: ['BUILT FOR THE RUNS WHERE', 'THIN AIR EXPOSES BAD PARTS.'],
           kicker: 'High-altitude no-prep and index racing',
-          clipSrc: '/media/stroom-short-source.mp4',
+          clipSrc: sourceClip,
         }}
       />
     </>

@@ -3,9 +3,9 @@ import {
   AbsoluteFill,
   Easing,
   OffthreadVideo,
+  Sequence,
   interpolate,
   spring,
-  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
@@ -18,8 +18,10 @@ type Props = {
 
 const palette = {
   base: '#16171a',
+  surface: '#1d1e22',
   line: 'rgba(241, 239, 236, 0.08)',
   orange: '#e8672e',
+  orangeSoft: 'rgba(232, 103, 46, 0.14)',
   paper: '#f1efec',
   muted: '#9a9997',
 };
@@ -70,14 +72,47 @@ export const StroomHeroTelemetry: React.FC<Props> = ({ headline, kicker, clipSrc
     [height, width],
   );
 
-  const resolvedClipSrc = clipSrc ?? staticFile('media/stroom-short-source.mp4');
+  const resolvedClipSrc = clipSrc ?? null;
 
   return (
     <AbsoluteFill style={{ backgroundColor: palette.base, fontFamily: 'Archivo, Hanken Grotesk, sans-serif' }}>
       {resolvedClipSrc ? (
-        <AbsoluteFill style={{ opacity: 0.18, filter: 'grayscale(1) contrast(1.05) brightness(0.45)' }}>
-          <OffthreadVideo src={resolvedClipSrc} muted />
-        </AbsoluteFill>
+        <>
+          <AbsoluteFill style={{ opacity: 0.12, filter: 'grayscale(1) contrast(1.05) brightness(0.18) blur(14px)', transform: 'scale(1.14)' }}>
+            <OffthreadVideo src={resolvedClipSrc} muted style={{ objectFit: 'cover' }} />
+          </AbsoluteFill>
+          <AbsoluteFill
+            style={{
+              left: width * 0.53,
+              width: width * 0.31,
+              top: height * 0.08,
+              height: height * 0.9,
+              overflow: 'hidden',
+              opacity: 0.34,
+              clipPath: 'polygon(16% 0, 100% 0, 84% 100%, 0 100%)',
+              boxShadow: '0 0 0 1px rgba(232,103,46,0.1)',
+            }}
+          >
+            <OffthreadVideo
+              src={resolvedClipSrc}
+              muted
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center center',
+                filter: 'grayscale(1) contrast(1.15) brightness(0.42)',
+                transform: 'scale(1.06)',
+              }}
+            />
+            <AbsoluteFill
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(232,103,46,0.1), rgba(22,23,26,0.2) 35%, rgba(22,23,26,0.65) 100%)',
+              }}
+            />
+          </AbsoluteFill>
+        </>
       ) : null}
 
       <AbsoluteFill
@@ -118,6 +153,29 @@ export const StroomHeroTelemetry: React.FC<Props> = ({ headline, kicker, clipSrc
       </AbsoluteFill>
 
       <AbsoluteFill>
+        <div
+          style={{
+            position: 'absolute',
+            right: width * 0.13,
+            top: height * 0.18,
+            width: 2,
+            height: height * 0.62,
+            background: 'linear-gradient(180deg, rgba(241,239,236,0.02), rgba(241,239,236,0.16), rgba(241,239,236,0.02))',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            right: width * 0.19,
+            top: height * 0.18,
+            width: 1,
+            height: height * 0.62,
+            background: 'linear-gradient(180deg, rgba(241,239,236,0.01), rgba(241,239,236,0.08), rgba(241,239,236,0.01))',
+          }}
+        />
+      </AbsoluteFill>
+
+      <AbsoluteFill>
         {particles.map((particle, index) => {
           const x = particle.baseX + Math.sin((frame + particle.offset) / 18) * 12;
           const y = particle.baseY + Math.cos((frame + particle.offset) / 22) * 8;
@@ -144,6 +202,53 @@ export const StroomHeroTelemetry: React.FC<Props> = ({ headline, kicker, clipSrc
             'linear-gradient(90deg, rgba(22,23,26,0.96) 0 34%, rgba(22,23,26,0.38) 58%, rgba(22,23,26,0.68) 100%)',
         }}
       />
+
+      <Sequence from={30}>
+        <div
+          style={{
+            position: 'absolute',
+            right: 116,
+            bottom: 112,
+            width: 380,
+            padding: '18px 20px 20px',
+            background: 'rgba(29,30,34,0.68)',
+            border: '1px solid rgba(241,239,236,0.08)',
+            opacity: interpolate(frame, [30, 54], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            }),
+          }}
+        >
+          <div
+            style={{
+              color: palette.orange,
+              fontSize: 16,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              marginBottom: 14,
+            }}
+          >
+            Live pass sample
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '120px 1fr',
+              gap: '12px 16px',
+              color: palette.paper,
+              fontSize: 22,
+              lineHeight: 1.1,
+            }}
+          >
+            <span style={{ color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.12em', fontSize: 14 }}>Surface</span>
+            <span>No-prep / lane hunting</span>
+            <span style={{ color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.12em', fontSize: 14 }}>Air</span>
+            <span>High DA / thin hit</span>
+            <span style={{ color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.12em', fontSize: 14 }}>Use</span>
+            <span>Proof, not theory</span>
+          </div>
+        </div>
+      </Sequence>
 
       <div
         style={{
@@ -219,6 +324,29 @@ export const StroomHeroTelemetry: React.FC<Props> = ({ headline, kicker, clipSrc
           <div>Race-day proof</div>
           <div>Supplier trust</div>
           <div>Altitude moat</div>
+        </div>
+        <div
+          style={{
+            marginTop: 26,
+            height: 1,
+            background: 'rgba(241,239,236,0.08)',
+          }}
+        />
+        <div
+          style={{
+            marginTop: 18,
+            display: 'grid',
+            gridTemplateColumns: '180px 1fr',
+            gap: '14px 18px',
+            color: palette.paper,
+            fontSize: 24,
+            lineHeight: 1.2,
+          }}
+        >
+          <span style={{ color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.12em', fontSize: 14 }}>Track condition</span>
+          <span>un-prepped / changing lane</span>
+          <span style={{ color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.12em', fontSize: 14 }}>Altitude problem</span>
+          <span>fuel, boost, converter, launch</span>
         </div>
       </div>
     </AbsoluteFill>
