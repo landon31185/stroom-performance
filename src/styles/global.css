@@ -1577,12 +1577,12 @@ textarea.form-field { resize: vertical; }
 }
 @media (max-width: 959px) {
   .hero-film-layer__panel {
-    right: 0.75rem;
-    top: 5.5rem;
+    right: 0.9rem;
+    top: 5.9rem;
     bottom: auto;
-    width: min(15rem, 48vw);
-    height: min(21rem, 42vh);
-    opacity: 0.96;
+    width: min(13.75rem, 44vw);
+    height: min(18.5rem, 36vh);
+    opacity: 0.92;
     box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
   }
   .hero-film-layer__video {
@@ -1613,7 +1613,14 @@ textarea.form-field { resize: vertical; }
   }
   .home-hero__copy {
     max-width: 27rem;
-    padding-top: min(14.5rem, 32vw);
+    padding-top: min(16.75rem, 38vw);
+    padding-right: min(40vw, 11rem);
+  }
+  .home-hero__title {
+    max-width: 8ch;
+  }
+  .home-hero__body {
+    max-width: 21rem;
   }
   .hero-film-layer__meta-value {
     font-size: 0.8rem;
