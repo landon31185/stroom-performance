@@ -11,11 +11,10 @@ const { src, poster } = Astro.props;
   <div class="hero-film-layer__ambient">
     <video
       class="hero-film-layer__video"
-      autoplay
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="none"
       poster={poster}
     >
       <source src={src} type="video/mp4" />
@@ -25,11 +24,10 @@ const { src, poster } = Astro.props;
   <div class="hero-film-layer__panel">
     <video
       class="hero-film-layer__panel-video"
-      autoplay
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="none"
       poster={poster}
     >
       <source src={src} type="video/mp4" />
@@ -41,3 +39,63 @@ const { src, poster } = Astro.props;
     </div>
   </div>
 </div>
+
+<script>
+  function initHeroFilm() {
+    document.querySelectorAll<HTMLElement>('.hero-film-layer').forEach((layer) => {
+      const statefulLayer = layer as HTMLElement & { heroFilmCleanup?: () => void };
+      statefulLayer.heroFilmCleanup?.();
+
+      const ambientVideo = layer.querySelector<HTMLVideoElement>('.hero-film-layer__video');
+      const panelVideo = layer.querySelector<HTMLVideoElement>('.hero-film-layer__panel-video');
+      const panel = layer.querySelector<HTMLElement>('.hero-film-layer__panel');
+      if (!ambientVideo || !panelVideo || !panel) return;
+
+      const mobileQuery = window.matchMedia('(max-width: 719px)');
+      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let observer: IntersectionObserver | undefined;
+
+      const play = (video: HTMLVideoElement) => {
+        void video.play().catch(() => {
+          // The real poster keeps autoplay failure intentional and readable.
+        });
+      };
+
+      const syncPlayback = () => {
+        observer?.disconnect();
+        observer = undefined;
+        ambientVideo.pause();
+        panelVideo.pause();
+
+        if (reducedMotionQuery.matches) return;
+
+        if (!mobileQuery.matches) {
+          play(ambientVideo);
+          play(panelVideo);
+          return;
+        }
+
+        observer = new IntersectionObserver(([entry]) => {
+          if (entry?.isIntersecting) play(panelVideo);
+          else panelVideo.pause();
+        }, { threshold: 0.2 });
+        observer.observe(panel);
+      };
+
+      mobileQuery.addEventListener('change', syncPlayback);
+      reducedMotionQuery.addEventListener('change', syncPlayback);
+      syncPlayback();
+
+      statefulLayer.heroFilmCleanup = () => {
+        observer?.disconnect();
+        ambientVideo.pause();
+        panelVideo.pause();
+        mobileQuery.removeEventListener('change', syncPlayback);
+        reducedMotionQuery.removeEventListener('change', syncPlayback);
+      };
+    });
+  }
+
+  initHeroFilm();
+  document.addEventListener('astro:page-load', initHeroFilm);
+</script>

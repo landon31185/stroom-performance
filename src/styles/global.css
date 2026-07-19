@@ -1770,6 +1770,68 @@ textarea.form-field { resize: vertical; }
   }
 }
 
+/* Phone: lead with the storefront promise, then reveal the film like an
+   editorial image rather than making motion the masthead. */
+@media (max-width: 719px) {
+  .site-header {
+    background: color-mix(in oklab, var(--color-base) 96%, transparent);
+    border-color: color-mix(in oklab, var(--color-line) 72%, transparent);
+  }
+  .hero-film-layer__ambient {
+    display: none;
+  }
+  .hero-film-layer__panel {
+    left: 1.25rem;
+    right: 1.25rem;
+    top: 34rem;
+    width: auto;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+  }
+  .hero-film-layer__panel-video {
+    object-position: 78% 58%;
+    transform: scale(1.48);
+    transform-origin: 78% 58%;
+  }
+  .hero-film-layer__panel-overlay {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(22, 23, 26, 0.18) 100%),
+      linear-gradient(115deg, transparent 0 62%, color-mix(in oklab, var(--color-accent) 12%, transparent) 62% 66%, transparent 66% 100%);
+  }
+  .home-hero__wrap {
+    padding-top: 6.5rem;
+    padding-bottom: 4rem;
+  }
+  .home-hero__copy {
+    max-width: 100%;
+    padding-top: 0;
+  }
+  .home-hero__title {
+    max-width: 7ch;
+    margin-top: 0;
+    font-size: clamp(3.35rem, 14vw, 4rem);
+  }
+  .home-hero__body {
+    max-width: 21rem;
+  }
+  .home-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .home-hero__actions > * {
+    justify-content: center;
+    padding-inline: 0.85rem;
+  }
+  .home-proof {
+    margin-top: 18rem;
+  }
+  .home-hero-panel {
+    margin-top: 4rem;
+  }
+}
+
 /* Tablet needs its own composition: media supports the headline instead of
    becoming a full-width mobile masthead. */
 @media (min-width: 720px) and (max-width: 959px) {

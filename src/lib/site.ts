@@ -31,7 +31,7 @@ export const site = {
   heroFilm: {
     enabled: true,
     src: '/media/stroom-hero-loop.mp4',
-    poster: '/og-default.svg',
+    poster: '/media/stroom-hero-poster.jpg',
   },
 } as const;
 
