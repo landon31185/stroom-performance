@@ -1769,3 +1769,51 @@ textarea.form-field { resize: vertical; }
     color: var(--color-ink-text);
   }
 }
+
+/* Tablet needs its own composition: media supports the headline instead of
+   becoming a full-width mobile masthead. */
+@media (min-width: 720px) and (max-width: 959px) {
+  .site-header {
+    background: color-mix(in oklab, var(--color-base) 94%, transparent);
+    border-color: color-mix(in oklab, var(--color-line) 72%, transparent);
+  }
+  .header-shell {
+    min-height: 4rem;
+  }
+  #mobile-hamburger {
+    height: 4rem !important;
+  }
+  .hero-film-layer__panel {
+    left: auto;
+    right: 1.5rem;
+    top: 6.75rem;
+    width: min(46vw, 27rem);
+    height: clamp(21rem, 58vh, 30rem);
+    clip-path: polygon(9% 0, 100% 0, 91% 100%, 0 100%);
+  }
+  .hero-film-layer__panel-video {
+    object-position: 76% 54%;
+    transform: scale(1.16);
+    transform-origin: 76% 54%;
+  }
+  .home-hero__wrap {
+    min-height: max(46rem, 100svh);
+    padding-top: clamp(11rem, 24vh, 15rem);
+  }
+  .home-hero__copy {
+    width: min(48%, 28rem);
+    padding-top: 0;
+  }
+  .home-hero__title {
+    max-width: 7ch;
+    font-size: clamp(3.4rem, 8vw, 4.8rem);
+  }
+  .home-hero__body {
+    max-width: 25rem;
+  }
+  .home-hero-panel {
+    width: min(34rem, 72vw);
+    margin-top: clamp(10rem, 26vh, 17rem);
+    margin-left: auto;
+  }
+}
