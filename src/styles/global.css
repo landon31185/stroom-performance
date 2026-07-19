@@ -24,15 +24,15 @@
 
 @theme {
   --color-ink:          #16171a;   /* primitive near-black — dark badge/wordmark/sections */
-  --color-paper:        #f1efec;   /* primitive warm off-white — light content sections */
-  --color-orange:       #e8672e;   /* primitive brand orange — mark, accents, headings */
-  --color-orange-ink:   #b8480e;   /* orange text on light bg (AA-safe, small text) */
-  --color-muted:        #8b8b8b;   /* secondary/labels, both modes */
+  --color-paper:        #f5f4f1;   /* primitive soft off-white — light content sections */
+  --color-orange:       #eb5f3a;   /* restrained warm red-orange — primary CTA / brand hit */
+  --color-orange-ink:   #5b2014;   /* warm accent text on light bg */
+  --color-muted:        #85868c;   /* secondary/labels, both modes */
 
   --color-base:         var(--color-ink);      /* page background — dark-forward */
   --color-surface:      #1d1e22;                /* cards / panels */
-  --color-surface-2:    #26272c;                /* raised panels */
-  --color-line:         #313236;                /* borders / dividers */
+  --color-surface-2:    #24262b;                /* raised panels */
+  --color-line:         #303238;                /* borders / dividers */
   --color-ink-text:      var(--color-paper);     /* primary text on dark (≈16:1) */
   --color-ink-muted:    var(--color-muted);     /* secondary text on dark */
 
@@ -101,7 +101,7 @@ a { color: inherit; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.accent { color: var(--color-accent); }
+.accent { color: color-mix(in oklab, var(--color-accent) 86%, var(--color-paper)); }
 .hazard { color: var(--color-accent); }
 .muted { color: var(--color-ink-muted); }
 
@@ -256,7 +256,7 @@ textarea.form-field { resize: vertical; }
   inset: 0;
   background:
     linear-gradient(90deg, color-mix(in oklab, var(--color-base) 97%, transparent) 0 43%, color-mix(in oklab, var(--color-base) 22%, transparent) 70%, color-mix(in oklab, var(--color-base) 66%, transparent) 100%),
-    radial-gradient(circle at 76% 28%, color-mix(in oklab, var(--color-accent) 12%, transparent), transparent 32%),
+    radial-gradient(circle at 76% 28%, color-mix(in oklab, var(--color-accent) 7%, transparent), transparent 32%),
     linear-gradient(180deg, color-mix(in oklab, var(--color-base) 18%, transparent), color-mix(in oklab, var(--color-base) 58%, transparent));
 }
 .hero-film-layer__panel {
@@ -453,17 +453,13 @@ textarea.form-field { resize: vertical; }
   gap: 1rem;
   align-items: baseline;
 }
-.home-hero-panel__eyebrow,
 .home-hero-panel__stamp,
-.home-system-card__meta,
 .home-guide-card__eyebrow {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
 }
-.home-hero-panel__eyebrow { color: var(--color-accent); }
 .home-hero-panel__stamp,
-.home-system-card__meta,
 .home-guide-card__eyebrow { color: var(--color-ink-muted); }
 .home-hero-panel__divider {
   width: 100%;
@@ -505,7 +501,7 @@ textarea.form-field { resize: vertical; }
   transform: translateY(-2px);
 }
 .home-hero-panel__card-label {
-  color: var(--color-accent);
+  color: var(--color-ink-muted);
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -563,15 +559,8 @@ textarea.form-field { resize: vertical; }
   display: grid;
   gap: 0.45rem;
 }
-.home-system-tile__meta {
-  color: var(--color-orange-ink);
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
 .home-spotlight {
-  background: linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 9%, transparent), transparent 18%);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 5%, transparent), transparent 18%);
   border-block: 1px solid var(--color-line);
 }
 .home-spotlight__wrap {
@@ -612,19 +601,14 @@ textarea.form-field { resize: vertical; }
     radial-gradient(circle at 78% 20%, color-mix(in oklab, var(--color-accent) 18%, transparent), transparent 28%),
     var(--color-surface);
 }
-.home-spotlight__label,
-.home-spotlight__mini-label,
-.home-guide-card__link,
-.home-assortment__label {
+.home-guide-card__link {
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-.home-spotlight__label,
 .home-spotlight__cta,
-.home-assortment__label {
-  color: var(--color-accent);
-}
+.home-guide-card__link { color: var(--color-ink-muted); }
+.home-spotlight__cta { color: var(--color-ink-text); }
 .home-spotlight__title {
   margin-top: 0.8rem;
   max-width: 9ch;
@@ -713,7 +697,7 @@ textarea.form-field { resize: vertical; }
 }
 .home-credibility__grid--wide .home-editorial-card {
   background:
-    linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 6%, transparent), transparent 30%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-paper) 3%, transparent), transparent 30%),
     var(--color-surface);
 }
 .home-editorial-card,
@@ -769,10 +753,7 @@ textarea.form-field { resize: vertical; }
   gap: 0.75rem;
   align-items: center;
 }
-.home-guide-card__link {
-  color: var(--color-accent);
-  font-family: var(--font-display);
-}
+.home-guide-card__link { font-family: var(--font-display); }
 
 .home-assortment__panel {
   display: grid;
