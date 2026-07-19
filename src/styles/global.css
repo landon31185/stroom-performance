@@ -524,11 +524,11 @@ textarea.form-field { resize: vertical; }
   gap: 1rem;
 }
 .home-system-rail .muted,
-.home-system-rail .nav-link,
 .home-spotlight__mini .muted,
 .home-assortment .muted {
   color: color-mix(in oklab, var(--color-ink) 68%, #5f6169);
 }
+.home-system-rail .nav-link { color: var(--color-orange-ink); }
 .home-system-rail__grid {
   display: grid;
   gap: 1px;
@@ -607,8 +607,7 @@ textarea.form-field { resize: vertical; }
   text-transform: uppercase;
 }
 .home-spotlight__cta,
-.home-guide-card__link { color: var(--color-ink-muted); }
-.home-spotlight__cta { color: var(--color-ink-text); }
+.home-guide-card__link { color: var(--color-accent); }
 .home-spotlight__title {
   margin-top: 0.8rem;
   max-width: 9ch;
@@ -1107,6 +1106,7 @@ textarea.form-field { resize: vertical; }
 }
 .resource-card__cta {
   margin-top: auto;
+  color: var(--color-accent);
 }
 
 .about-hero__sidebar-list {
@@ -1325,12 +1325,12 @@ textarea.form-field { resize: vertical; }
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-ink-muted);
+  color: var(--color-accent);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 .nav-link:hover,
-.nav-link[aria-current="page"] { color: var(--color-accent); }
+.nav-link[aria-current="page"] { color: var(--color-accent-hi); }
 
 /* ─── Product card ──────────────────────────────────────────────── */
 
@@ -1496,12 +1496,12 @@ textarea.form-field { resize: vertical; }
   text-transform: uppercase;
   line-height: 1.15;
   padding: 0.5rem 0;
-  color: var(--color-ink-text);
+  color: var(--color-accent);
   text-decoration: none;
   border-bottom: 1px solid var(--color-line);
   transition: color 0.15s ease;
 }
-.mobile-nav-item:hover { color: var(--color-accent); }
+.mobile-nav-item:hover { color: var(--color-accent-hi); }
 
 /* ─── Scroll reveal ──────────────────────────────────────────────── */
 
@@ -1522,8 +1522,8 @@ textarea.form-field { resize: vertical; }
   color: var(--color-ink-muted);
 }
 .breadcrumb li { display: flex; align-items: center; gap: 0.375rem; }
-.breadcrumb a { text-decoration: none; transition: color 0.15s ease; }
-.breadcrumb a:hover { color: var(--color-accent); }
+.breadcrumb a { color: var(--color-accent); text-decoration: none; transition: color 0.15s ease; }
+.breadcrumb a:hover { color: var(--color-accent-hi); }
 .breadcrumb [aria-current="page"] { color: var(--color-ink-text); }
 .breadcrumb .sep { color: var(--color-line); }
 
