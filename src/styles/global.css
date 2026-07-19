@@ -233,7 +233,11 @@ textarea.form-field { resize: vertical; }
 }
 .hero-film-layer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
@@ -375,7 +379,11 @@ textarea.form-field { resize: vertical; }
   gap: 2.25rem;
   padding-block: clamp(5.5rem, 10vw, 9rem) clamp(3.75rem, 8vw, 6rem);
 }
-.home-hero__copy { max-width: 39rem; }
+.home-hero__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 39rem;
+}
 .home-hero__title {
   margin-top: 1.15rem;
   max-width: 9.5ch;
@@ -390,6 +398,7 @@ textarea.form-field { resize: vertical; }
   font-size: 1rem;
   line-height: 1.75;
 }
+.home-hero__body-mobile { display: none; }
 .home-hero__actions {
   display: flex;
   flex-wrap: wrap;
@@ -1780,20 +1789,24 @@ textarea.form-field { resize: vertical; }
   .hero-film-layer__ambient {
     display: none;
   }
+  .hero-film-layer {
+    display: contents;
+  }
   .hero-film-layer__panel {
-    left: 1.25rem;
-    right: 1.25rem;
-    top: 34rem;
-    width: auto;
+    position: relative;
+    inset: auto;
+    order: 2;
+    width: 100%;
     height: auto;
+    margin-top: 0.5rem;
     aspect-ratio: 16 / 10;
     clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
   }
   .hero-film-layer__panel-video {
-    object-position: 78% 58%;
-    transform: scale(1.48);
-    transform-origin: 78% 58%;
+    object-position: 82% 54%;
+    transform: scale(1.62);
+    transform-origin: 82% 54%;
   }
   .hero-film-layer__panel-overlay {
     background:
@@ -1805,8 +1818,14 @@ textarea.form-field { resize: vertical; }
     padding-bottom: 4rem;
   }
   .home-hero__copy {
+    display: contents;
     max-width: 100%;
     padding-top: 0;
+  }
+  .home-hero__intro {
+    position: relative;
+    z-index: 1;
+    order: 1;
   }
   .home-hero__title {
     max-width: 7ch;
@@ -1816,6 +1835,8 @@ textarea.form-field { resize: vertical; }
   .home-hero__body {
     max-width: 21rem;
   }
+  .home-hero__body-desktop { display: none; }
+  .home-hero__body-mobile { display: inline; }
   .home-hero__actions {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
@@ -1825,10 +1846,14 @@ textarea.form-field { resize: vertical; }
     padding-inline: 0.85rem;
   }
   .home-proof {
-    margin-top: 18rem;
+    position: relative;
+    z-index: 1;
+    order: 3;
+    margin-top: 1.25rem;
   }
   .home-hero-panel {
-    margin-top: 4rem;
+    order: 4;
+    margin-top: 2.5rem;
   }
 }
 

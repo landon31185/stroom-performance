@@ -40,22 +40,28 @@ const supportSpotlights = featured.slice(1, 3);
   description="Curated performance parts, fitment-minded guidance, and cleaner category entry points for builders who want more confidence and less guesswork."
 >
   <section class="home-hero">
-    {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
     <HeroAtmosphere client:load />
     <div class="wrap home-hero__wrap">
       <div class="home-hero__copy">
-        <h1 class="heading-hero home-hero__title reveal">
-          Serious parts.
-          <span class="home-hero__title-accent">Clearer choices.</span>
-        </h1>
-        <p class="body-large muted reveal home-hero__body">
-          A curated performance storefront built around systems, fitment-minded
-          guidance, and product judgment that scales as the real catalog comes
-          into focus.
-        </p>
-        <div class="home-hero__actions reveal">
-          <a href="/shop" class="btn-primary">Shop Parts</a>
-          <a href="/guides" class="btn-outline">Browse Guides</a>
+        <div class="home-hero__intro">
+          <h1 class="heading-hero home-hero__title reveal">
+            Serious parts.
+            <span class="home-hero__title-accent">Clearer choices.</span>
+          </h1>
+          <p class="body-large muted reveal home-hero__body">
+            <span class="home-hero__body-desktop">
+              A curated performance storefront built around systems, fitment-minded
+              guidance, and product judgment that scales as the real catalog comes
+              into focus.
+            </span>
+            <span class="home-hero__body-mobile">
+              Fitment-minded parts and guidance for GM LS and Gen III Hemi builds.
+            </span>
+          </p>
+          <div class="home-hero__actions reveal">
+            <a href="/shop" class="btn-primary">Shop Parts</a>
+            <a href="/guides" class="btn-outline">Browse Guides</a>
+          </div>
         </div>
         <div class="home-proof reveal" aria-label="Homepage highlights">
           {heroHighlights.map((item) => (
@@ -66,6 +72,8 @@ const supportSpotlights = featured.slice(1, 3);
           ))}
         </div>
       </div>
+
+      {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
 
       <aside class="home-hero-panel reveal" aria-label="Featured focus">
         <div class="home-hero-panel__top">
