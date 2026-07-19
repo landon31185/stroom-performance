@@ -1,0 +1,70 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  brand: string;
+  partNumber?: string;
+  image?: string;
+  size?: 'card' | 'hero';
+}
+
+const { slug, title, brand, partNumber, image, size = 'card' } = Astro.props;
+const drawing = slug.includes('valve-springs')
+  ? 'springs'
+  : slug.includes('cam')
+    ? 'camshaft'
+    : slug.includes('intake')
+      ? 'intake'
+      : 'electronics';
+---
+
+<figure class={`product-media product-media--${size}`} aria-label={`${title} product image placeholder`}>
+  {image ? (
+    <img src={image} alt={`${brand} ${title}`} loading={size === 'card' ? 'lazy' : 'eager'} />
+  ) : (
+    <>
+      <div class="product-media__grid" aria-hidden="true"></div>
+      <svg class="product-media__drawing" viewBox="0 0 640 400" role="img" aria-label={`Abstract technical drawing representing ${title}`}>
+        {drawing === 'springs' && (
+          <g fill="none" stroke="currentColor" stroke-width="7">
+            <ellipse cx="320" cy="90" rx="105" ry="34" />
+            <ellipse cx="320" cy="310" rx="70" ry="24" />
+            <path d="M215 90 C430 115 195 145 415 170 C205 195 430 225 235 248 C420 270 235 292 250 310" />
+            <path d="M425 90 C210 115 445 145 225 170 C435 195 210 225 405 248 C220 270 405 292 390 310" />
+          </g>
+        )}
+        {drawing === 'camshaft' && (
+          <g fill="none" stroke="currentColor" stroke-width="7" transform="rotate(-11 320 200)">
+            <path d="M95 200 H545" />
+            <circle cx="115" cy="200" r="28" />
+            <circle cx="525" cy="200" r="28" />
+            <ellipse cx="205" cy="175" rx="38" ry="68" />
+            <ellipse cx="285" cy="225" rx="38" ry="68" />
+            <ellipse cx="365" cy="175" rx="38" ry="68" />
+            <ellipse cx="445" cy="225" rx="38" ry="68" />
+          </g>
+        )}
+        {drawing === 'intake' && (
+          <g fill="none" stroke="currentColor" stroke-width="7">
+            <path d="M175 105 H465 L505 175 V285 H135 V175 Z" />
+            <ellipse cx="320" cy="125" rx="78" ry="30" />
+            <path d="M165 180 H475 M165 225 H475 M195 285 V335 M245 285 V335 M295 285 V335 M345 285 V335 M395 285 V335 M445 285 V335" />
+          </g>
+        )}
+        {drawing === 'electronics' && (
+          <g fill="none" stroke="currentColor" stroke-width="7">
+            <rect x="180" y="90" width="280" height="220" rx="12" />
+            <path d="M225 145 H415 M225 190 H360 M225 235 H395" />
+            <circle cx="405" cy="190" r="18" />
+            <path d="M180 135 H125 L95 105 M180 185 H110 L75 220 M460 145 H520 L555 105 M460 235 H525 L565 275" />
+          </g>
+        )}
+      </svg>
+      <div class="product-media__meta">
+        <span>{brand}</span>
+        <span>{partNumber ?? 'Image pending'}</span>
+      </div>
+      <span class="product-media__state">Product image pending</span>
+    </>
+  )}
+</figure>

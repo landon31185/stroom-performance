@@ -18,6 +18,7 @@ const products = defineCollection({
     title: z.string(),
     brand: z.string(),                       // Squash Performance, Motion Race Works, Holley…
     manufacturerPartNumber: z.string().optional(),
+    image: z.string().optional(),
     system: z.enum(SYSTEMS),
     platforms: z.array(z.enum(PLATFORMS)).default([]),
     raceStyles: z.array(z.enum(RACE_STYLES)).default([]),

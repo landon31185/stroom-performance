@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getCollection, render } from 'astro:content';
 import { site, systemName, raceStyleName, platformName } from '../../lib/site';
+import ProductMedia from '../../components/ProductMedia.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products');
@@ -37,6 +38,7 @@ const schema = JSON.stringify({
   brand: { '@type': 'Brand', name: d.brand },
   ...(d.manufacturerPartNumber ? { mpn: d.manufacturerPartNumber, sku: d.manufacturerPartNumber } : {}),
   category: systemName(d.system),
+  ...(d.image ? { image: `${site.url}${d.image}` } : {}),
   offers: {
     '@type': 'Offer',
     availability: availabilityMap[d.availability],
@@ -57,6 +59,7 @@ const schema = JSON.stringify({
     <div class="wrap product-hero__wrap">
       <div class="product-hero__copy">
         <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(d.system), href: `/collections/${d.system}` }, { label: d.title }]} />
+        <ProductMedia slug={product.id} title={d.title} brand={d.brand} partNumber={d.manufacturerPartNumber} image={d.image} size="hero" />
         <div class="product-hero__tags reveal">
           <span class="tag">{systemName(d.system)}</span>
           {d.platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}

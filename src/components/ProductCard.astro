@@ -1,5 +1,6 @@
 ---
 import { platformName, systemName } from '../lib/site';
+import ProductMedia from './ProductMedia.astro';
 interface Props {
   slug: string;
   title: string;
@@ -9,8 +10,10 @@ interface Props {
   summary: string;
   availability: 'in-stock' | 'build-to-order' | 'coming-soon';
   price?: number;
+  partNumber?: string;
+  image?: string;
 }
-const { slug, title, brand, system, platforms = [], summary, availability, price } = Astro.props;
+const { slug, title, brand, system, platforms = [], summary, availability, price, partNumber, image } = Astro.props;
 const availLabel = {
   'in-stock': 'In stock',
   'build-to-order': 'Build to order',
@@ -18,6 +21,7 @@ const availLabel = {
 }[availability];
 ---
 <a href={`/products/${slug}`} class="product-card">
+  <ProductMedia {slug} {title} {brand} {partNumber} {image} />
   <div class="product-card__top">
     <div class="product-card__facets">
       <span class="tag">{systemName(system)}</span>
