@@ -1577,12 +1577,43 @@ textarea.form-field { resize: vertical; }
 }
 @media (max-width: 959px) {
   .hero-film-layer__panel {
-    right: 1rem;
-    top: auto;
-    bottom: 1rem;
-    width: min(13rem, 42vw);
-    height: min(18rem, 36vh);
-    opacity: 0.78;
+    right: 0.75rem;
+    top: 5.5rem;
+    bottom: auto;
+    width: min(15rem, 48vw);
+    height: min(21rem, 42vh);
+    opacity: 0.96;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+  }
+  .hero-film-layer__video {
+    opacity: 0.13;
+    filter: grayscale(1) contrast(1.05) brightness(0.22) blur(12px);
+  }
+  .hero-film-layer__panel-video {
+    object-position: 60% center;
+    filter: grayscale(0.18) contrast(1.18) brightness(0.54) saturate(0.9);
+    transform: scale(1.04);
+  }
+  .hero-film-layer__panel-overlay {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.01), rgba(22, 23, 26, 0.08) 24%, rgba(22, 23, 26, 0.62) 100%),
+      linear-gradient(115deg, transparent 0 58%, color-mix(in oklab, var(--color-accent) 18%, transparent) 58% 63%, transparent 63% 100%);
+  }
+  .hero-film-layer__panel-meta {
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0.85rem;
+    padding-top: 0.7rem;
+  }
+  .hero-film-layer__meta-label {
+    font-size: 0.62rem;
+  }
+  .hero-atmosphere__canvas {
+    opacity: 0.42;
+  }
+  .home-hero__copy {
+    max-width: 27rem;
+    padding-top: min(14.5rem, 32vw);
   }
   .hero-film-layer__meta-value {
     font-size: 0.8rem;
