@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import HeroAtmosphere from '../components/HeroAtmosphere';
+import HeroFilmLayer from '../components/HeroFilmLayer.astro';
 import { getCollection } from 'astro:content';
 import { site, systems, raceStyles } from '../lib/site';
 
@@ -34,19 +35,19 @@ const wholesaleReasons = [
   description="Performance parts curated for high-altitude No-Prep and Index drag racing. Fuel, boost, converters, and tuning proven at density altitude by the Stroom Performance channel."
 >
   <section class="home-hero">
+    {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
     <HeroAtmosphere client:load />
     <div class="wrap home-hero__wrap">
       <div class="home-hero__copy">
         <p class="label-small accent reveal">High-Altitude Drag Racing Parts</p>
-        <p class="home-kicker reveal">Wholesaler-first launch platform for a density-altitude specialist brand.</p>
+        <p class="home-kicker reveal">High-altitude parts for no-prep and index racers.</p>
         <h1 class="heading-hero home-hero__title reveal">
           Built for the runs where
           <span class="home-hero__title-accent">thin air exposes bad parts.</span>
         </h1>
         <p class="body-large muted reveal home-hero__body">
-          Stroom Performance is not trying to out-catalog the big stores. It is
-          building authority around the parts, setups, and fitment choices that
-          still work when No Prep surfaces and density altitude change the rules.
+          Not the biggest catalog. The right parts when altitude and surface
+          conditions punish bad choices.
         </p>
         <div class="home-hero__actions reveal">
           <a href="/wholesale" class="btn-primary">Become a Dealer</a>

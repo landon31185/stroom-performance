@@ -84,8 +84,8 @@ export default function HeroAtmosphere() {
         const amplitude = 20 + i * 3 + py * 8;
 
         context.beginPath();
-        context.lineWidth = i === 2 ? 1.8 : 1;
-        context.strokeStyle = i === 2 ? 'rgba(232, 103, 46, 0.6)' : 'rgba(232, 103, 46, 0.22)';
+        context.lineWidth = i === 2 ? 1.15 : 1;
+        context.strokeStyle = i === 2 ? 'rgba(232, 103, 46, 0.34)' : 'rgba(232, 103, 46, 0.22)';
         context.moveTo(0, baseY);
         context.bezierCurveTo(
           width * 0.18,

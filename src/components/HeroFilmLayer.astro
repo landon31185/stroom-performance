@@ -1,0 +1,23 @@
+---
+interface Props {
+  src: string;
+  poster?: string;
+}
+
+const { src, poster } = Astro.props;
+---
+
+<div class="hero-film-layer" aria-hidden="true">
+  <video
+    class="hero-film-layer__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    poster={poster}
+  >
+    <source src={src} type="video/mp4" />
+  </video>
+  <div class="hero-film-layer__shade"></div>
+</div>

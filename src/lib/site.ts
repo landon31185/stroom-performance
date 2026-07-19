@@ -28,6 +28,11 @@ export const site = {
   wholesaleEmail: 'dealers@stroomperformance.com',
   contactEmail: 'hello@stroomperformance.com',
   owner: 'Jake',
+  heroFilm: {
+    enabled: false,
+    src: '/media/stroom-hero-loop.mp4',
+    poster: '/og-default.svg',
+  },
 } as const;
 
 // ── Shop by System (Category facet — from the ORCA object map) ──

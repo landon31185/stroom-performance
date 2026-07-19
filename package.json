@@ -9,18 +9,23 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "remotion:studio": "remotion studio remotion/index.ts",
+    "remotion:render:hero": "remotion render remotion/index.ts StroomHeroTelemetry out/stroom-hero-telemetry.mp4"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.0",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.8",
+    "@remotion/cli": "4.0.491",
     "@tailwindcss/vite": "^4.2.2",
     "@vercel/og": "^0.8.5",
     "astro": "^6.1.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "tailwindcss": "^4.2.2"
+    "remotion": "4.0.491",
+    "tailwindcss": "^4.2.2",
+    "zod": "4.3.6"
   },
   "overrides": {
     "vite": "^7.3.2"
