@@ -9,8 +9,7 @@ tools:
   - "EFI with data logging (e.g. Holley Terminator X)"
   - "Weather station / DA readout"
 partsUsed:
-  - holley-terminator-x
-  - high-da-torque-converter
+  - holley-terminator-x-550-909t
 videoUrl: "https://www.youtube.com/@StroomPerformance"
 order: 2
 steps:

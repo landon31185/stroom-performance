@@ -91,7 +91,7 @@ const schema = JSON.stringify({
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((p) => (
-              <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+              <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} platforms={p.data.platforms} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
             ))}
           </div>
         </>

@@ -4,6 +4,7 @@ import { glob } from 'astro/loaders';
 // System + racing-style facets from the ORCA object map.
 const SYSTEMS = ['fuel', 'engine', 'drivetrain', 'electronics', 'safety'] as const;
 const RACE_STYLES = ['no-prep', 'index', 'street-strip'] as const;
+const PLATFORMS = ['gm-ls', 'gen3-hemi'] as const;
 
 /**
  * Product (reference — Shopify-owned once live).
@@ -17,12 +18,15 @@ const products = defineCollection({
   schema: z.object({
     title: z.string(),
     brand: z.string(),                       // Squash Performance, Motion Race Works, Holley…
+    manufacturerPartNumber: z.string().optional(),
     system: z.enum(SYSTEMS),
+    platforms: z.array(z.enum(PLATFORMS)).default([]),
     raceStyles: z.array(z.enum(RACE_STYLES)).default([]),
     price: z.number().optional(),            // absent while pre-catalog
     availability: z.enum(['in-stock', 'build-to-order', 'coming-soon']).default('coming-soon'),
     summary: z.string(),
     specs: z.array(z.string()).default([]),
+    referenceUrl: z.string().url().optional(),
     // Fitment / altitude — the differentiator. Stroom-authored, confidence-tagged.
     fitment: z
       .object({

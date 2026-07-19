@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { getCollection } from 'astro:content';
-import { systems, raceStyles, site } from '../lib/site';
+import { systems, raceStyles, platforms, site } from '../lib/site';
 
 const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
 
@@ -27,16 +27,16 @@ const schema = JSON.stringify({
 
 <BaseLayout
   title="Shop All Parts | Stroom Performance"
-  description="Browse Stroom Performance parts by system (Fuel, Engine, Drivetrain, Electronics, Safety) and racing style (No Prep, Index, Street/Strip). Catalog launching soon."
+  description="Browse Stroom Performance parts for GM LS and Gen III Hemi builds by system and use case. Product pricing and checkout are launching soon."
   schema={`<script type="application/ld+json">${schema}<\/script>`}
 >
   <section class="wrap" style="padding-block:3rem 2rem;">
     <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop' }]} />
     <h1 class="heading-section">Shop All Parts</h1>
     <p class="muted" style="margin-top:0.75rem;max-width:60ch;">
-      Curated for high-altitude drag racing. Live pricing and checkout arrive as
-      supplier accounts open — every listing carries Stroom-authored fitment and
-      density-altitude notes.
+      A focused catalog for GM LS and Gen III Hemi builds. The first verified LS
+      products are listed now; Mopar-specific part numbers and live Stroom pricing
+      will appear as they are confirmed.
     </p>
   </section>
 
@@ -47,6 +47,16 @@ const schema = JSON.stringify({
         <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
           {systems.map((s) => (
             <a href={`/collections/${s.slug}`} class="tag" style="text-decoration:none;">{s.name}</a>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">By Platform</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          {platforms.map((platform) => (
+            <span class={`tag ${platform.slug === 'gm-ls' ? 'tag-platform' : ''}`}>
+              {platform.name}{platform.slug === 'gen3-hemi' ? ' — products being confirmed' : ''}
+            </span>
           ))}
         </div>
       </div>
@@ -64,7 +74,7 @@ const schema = JSON.stringify({
   <section class="wrap" style="padding-bottom:4rem;">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {products.map((p) => (
-        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} platforms={p.data.platforms} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
       ))}
     </div>
   </section>

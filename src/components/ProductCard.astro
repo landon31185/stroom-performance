@@ -1,15 +1,16 @@
 ---
-import { systemName } from '../lib/site';
+import { platformName, systemName } from '../lib/site';
 interface Props {
   slug: string;
   title: string;
   brand: string;
   system: string;
+  platforms?: string[];
   summary: string;
   availability: 'in-stock' | 'build-to-order' | 'coming-soon';
   price?: number;
 }
-const { slug, title, brand, system, summary, availability, price } = Astro.props;
+const { slug, title, brand, system, platforms = [], summary, availability, price } = Astro.props;
 const availLabel = {
   'in-stock': 'In stock',
   'build-to-order': 'Build to order',
@@ -18,7 +19,10 @@ const availLabel = {
 ---
 <a href={`/products/${slug}`} class="product-card">
   <div class="product-card__top">
-    <span class="tag">{systemName(system)}</span>
+    <div class="product-card__facets">
+      <span class="tag">{systemName(system)}</span>
+      {platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
+    </div>
     <span class="readout product-card__availability">{availLabel}</span>
   </div>
   <div class="product-card__body">

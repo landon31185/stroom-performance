@@ -1357,6 +1357,25 @@ textarea.form-field { resize: vertical; }
   align-items: start;
   gap: 0.5rem;
 }
+.product-card__facets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tag-platform {
+  color: var(--color-ink-text);
+  background: transparent;
+  border-color: var(--color-line);
+}
+.home-system-rail .tag-platform {
+  color: var(--color-ink);
+  border-color: color-mix(in oklab, var(--color-ink) 24%, transparent);
+}
+.product-detail__mpn {
+  margin-top: 1.25rem;
+  color: var(--color-ink-muted);
+  font-size: 0.75rem;
+}
 .product-card__availability,
 .product-card__brand {
   font-size: 0.72rem;

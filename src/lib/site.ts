@@ -51,6 +51,11 @@ export const raceStyles = [
   { slug: 'street-strip', name: 'Street/Strip', blurb: 'Dual-duty combos that drive home and still run hard at the track.' },
 ] as const;
 
+export const platforms = [
+  { slug: 'gm-ls', name: 'GM LS' },
+  { slug: 'gen3-hemi', name: 'Gen III Hemi' },
+] as const;
+
 export type SystemSlug = (typeof systems)[number]['slug'];
 export type RaceStyleSlug = (typeof raceStyles)[number]['slug'];
 
@@ -59,4 +64,7 @@ export function systemName(slug: string) {
 }
 export function raceStyleName(slug: string) {
   return raceStyles.find((s) => s.slug === slug)?.name ?? slug;
+}
+export function platformName(slug: string) {
+  return platforms.find((p) => p.slug === slug)?.name ?? slug;
 }

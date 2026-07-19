@@ -6,12 +6,7 @@ description: >
 vehicle: "TODO(stroom): confirm chassis / engine combo"
 altitude: "6,600 ft home density altitude"
 raceStyles: ["no-prep", "index"]
-partsUsed:
-  - squash-intank-hat
-  - motion-valley-plate
-  - high-da-torque-converter
-  - holley-terminator-x
-  - engine-diaper
+partsUsed: []
 videoUrl: "https://www.youtube.com/@StroomPerformance"
 order: 1
 ---

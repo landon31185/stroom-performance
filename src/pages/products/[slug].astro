@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getCollection, render } from 'astro:content';
-import { site, systemName, raceStyleName } from '../../lib/site';
+import { site, systemName, raceStyleName, platformName } from '../../lib/site';
 
 export async function getStaticPaths() {
   const products = await getCollection('products');
@@ -35,6 +35,7 @@ const schema = JSON.stringify({
   name: d.title,
   description: d.summary,
   brand: { '@type': 'Brand', name: d.brand },
+  ...(d.manufacturerPartNumber ? { mpn: d.manufacturerPartNumber, sku: d.manufacturerPartNumber } : {}),
   category: systemName(d.system),
   offers: {
     '@type': 'Offer',
@@ -58,6 +59,7 @@ const schema = JSON.stringify({
         <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(d.system), href: `/collections/${d.system}` }, { label: d.title }]} />
         <div class="product-hero__tags reveal">
           <span class="tag">{systemName(d.system)}</span>
+          {d.platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
           {d.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
         </div>
         <p class="muted product-hero__brand reveal">{d.brand}</p>
@@ -77,7 +79,7 @@ const schema = JSON.stringify({
 
         {d.fitment && (
           <div class="product-fitment">
-            <p class="label-small hazard">Fitment & Altitude</p>
+            <p class="label-small hazard">Fitment & Compatibility</p>
             <dl class="product-fitment__list">
               <dt>Application</dt>
               <dd>{d.fitment.application}</dd>
@@ -101,7 +103,7 @@ const schema = JSON.stringify({
         )}
 
         <p class="muted product-buybox__support">
-          Not sure it fits your setup and altitude? <a href="/wholesale" class="accent">Ask us</a> — that is the whole point of this store.
+          Not sure it fits your setup? <a href={`mailto:${site.contactEmail}`} class="accent">Ask us</a> before ordering.
         </p>
       </aside>
     </div>
@@ -125,13 +127,14 @@ const schema = JSON.stringify({
       </div>
 
       <aside class="product-detail__rail reveal">
-        <div class="product-detail__rail-panel">
-          <p class="label-small accent">Why this page matters</p>
+          <div class="product-detail__rail-panel">
+          <p class="label-small accent">Selection notes</p>
           <p class="product-detail__rail-text">
-            A Stroom product page should explain not just what the part is, but
-            why it still makes sense in altitude, on the surface, and in the
-            style of racing it is meant for.
+            Stroom listings connect the part to its engine platform, supporting
+            hardware, and intended use so you can narrow the choice before buying.
           </p>
+          {d.manufacturerPartNumber && <p class="readout product-detail__mpn">MPN {d.manufacturerPartNumber}</p>}
+          {d.referenceUrl && <a href={d.referenceUrl} class="nav-link" target="_blank" rel="noreferrer">Reference details →</a>}
         </div>
       </aside>
     </div>

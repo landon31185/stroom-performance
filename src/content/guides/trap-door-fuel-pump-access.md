@@ -10,8 +10,7 @@ tools:
   - "Cleco / rivet or fastener kit"
   - "Deburring tool"
   - "Marker + straightedge"
-partsUsed:
-  - squash-intank-hat
+partsUsed: []
 videoUrl: "https://www.youtube.com/@StroomPerformance"
 order: 1
 steps:
