@@ -1,139 +1,262 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
+import HeroAtmosphere from '../components/HeroAtmosphere';
 import { getCollection } from 'astro:content';
 import { site, systems, raceStyles } from '../lib/site';
 
 const products = await getCollection('products');
 const featured = products.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
 const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
+
+const heroProof = [
+  { label: 'Home DA', value: '6,600 ft', note: 'thin air is the baseline' },
+  { label: 'Surface', value: 'No Prep', note: 'traction changes every call' },
+  { label: 'Mode', value: 'Index + Street', note: 'repeatable, not theoretical' },
+];
+
+const runSheet = [
+  { key: 'Track condition', value: 'un-prepped / changing lane' },
+  { key: 'Altitude problem', value: 'fuel, boost, converter, launch' },
+  { key: 'Stroom filter', value: 'only parts that still make sense at DA' },
+  { key: 'Current mission', value: 'win supplier trust before catalog launch' },
+];
+
+const wholesaleReasons = [
+  'Existing YouTube audience gives supplier brands immediate context and reach.',
+  'Altitude-fitment framing creates a niche that generic performance stores do not own.',
+  'Guides, builds, and race-day proof create better product stories than catalog copy alone.',
+];
 ---
 
 <BaseLayout
   title="Stroom Performance — High-Altitude Drag Racing Parts"
   description="Performance parts curated for high-altitude No-Prep and Index drag racing. Fuel, boost, converters, and tuning proven at density altitude by the Stroom Performance channel."
 >
-  <!-- Hero -->
-  <section style="position:relative;overflow:hidden;border-bottom:1px solid var(--color-line);">
-    <div class="wrap" style="padding-block:clamp(4rem,10vw,7rem);position:relative;z-index:1;">
-      <p class="label-small accent reveal">No Prep · Index · Density Altitude</p>
-      <h1 class="heading-hero reveal" style="margin-top:1rem;max-width:16ch;">
-        Parts proven where the <span class="accent">air runs thin</span>.
-      </h1>
-      <p class="body-large muted reveal" style="margin-top:1.5rem;max-width:52ch;">
-        Stroom Performance is a specialist store for high-altitude drag racing —
-        where density altitude, hypoxia, and un-prepped surfaces change every
-        tuning decision. Built on the runs, not a catalog someone handed us.
+  <section class="home-hero">
+    <HeroAtmosphere client:load />
+    <div class="wrap home-hero__wrap">
+      <div class="home-hero__copy">
+        <p class="label-small accent reveal">High-Altitude Drag Racing Parts</p>
+        <p class="home-kicker reveal">Wholesaler-first launch platform for a density-altitude specialist brand.</p>
+        <h1 class="heading-hero home-hero__title reveal">
+          Built for the runs where
+          <span class="home-hero__title-accent">thin air exposes bad parts.</span>
+        </h1>
+        <p class="body-large muted reveal home-hero__body">
+          Stroom Performance is not trying to out-catalog the big stores. It is
+          building authority around the parts, setups, and fitment choices that
+          still work when No Prep surfaces and density altitude change the rules.
+        </p>
+        <div class="home-hero__actions reveal">
+          <a href="/wholesale" class="btn-primary">Become a Dealer</a>
+          <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">Watch the Builds</a>
+        </div>
+        <div class="home-proof reveal">
+          {heroProof.map((item) => (
+            <div class="home-proof__item">
+              <p class="home-proof__label">{item.label}</p>
+              <p class="home-proof__value">{item.value}</p>
+              <p class="home-proof__note">{item.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <aside class="home-run-sheet reveal" aria-label="Stroom run sheet">
+        <div class="home-run-sheet__top">
+          <p class="home-run-sheet__eyebrow">Stroom Run Sheet</p>
+          <p class="home-run-sheet__stamp">01 / Current Positioning</p>
+        </div>
+        <div class="home-run-sheet__divider"></div>
+        <div class="home-run-sheet__headline">
+          <span>Race-day proof</span>
+          <span>Supplier trust</span>
+          <span>Altitude moat</span>
+        </div>
+        <div class="home-run-sheet__rows">
+          {runSheet.map((item) => (
+            <div class="home-run-sheet__row">
+              <p class="home-run-sheet__key">{item.key}</p>
+              <p class="home-run-sheet__value">{item.value}</p>
+            </div>
+          ))}
+        </div>
+        <p class="home-run-sheet__footer">
+          Storefront launching soon. Right now the homepage has one job:
+          convince suppliers that Stroom knows exactly who it serves.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="home-marquee">
+    <div class="wrap home-marquee__wrap reveal">
+      <p class="home-marquee__lead">Current strategic frame</p>
+      <p class="home-marquee__text">
+        A credibility engine first. A storefront second. A generic parts catalog
+        never wins this niche.
       </p>
-      <div class="reveal" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2rem;">
-        <a href="/wholesale" class="btn-primary">Become a Dealer</a>
-        <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">Watch the Builds</a>
-      </div>
-      <p class="muted reveal" style="margin-top:1.25rem;font-size:0.8125rem;">
-        Storefront launching soon — <a href="/wholesale" style="color:var(--color-accent);">suppliers & wholesalers start here</a>.
-      </p>
     </div>
   </section>
 
-  <!-- Credibility strip -->
-  <section class="wrap" style="padding-block:2.5rem;border-bottom:1px solid var(--color-line);">
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="reveal">
-        <p class="heading-card accent">A YouTube-first following</p>
-        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">The audience already exists. The channel documents real builds, real failures, and real fixes at altitude.</p>
+  <section class="home-credibility">
+    <div class="wrap">
+      <div class="home-section-heading reveal">
+        <p class="label-small accent">Why This Can Win</p>
+        <h2 class="heading-section">A more believable specialist story than “we sell performance parts.”</h2>
       </div>
-      <div class="reveal">
-        <p class="heading-card accent">6,600 ft home DA</p>
-        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">Every part earns its place on a car that races where thin air is the default, not the exception.</p>
-      </div>
-      <div class="reveal">
-        <p class="heading-card accent">The altitude moat</p>
-        <p class="muted" style="font-size:0.9375rem;line-height:1.6;margin-top:0.25rem;">Nobody else answers "will this work at my density altitude?" — that's the whole reason Stroom exists.</p>
+      <div class="home-credibility__grid">
+        <div class="home-editorial-card reveal">
+          <p class="home-card-index">01</p>
+          <h3 class="heading-card">The channel is the proof layer</h3>
+          <p class="muted">
+            Stroom already has a story engine: builds, passes, failures, and
+            fixes documented in public. That makes supplier outreach feel earned,
+            not invented.
+          </p>
+        </div>
+        <div class="home-editorial-card reveal">
+          <p class="home-card-index">02</p>
+          <h3 class="heading-card">Density altitude is the wedge</h3>
+          <p class="muted">
+            Most stores stop at fitment. Stroom can talk about whether a setup
+            still behaves at altitude, which is where the niche becomes useful.
+          </p>
+        </div>
+        <div class="home-editorial-card reveal">
+          <p class="home-card-index">03</p>
+          <h3 class="heading-card">The site sells judgment, not inventory volume</h3>
+          <p class="muted">
+            The goal is not to look gigantic. The goal is to look like the right
+            specialist for a specific racing audience suppliers want to reach.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Shop by System -->
-  <section class="wrap" style="padding-block:4rem;">
-    <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.75rem;">
-      <h2 class="heading-section">Shop by System</h2>
-      <a href="/shop" class="nav-link accent">All parts →</a>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {systems.map((s) => (
-        <a href={`/collections/${s.slug}`} class="card reveal" style="padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:0.5rem;">
-          <h3 class="heading-card">{s.name}</h3>
-          <p class="muted" style="font-size:0.9375rem;line-height:1.55;">{s.blurb}</p>
-          <span class="nav-link accent" style="margin-top:auto;padding-top:0.5rem;">Browse {s.name} →</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <!-- Shop by Racing Style -->
-  <section style="background:var(--color-surface);border-block:1px solid var(--color-line);">
-    <div class="wrap" style="padding-block:4rem;">
-      <h2 class="heading-section" style="margin-bottom:1.75rem;">Shop by Racing Style</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {raceStyles.map((r) => (
-          <a href={`/collections/${r.slug}`} class="card reveal" style="padding:1.5rem;text-decoration:none;background:var(--color-surface-2);display:flex;flex-direction:column;gap:0.5rem;">
-            <span class="tag tag-hazard">{r.name}</span>
-            <p class="muted" style="font-size:0.9375rem;line-height:1.55;margin-top:0.25rem;">{r.blurb}</p>
-            <span class="nav-link accent" style="margin-top:auto;padding-top:0.5rem;">Browse →</span>
+  <section class="home-systems">
+    <div class="wrap home-systems__wrap">
+      <div class="home-section-heading reveal">
+        <p class="label-small accent">Catalog Structure</p>
+        <h2 class="heading-section">The future store should feel ordered like a pit table, not a random shelf.</h2>
+      </div>
+      <div class="home-systems__grid">
+        {systems.map((s) => (
+          <a href={`/collections/${s.slug}`} class="home-system-card reveal">
+            <p class="home-system-card__meta">System</p>
+            <h3 class="heading-card">{s.name}</h3>
+            <p class="muted">{s.blurb}</p>
+            <span class="nav-link accent">Browse {s.name} →</span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Representative parts -->
-  <section class="wrap" style="padding-block:4rem;">
-    <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:0.5rem;">
-      <h2 class="heading-section">Representative Parts</h2>
-      <a href="/shop" class="nav-link accent">See all →</a>
-    </div>
-    <p class="muted" style="margin-bottom:1.75rem;max-width:60ch;">
-      A preview of the kind of parts Stroom will carry. Catalog and live pricing
-      arrive as supplier accounts open — these show the fitment and altitude
-      detail every listing will get.
-    </p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {featured.map((p) => (
-        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
-      ))}
+  <section class="home-race-styles">
+    <div class="wrap home-race-styles__wrap">
+      <div class="home-race-styles__intro reveal">
+        <p class="label-small accent">Use Context</p>
+        <h2 class="heading-section">Parts make more sense when the race format is explicit.</h2>
+        <p class="muted">
+          Stroom should organize by the realities racers actually care about:
+          surface, consistency, launch behavior, and whether the combo still
+          behaves in altitude.
+        </p>
+      </div>
+      <div class="home-race-styles__grid">
+        {raceStyles.map((r) => (
+          <a href={`/collections/${r.slug}`} class="home-race-card reveal">
+            <span class="tag tag-hazard">{r.name}</span>
+            <p class="home-race-card__text">{r.blurb}</p>
+            <span class="nav-link accent">Open collection →</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
-  <!-- Guides teaser -->
-  <section style="background:var(--color-surface);border-block:1px solid var(--color-line);">
-    <div class="wrap" style="padding-block:4rem;">
-      <div style="display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.75rem;">
-        <h2 class="heading-section">Guides & How-To</h2>
+  <section class="home-parts">
+    <div class="wrap">
+      <div class="home-section-heading reveal home-section-heading--split">
+        <div>
+          <p class="label-small accent">Representative Parts</p>
+          <h2 class="heading-section">Placeholder catalog, real content model.</h2>
+        </div>
+        <a href="/shop" class="nav-link accent">See all →</a>
+      </div>
+      <p class="muted home-section-copy reveal">
+        These listings are still illustrative, but the shape is right: every
+        product should eventually explain the system, use case, and altitude
+        relevance instead of reading like copy pasted distributor text.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {featured.map((p) => (
+          <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-guides">
+    <div class="wrap home-guides__wrap">
+      <div class="home-section-heading reveal home-section-heading--split">
+        <div>
+          <p class="label-small accent">Guides & Builds</p>
+          <h2 class="heading-section">Content is the conversion bridge between race-day proof and future commerce.</h2>
+        </div>
         <a href="/guides" class="nav-link accent">All guides →</a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="home-guides__grid">
         {guides.map((g) => (
-          <a href={`/guides/${g.id}`} class="card" style="padding:1.5rem;text-decoration:none;background:var(--color-surface-2);">
-            <span class="tag">{g.data.difficulty}</span>
-            <h3 class="heading-card" style="margin-top:0.75rem;">{g.data.title}</h3>
-            <p class="muted" style="font-size:0.9375rem;line-height:1.55;margin-top:0.5rem;">{g.data.description}</p>
+          <a href={`/guides/${g.id}`} class="home-guide-card reveal">
+            <div class="home-guide-card__top">
+              <span class="tag">{g.data.difficulty}</span>
+              <span class="home-guide-card__eyebrow">Guide</span>
+            </div>
+            <h3 class="heading-card">{g.data.title}</h3>
+            <p class="muted">{g.data.description}</p>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Wholesale CTA band -->
-  <section class="wrap" style="padding-block:4.5rem;">
-    <div class="altitude-panel" style="display:flex;flex-direction:column;gap:1rem;align-items:start;">
-      <span class="tag tag-hazard">For Suppliers & Wholesalers</span>
-      <h2 class="heading-section" style="max-width:22ch;">Want your parts in front of the altitude-racing crowd?</h2>
-      <p class="muted" style="max-width:60ch;line-height:1.7;">
-        Stroom brings an engaged, high-intent audience and a niche nobody else
-        owns. We're opening drop-ship and dealer accounts now. Tell us what you
-        build and let's talk terms.
+  <section class="home-wholesale">
+    <div class="wrap">
+      <div class="home-wholesale__panel reveal">
+        <div class="home-wholesale__intro">
+          <span class="tag tag-hazard">For Suppliers & Wholesalers</span>
+          <h2 class="heading-section">A smaller site can still feel like the right commercial partner.</h2>
+          <p class="muted">
+            The right brands do not need another generic reseller. They need a
+            focused outlet with a real audience, a point of view, and better
+            product storytelling than a raw feed can provide.
+          </p>
+        </div>
+        <div class="home-wholesale__reasons">
+          {wholesaleReasons.map((reason, index) => (
+            <div class="home-wholesale__reason">
+              <p class="home-card-index">{String(index + 1).padStart(2, '0')}</p>
+              <p>{reason}</p>
+            </div>
+          ))}
+        </div>
+        <a href="/wholesale" class="btn-primary">Start a Wholesale Inquiry</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-postscript">
+    <div class="wrap home-postscript__wrap reveal">
+      <div class="home-postscript__rule"></div>
+      <p class="home-postscript__text">
+        The goal is not to look like a massive generic store. The goal is to
+        look like the one specialist brand a serious supplier should want in
+        front of altitude racers.
       </p>
-      <a href="/wholesale" class="btn-primary">Start a Wholesale Inquiry</a>
     </div>
   </section>
 </BaseLayout>

@@ -16,18 +16,18 @@ const availLabel = {
   'coming-soon': 'Coming soon',
 }[availability];
 ---
-<a href={`/products/${slug}`} class="card" style="display:flex;flex-direction:column;gap:0.75rem;padding:1.25rem;text-decoration:none;">
-  <div style="display:flex;justify-content:space-between;align-items:start;gap:0.5rem;">
+<a href={`/products/${slug}`} class="product-card">
+  <div class="product-card__top">
     <span class="tag">{systemName(system)}</span>
-    <span class="readout" style="font-size:0.6875rem;color:var(--color-ink-muted);text-transform:uppercase;letter-spacing:0.06em;">{availLabel}</span>
+    <span class="readout product-card__availability">{availLabel}</span>
   </div>
-  <div>
-    <p class="muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">{brand}</p>
-    <h3 class="heading-card" style="margin-top:0.15rem;">{title}</h3>
+  <div class="product-card__body">
+    <p class="muted product-card__brand">{brand}</p>
+    <h3 class="heading-card product-card__title">{title}</h3>
   </div>
-  <p class="muted" style="font-size:0.875rem;line-height:1.55;flex:1;">{summary}</p>
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <span class="readout accent" style="font-weight:600;">{price ? `$${price.toFixed(2)}` : 'Pricing soon'}</span>
+  <p class="muted product-card__summary">{summary}</p>
+  <div class="product-card__footer">
+    <span class="readout accent product-card__price">{price ? `$${price.toFixed(2)}` : 'Pricing soon'}</span>
     <span class="nav-link accent">View →</span>
   </div>
 </a>

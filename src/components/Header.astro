@@ -10,10 +10,17 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header id="site-header" class="site-header">
-  <div class="wrap flex items-center justify-between gap-8 h-14 lg:h-16">
-    <a href="/" class="wordmark" aria-label="Stroom Performance home">
-      Stroom<span class="spark">/</span>Performance
-    </a>
+  <div class="wrap header-shell">
+    <div class="header-brand-rail">
+      <a href="/" class="wordmark" aria-label="Stroom Performance home">
+        Stroom<span class="spark">/</span>Performance
+      </a>
+      <div class="header-status hidden lg:flex" aria-label="Current site positioning">
+        <span class="header-status__item">No Prep</span>
+        <span class="header-status__item">Index</span>
+        <span class="header-status__item">High DA</span>
+      </div>
+    </div>
 
     <nav class="hidden lg:flex items-center gap-7 ml-auto" aria-label="Primary navigation">
       {navLinks.map(({ label, href }) => (
@@ -23,7 +30,7 @@ const currentPath = Astro.url.pathname;
 
     <div class="flex items-center gap-3">
       <div class="hidden lg:block">
-        <a href="/wholesale" class="btn-primary text-sm" style="padding:0.5rem 1.1rem;">Become a Dealer</a>
+        <a href="/wholesale" class="btn-primary text-sm header-dealer-cta">Become a Dealer</a>
       </div>
       <!-- Spacer: actual hamburger button lives in BaseLayout -->
       <div class="lg:hidden w-10 h-10 flex-shrink-0" aria-hidden="true"></div>

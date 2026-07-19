@@ -4,10 +4,32 @@ import Breadcrumb from '../components/Breadcrumb.astro';
 import { site, systems } from '../lib/site';
 
 const valueProps = [
-  { h: 'A built-in audience', p: 'The Stroom Performance YouTube channel already has a following of high-intent altitude racers — the exact buyers for your parts.' },
-  { h: 'A niche nobody owns', p: 'No competitor answers "will this work at my density altitude?" We do. Your parts get positioned against a real, defensible differentiator.' },
-  { h: 'Content that sells', p: 'Every part can be featured in a build or guide video — proof of the part working at altitude, wired straight to a shoppable listing.' },
-  { h: 'Lean drop-ship model', p: 'We carry the audience and the fitment expertise; you keep the inventory and fulfillment. Clean drop-ship terms, no dead stock on our side.' },
+  {
+    label: 'Audience fit',
+    headline: 'The buyers are already here.',
+    body: 'Stroom starts with an audience of high-intent altitude racers, not an empty storefront waiting for traffic.',
+  },
+  {
+    label: 'Positioning moat',
+    headline: 'Altitude gives the catalog a point of view.',
+    body: 'Most stores stop at fitment. Stroom can explain how a part still behaves at density altitude, which is where the story becomes useful.',
+  },
+  {
+    label: 'Content engine',
+    headline: 'Builds and guides do the selling.',
+    body: 'Product storytelling can be proven with race-day context, installs, and setup notes instead of copied supplier descriptions.',
+  },
+  {
+    label: 'Model',
+    headline: 'Lean drop-ship economics.',
+    body: 'Suppliers keep fulfillment and inventory; Stroom brings niche authority, product framing, and a more qualified buyer.',
+  },
+];
+
+const process = [
+  'You tell us what product lines, terms, and fulfillment model make sense.',
+  'We map those lines into the systems and race-style structure Stroom is already using.',
+  'We turn the parts into guides, builds, and product pages that explain why they matter at altitude.',
 ];
 ---
 
@@ -15,75 +37,139 @@ const valueProps = [
   title="Wholesale & Dealer Inquiries | Stroom Performance"
   description="Manufacturers and distributors: put your performance parts in front of the high-altitude No-Prep and Index racing audience. Stroom is opening drop-ship and dealer accounts now."
 >
-  <section class="wrap" style="padding-block:3rem 1rem;">
-    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Wholesale' }]} />
-    <span class="tag tag-hazard">For Suppliers & Manufacturers</span>
-    <h1 class="heading-hero" style="margin-top:1rem;max-width:16ch;font-size:clamp(2.25rem,6vw,4rem);">
-      Sell to the <span class="accent">altitude crowd</span>.
-    </h1>
-    <p class="body-large muted" style="margin-top:1.25rem;max-width:56ch;">
-      Stroom Performance is building the go-to store for high-altitude drag
-      racing parts. We're opening drop-ship and dealer accounts now — before the
-      public catalog launches. If you build fuel, boost, converter, EFI, or
-      safety parts that survive thin air, let's talk.
-    </p>
-  </section>
-
-  <!-- Value props -->
-  <section class="wrap" style="padding-block:3rem;">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {valueProps.map((v) => (
-        <div class="card" style="padding:1.5rem;">
-          <h2 class="heading-card accent">{v.h}</h2>
-          <p class="muted" style="margin-top:0.5rem;line-height:1.6;">{v.p}</p>
+  <section class="wholesale-hero">
+    <div class="wrap wholesale-hero__wrap">
+      <div class="wholesale-hero__copy">
+        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Wholesale' }]} />
+        <span class="tag tag-hazard reveal">For Suppliers & Manufacturers</span>
+        <h1 class="heading-hero wholesale-hero__title reveal">
+          Put your parts in front of the
+          <span class="wholesale-hero__accent">altitude crowd.</span>
+        </h1>
+        <p class="body-large muted wholesale-hero__body reveal">
+          Stroom is building a specialist performance store around one clear
+          niche: racers who need answers that still make sense when density
+          altitude changes the pass. Before the public catalog fully opens, we
+          are setting up the right supplier and dealer relationships.
+        </p>
+        <div class="wholesale-hero__actions reveal">
+          <a href={`mailto:${site.wholesaleEmail}`} class="btn-primary">Email the Wholesale Desk</a>
+          <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">See the Channel Proof</a>
         </div>
-      ))}
+      </div>
+
+      <aside class="wholesale-sheet reveal" aria-label="Wholesale positioning summary">
+        <p class="wholesale-sheet__eyebrow">Wholesale Positioning</p>
+        <div class="wholesale-sheet__divider"></div>
+        <div class="wholesale-sheet__headline">
+          <span>Niche audience</span>
+          <span>Race-day proof</span>
+          <span>Fitment story</span>
+        </div>
+        <div class="wholesale-sheet__list">
+          <div class="wholesale-sheet__row">
+            <p class="wholesale-sheet__key">Best fit</p>
+            <p class="wholesale-sheet__value">fuel, EFI, driveline, safety, altitude-sensitive setups</p>
+          </div>
+          <div class="wholesale-sheet__row">
+            <p class="wholesale-sheet__key">Current ask</p>
+            <p class="wholesale-sheet__value">dealer or drop-ship terms before full catalog launch</p>
+          </div>
+          <div class="wholesale-sheet__row">
+            <p class="wholesale-sheet__key">Commercial angle</p>
+            <p class="wholesale-sheet__value">specialist authority beats generic catalog scale</p>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
-  <!-- Inquiry form -->
-  <section class="wrap" style="padding-block:2rem 5rem;">
-    <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10">
-      <div>
-        <h2 class="heading-section">Start an inquiry</h2>
-        <p class="muted" style="margin-top:0.75rem;line-height:1.7;">
-          Tell us what you make and how you prefer to work. We'll follow up to
-          set up a dealer or drop-ship account.
+  <section class="wholesale-value">
+    <div class="wrap">
+      <div class="home-section-heading reveal">
+        <p class="label-small accent">Why Partner Here</p>
+        <h2 class="heading-section">This is not a mass reseller pitch. It is a relevance pitch.</h2>
+      </div>
+      <div class="wholesale-value__grid">
+        {valueProps.map((item, index) => (
+          <div class="wholesale-value-card reveal">
+            <p class="home-card-index">{String(index + 1).padStart(2, '0')}</p>
+            <p class="wholesale-value-card__label">{item.label}</p>
+            <h2 class="heading-card">{item.headline}</h2>
+            <p class="muted">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wholesale-process">
+    <div class="wrap wholesale-process__wrap">
+      <div class="wholesale-process__intro reveal">
+        <p class="label-small accent">How It Works</p>
+        <h2 class="heading-section">Simple path now, deeper integration later.</h2>
+        <p class="muted">
+          The immediate goal is to start qualified conversations and structure
+          the right product lines into the Stroom system before the catalog and
+          commerce layer mature further.
         </p>
-        <p class="muted" style="margin-top:1.5rem;font-size:0.9375rem;">
-          Prefer email? Reach us directly at
-          <a href={`mailto:${site.wholesaleEmail}`} style="color:var(--color-accent);">{site.wholesaleEmail}</a>.
+      </div>
+      <ol class="steps-list reveal">
+        {process.map((step) => (
+          <li>{step}</li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="wholesale-form-section">
+    <div class="wrap wholesale-form-section__wrap">
+      <div class="wholesale-form-copy reveal">
+        <p class="label-small accent">Inquiry Form</p>
+        <h2 class="heading-section">Start the conversation.</h2>
+        <p class="muted">
+          Tell us what you make, what terms you usually offer, and which product
+          lines make the most sense for a high-altitude performance audience.
+        </p>
+        <p class="muted wholesale-form-copy__small">
+          Prefer direct email? Reach us at
+          <a href={`mailto:${site.wholesaleEmail}`} class="accent">{site.wholesaleEmail}</a>.
         </p>
       </div>
 
       <!--
-        TODO(stroom): this form is not wired to a backend yet. Options:
-          - Formspree / Basin / Web3Forms (set `action` to the endpoint), or
-          - a Vercel serverless function under src/pages/api/ that emails Jake.
-        Until then it falls back to the mailto above.
+        TODO(stroom): this form is still not wired to a backend.
+        Options:
+          - Formspree / Basin / Web3Forms endpoint
+          - Vercel serverless function in src/pages/api/
+        Until then this falls back to mailto.
       -->
-      <form action={`mailto:${site.wholesaleEmail}`} method="post" enctype="text/plain" class="card" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem;">
-        <div style="display:grid;gap:0.35rem;">
-          <label for="company" class="label-small muted">Company / Brand</label>
-          <input id="company" name="company" type="text" required class="form-field" />
+      <form action={`mailto:${site.wholesaleEmail}`} method="post" enctype="text/plain" class="wholesale-form reveal">
+        <div class="wholesale-form__grid">
+          <div class="wholesale-form__field">
+            <label for="company" class="label-small muted">Company / Brand</label>
+            <input id="company" name="company" type="text" required class="form-field" />
+          </div>
+          <div class="wholesale-form__field">
+            <label for="email" class="label-small muted">Email</label>
+            <input id="email" name="email" type="email" required class="form-field" />
+          </div>
         </div>
-        <div style="display:grid;gap:0.35rem;">
-          <label for="email" class="label-small muted">Email</label>
-          <input id="email" name="email" type="email" required class="form-field" />
-        </div>
-        <div style="display:grid;gap:0.35rem;">
-          <label for="systems" class="label-small muted">What do you build?</label>
+        <div class="wholesale-form__field">
+          <label for="systems" class="label-small muted">Closest product line</label>
           <select id="systems" name="systems" class="form-field">
             {systems.map((s) => <option value={s.slug}>{s.name}</option>)}
             <option value="other">Other</option>
           </select>
         </div>
-        <div style="display:grid;gap:0.35rem;">
-          <label for="message" class="label-small muted">Tell us about your parts & terms</label>
-          <textarea id="message" name="message" rows="4" class="form-field"></textarea>
+        <div class="wholesale-form__field">
+          <label for="message" class="label-small muted">Parts, terms, and fit</label>
+          <textarea id="message" name="message" rows="6" class="form-field"></textarea>
         </div>
-        <button type="submit" class="btn-primary" style="justify-content:center;">Send inquiry</button>
-        <p class="muted" style="font-size:0.75rem;text-align:center;">TODO(stroom): connect to a real form endpoint before launch.</p>
+        <div class="wholesale-form__footer">
+          <button type="submit" class="btn-primary">Send Inquiry</button>
+          <p class="muted wholesale-form__note">Backend still TODO before full launch.</p>
+        </div>
       </form>
     </div>
   </section>

@@ -48,28 +48,62 @@ const schema = JSON.stringify({
   description={category.description}
   schema={`<script type="application/ld+json">${schema}<\/script>`}
 >
-  <section class="wrap" style="padding-block:3rem 2rem;">
-    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: category.name }]} />
-    <p class="label-small accent">{facetLabel}</p>
-    <h1 class="heading-section" style="margin-top:0.5rem;">{category.name}</h1>
-    <p class="muted" style="margin-top:0.75rem;max-width:62ch;line-height:1.7;">{category.description}</p>
+  <section class="collection-hero">
+    <div class="wrap collection-hero__wrap">
+      <div class="collection-hero__copy">
+        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: category.name }]} />
+        <p class="label-small accent reveal">{facetLabel}</p>
+        <h1 class="heading-section collection-hero__title reveal">{category.name}</h1>
+        <p class="muted collection-hero__body reveal">{category.description}</p>
+      </div>
+      <aside class="collection-hero__meta reveal">
+        <p class="collection-hero__meta-label">Collection State</p>
+        <div class="collection-hero__meta-rule"></div>
+        <div class="collection-hero__meta-grid">
+          <div>
+            <p class="collection-hero__meta-key">Items</p>
+            <p class="collection-hero__meta-value">{products.length}</p>
+          </div>
+          <div>
+            <p class="collection-hero__meta-key">Use case</p>
+            <p class="collection-hero__meta-value">{facetLabel}</p>
+          </div>
+          <div>
+            <p class="collection-hero__meta-key">Model</p>
+            <p class="collection-hero__meta-value">curated, not bulk</p>
+          </div>
+        </div>
+      </aside>
+    </div>
   </section>
 
-  <section class="wrap" style="padding-bottom:4rem;">
-    {products.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.map((p) => (
-          <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
-        ))}
-      </div>
-    ) : (
-      <div class="altitude-panel">
-        <p class="heading-card">Parts coming soon</p>
-        <p class="muted" style="margin-top:0.5rem;max-width:52ch;">
-          We're opening supplier accounts for this category now. Are you a
-          manufacturer or distributor? <a href="/wholesale" style="color:var(--color-accent);">Start a wholesale inquiry →</a>
-        </p>
-      </div>
-    )}
+  <section class="collection-results">
+    <div class="wrap">
+      {products.length > 0 ? (
+        <>
+          <div class="collection-results__intro reveal">
+            <p class="label-small accent">Current Listings</p>
+            <p class="collection-results__text">
+              Placeholder catalog now, but the structure is the point: parts are
+              grouped by real system and real racing context, not just generic
+              shelf category names.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {products.map((p) => (
+              <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} summary={p.data.summary} availability={p.data.availability} price={p.data.price} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="collection-empty reveal">
+          <p class="heading-card">Parts coming soon</p>
+          <p class="muted">
+            Supplier accounts for this category are still opening. If you build
+            for this niche, <a href="/wholesale" class="accent">start a wholesale inquiry →</a>
+          </p>
+        </div>
+      )}
+    </div>
   </section>
 </BaseLayout>

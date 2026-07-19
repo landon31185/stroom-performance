@@ -2,48 +2,82 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import { site } from '../lib/site';
+
+const pillars = [
+  'real race-car context before catalog theory',
+  'density-altitude thinking as the niche moat',
+  'guides and builds as the trust layer behind commerce',
+];
 ---
 
 <BaseLayout
   title="About | Stroom Performance"
   description="Stroom Performance started on YouTube, wrenching on a real high-altitude drag car. The store exists to sell the parts that actually work where the air runs thin."
 >
-  <section class="wrap" style="padding-block:3rem 2rem;max-width:48rem;">
-    <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
-    <h1 class="heading-section">Built on the runs, not a catalog.</h1>
+  <section class="about-hero">
+    <div class="wrap about-hero__wrap">
+      <div class="about-hero__copy">
+        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+        <p class="label-small accent reveal">About Stroom</p>
+        <h1 class="heading-section about-hero__title reveal">Built on the runs, not a catalog.</h1>
+        <p class="muted about-hero__body reveal">
+          Stroom starts with a real car, a real channel, and a real high-altitude
+          problem set. The store exists because generic performance shops do not
+          answer the questions that actually matter when the air runs thin.
+        </p>
+      </div>
+      <aside class="about-hero__sidebar reveal">
+        <p class="about-hero__sidebar-label">Operating pillars</p>
+        <div class="about-hero__sidebar-rule"></div>
+        <ul class="about-hero__sidebar-list">
+          {pillars.map((pillar) => <li>{pillar}</li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
 
-    <div class="prose-section" style="margin-top:1.5rem;border-bottom:none;">
-      <p>
-        Stroom Performance started where a lot of good things do — on the
-        internet, wrenching on a race car and posting the results. Cutting a trap
-        door with the "Death Wheel" to service a fuel pump. Chasing a converter
-        that would actually flash right at altitude. Reading data logs to figure
-        out why a run went sideways on an un-prepped surface.
-      </p>
-      <p>
-        That's the whole idea behind the store. Most performance shops assume sea
-        level. We don't. Racing at high <span class="hazard">density altitude</span>
-        changes everything — the engine fights hypoxia, the converter behaves
-        differently, and the fuel math moves. The parts we'll sell are the parts
-        that survived those conditions on our own car first.
-      </p>
-      <h2>Why the niche matters</h2>
-      <p>
-        Ask most stores for a torque converter and they ask for your car. We ask
-        for your car <em>and your altitude</em>. That single question — "will this
-        work at my DA?" — is something nobody else answers well. It's the reason
-        Stroom exists, and it's the thread that runs through every listing,
-        guide, and build on this site.
-      </p>
-      <h2>What's next</h2>
-      <p>
-        The storefront is launching in stages as supplier accounts come online.
-        In the meantime, the <a href="/guides">guides</a> and
-        <a href="/builds">builds</a> carry the expertise, and the
-        <a href={site.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>
-        keeps documenting the work. Manufacturers and distributors who want in
-        can <a href="/wholesale">start a wholesale inquiry</a>.
-      </p>
+  <section class="about-story">
+    <div class="wrap about-story__wrap">
+      <div class="about-story__intro reveal">
+        <p class="label-small accent">Why It Exists</p>
+        <h2 class="heading-section">A specialist store makes more sense than pretending altitude does not matter.</h2>
+      </div>
+      <div class="about-story__body reveal">
+        <p>
+          Stroom Performance started where a lot of good racing knowledge
+          starts: on the car, in the garage, and on the internet. Cutting access
+          panels to service a fuel pump. Chasing a converter that flashes where
+          it should at altitude. Reading data logs to understand why a pass went
+          sideways on an un-prepped lane.
+        </p>
+        <p>
+          That is the reason the store exists. Most performance shops assume sea
+          level. Stroom does not. High density altitude changes the engine, the
+          fuel math, the converter behavior, and the margin for error. The
+          future catalog is supposed to reflect those realities, not ignore
+          them.
+        </p>
+        <p>
+          The site is being built in stages. Guides and builds carry the
+          expertise now. Product pages and supplier relationships are catching up
+          behind that. The throughline stays the same: show the judgment first,
+          then scale the commerce layer around it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta">
+    <div class="wrap about-cta__panel reveal">
+      <div>
+        <p class="label-small accent">What To Do Next</p>
+        <h2 class="heading-section">Watch the work, read the guides, or talk wholesale.</h2>
+      </div>
+      <div class="about-cta__actions">
+        <a href={site.youtube} target="_blank" rel="noopener noreferrer" class="btn-outline">Watch the Channel</a>
+        <a href="/guides" class="btn-outline">Read the Guides</a>
+        <a href="/wholesale" class="btn-primary">Start a Wholesale Inquiry</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
