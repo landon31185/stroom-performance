@@ -431,7 +431,7 @@ textarea.form-field { resize: vertical; }
   z-index: 1;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  margin-top: 10rem;
+  margin-top: 18rem;
 }
 .home-hero-panel::after {
   content: "";
@@ -1621,7 +1621,7 @@ textarea.form-field { resize: vertical; }
     gap: 2.5rem;
   }
   .home-hero-panel {
-    margin-top: 13rem;
+    margin-top: 22rem;
   }
   .home-proof,
   .home-credibility__grid,
@@ -1751,6 +1751,6 @@ textarea.form-field { resize: vertical; }
     font-size: 0.8rem;
   }
   .home-hero-panel {
-    margin-top: 7.5rem;
+    margin-top: 12rem;
   }
 }
