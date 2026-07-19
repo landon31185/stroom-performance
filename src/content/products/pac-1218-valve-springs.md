@@ -5,7 +5,7 @@ manufacturerPartNumber: PAC-1218-16
 system: engine
 platforms: ["gm-ls"]
 raceStyles: ["street-strip", "index", "no-prep"]
-availability: coming-soon
+status: announced
 featured: true
 order: 1
 referenceUrl: "https://www.racingsprings.com/product/valve-springs/street-performance/modern-muscle/valve-spring-kit-rpm-series-ovate-wire-beehive/"

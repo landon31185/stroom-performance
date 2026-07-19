@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
@@ -7,7 +6,7 @@ import vercel from '@astrojs/vercel';
 // TODO(stroom): swap `site` for the real production domain once registered.
 // Placeholder until Jake confirms (stroomperformance.com assumed).
 export default defineConfig({
-  site: 'https://stroomperformance.com',
+  site: process.env.PUBLIC_SITE_URL || 'https://stroomperformance.com',
   adapter: vercel(),
   trailingSlash: 'never',
   // Dev-only overlay 504s under this Vite/Astro version pairing (unrelated
@@ -15,7 +14,6 @@ export default defineConfig({
   // the dev console clean; safe to re-enable if a future Astro bump fixes it.
   devToolbar: { enabled: false },
   integrations: [
-    sitemap(),
     react(),
   ],
   build: {

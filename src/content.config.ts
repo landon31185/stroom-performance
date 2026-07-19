@@ -23,7 +23,7 @@ const products = defineCollection({
     platforms: z.array(z.enum(PLATFORMS)).default([]),
     raceStyles: z.array(z.enum(RACE_STYLES)).default([]),
     price: z.number().optional(),            // absent while pre-catalog
-    availability: z.enum(['in-stock', 'build-to-order', 'coming-soon']).default('coming-soon'),
+    status: z.enum(['draft', 'announced', 'available', 'unavailable']).default('announced'),
     summary: z.string(),
     specs: z.array(z.string()).default([]),
     referenceUrl: z.string().url().optional(),

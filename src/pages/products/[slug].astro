@@ -1,113 +1,100 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import { getCollection, render } from 'astro:content';
-import { site, systemName, raceStyleName, platformName } from '../../lib/site';
 import ProductMedia from '../../components/ProductMedia.astro';
+import { getCatalogProducts, getProductDescription, formatMoney, statusLabels } from '../../lib/catalog';
+import { site, systemName, raceStyleName, platformName } from '../../lib/site';
 
 export async function getStaticPaths() {
-  const products = await getCollection('products');
-  return products.map((p) => ({ params: { slug: p.id }, props: { product: p } }));
+  const products = await getCatalogProducts();
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
 }
 
 const { product } = Astro.props;
-const d = product.data;
-const { Content } = await render(product);
+const rendered = await getProductDescription(product);
+const Content = rendered?.Content;
 
-const availabilityMap: Record<string, string> = {
-  'in-stock': 'https://schema.org/InStock',
-  'build-to-order': 'https://schema.org/BackOrder',
-  'coming-soon': 'https://schema.org/PreOrder',
-};
-const availLabel: Record<string, string> = {
-  'in-stock': 'In stock',
-  'build-to-order': 'Build to order — lead time applies',
-  'coming-soon': 'Coming soon',
-};
 const confidenceLabel: Record<string, string> = {
   'verified-on-car': 'Verified on our car',
   'vendor-stated': 'Vendor-stated',
-  'inferred': 'Inferred — confirm before purchase',
+  inferred: 'Inferred — confirm before purchase',
 };
-
+const canBuy = product.source === 'shopify'
+  && product.status === 'available'
+  && product.availableForSale
+  && product.price
+  && product.variantId;
+const purchasablePrice = canBuy ? product.price : undefined;
+const offer = canBuy ? {
+  '@type': 'Offer',
+  availability: 'https://schema.org/InStock',
+  url: `${site.url}/products/${product.slug}`,
+  seller: { '@id': `${site.url}/#store` },
+  price: purchasablePrice!.amount.toFixed(2),
+  priceCurrency: purchasablePrice!.currencyCode,
+} : undefined;
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: d.title,
-  description: d.summary,
-  brand: { '@type': 'Brand', name: d.brand },
-  ...(d.manufacturerPartNumber ? { mpn: d.manufacturerPartNumber, sku: d.manufacturerPartNumber } : {}),
-  category: systemName(d.system),
-  ...(d.image ? { image: `${site.url}${d.image}` } : {}),
-  offers: {
-    '@type': 'Offer',
-    availability: availabilityMap[d.availability],
-    url: `${site.url}/products/${product.id}`,
-    seller: { '@id': `${site.url}/#store` },
-    ...(d.price ? { price: d.price.toFixed(2), priceCurrency: 'USD' } : {}),
-  },
+  name: product.title,
+  description: product.summary,
+  brand: { '@type': 'Brand', name: product.brand },
+  ...(product.manufacturerPartNumber ? { mpn: product.manufacturerPartNumber, sku: product.manufacturerPartNumber } : {}),
+  category: systemName(product.system),
+  ...(product.image ? { image: product.image.startsWith('http') ? product.image : `${site.url}${product.image}` } : {}),
+  ...(offer ? { offers: offer } : {}),
 });
 ---
 
 <BaseLayout
-  title={`${d.title} | Stroom Performance`}
-  description={d.summary}
-  ogType="article"
+  title={`${product.title} | Stroom Performance`}
+  description={product.summary}
+  ogType="website"
+  ogImage={product.image}
   schema={`<script type="application/ld+json">${schema}<\/script>`}
+  noindex={product.status === 'draft'}
 >
   <section class="product-hero">
     <div class="wrap product-hero__wrap">
       <div class="product-hero__copy">
-        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(d.system), href: `/collections/${d.system}` }, { label: d.title }]} />
-        <ProductMedia slug={product.id} title={d.title} brand={d.brand} partNumber={d.manufacturerPartNumber} image={d.image} size="hero" />
+        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(product.system), href: `/collections/${product.system}` }, { label: product.title }]} />
+        <ProductMedia slug={product.slug} title={product.title} brand={product.brand} partNumber={product.manufacturerPartNumber} image={product.image} imageAlt={product.imageAlt} size="hero" />
         <div class="product-hero__tags reveal">
-          <span class="tag">{systemName(d.system)}</span>
-          {d.platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
-          {d.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
+          <span class="tag">{systemName(product.system)}</span>
+          {product.platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
+          {product.raceStyles.map((style) => <span class="tag tag-hazard">{raceStyleName(style)}</span>)}
         </div>
-        <p class="muted product-hero__brand reveal">{d.brand}</p>
-        <h1 class="heading-section product-hero__title reveal">{d.title}</h1>
-        <p class="body-large muted product-hero__body reveal">{d.summary}</p>
+        <p class="muted product-hero__brand reveal">{product.brand}</p>
+        <h1 class="heading-section product-hero__title reveal">{product.title}</h1>
+        <p class="body-large muted product-hero__body reveal">{product.summary}</p>
       </div>
 
       <aside class="product-buybox reveal">
-        <p class="product-buybox__price readout accent">{d.price ? `$${d.price.toFixed(2)}` : 'Pricing soon'}</p>
-        <p class="muted product-buybox__availability">{availLabel[d.availability]}</p>
+        <p class="product-buybox__price readout accent">{formatMoney(product.price)}</p>
+        <p class="muted product-buybox__availability">{statusLabels[product.status]}</p>
+        {canBuy ? (
+          <form method="POST" action="/api/cart">
+            <input type="hidden" name="variantId" value={product.variantId} />
+            <input type="hidden" name="quantity" value="1" />
+            <button class="btn-primary product-buybox__cta" type="submit">Buy with Shopify</button>
+          </form>
+        ) : (
+          <button class="btn-primary product-buybox__cta" disabled aria-disabled="true">Not available yet</button>
+        )}
+        <p class="muted product-buybox__small">Secure checkout hosted by Shopify</p>
 
-        <!-- TODO(stroom): wire to Shopify cart once Storefront API + product exist. -->
-        <button class="btn-primary product-buybox__cta" disabled aria-disabled="true">
-          {d.availability === 'coming-soon' ? 'Notify me' : 'Add to cart'}
-        </button>
-        <p class="muted product-buybox__small">Checkout via Shopify — launching soon</p>
-
-        {d.fitment && (
+        {product.fitment && (
           <div class="product-fitment">
             <p class="label-small hazard">Fitment & Compatibility</p>
             <dl class="product-fitment__list">
-              <dt>Application</dt>
-              <dd>{d.fitment.application}</dd>
-              {d.fitment.daRange && (
-                <>
-                  <dt>Density Altitude</dt>
-                  <dd class="readout">{d.fitment.daRange}</dd>
-                </>
-              )}
-              {d.fitment.requiredMods.length > 0 && (
-                <>
-                  <dt>Required Mods</dt>
-                  <dd>{d.fitment.requiredMods.join('; ')}</dd>
-                </>
-              )}
-              <dt>Confidence</dt>
-              <dd>{confidenceLabel[d.fitment.confidence]}</dd>
+              <dt>Application</dt><dd>{product.fitment.application}</dd>
+              {product.fitment.requiredMods.length > 0 && <><dt>Required Mods</dt><dd>{product.fitment.requiredMods.join('; ')}</dd></>}
+              <dt>Confidence</dt><dd>{confidenceLabel[product.fitment.confidence]}</dd>
             </dl>
-            {d.fitment.notes && <p class="muted product-fitment__notes">{d.fitment.notes}</p>}
+            {product.fitment.notes && <p class="muted product-fitment__notes">{product.fitment.notes}</p>}
           </div>
         )}
-
-        <p class="muted product-buybox__support">
-          Not sure it fits your setup? <a href={`mailto:${site.contactEmail}`} class="accent">Ask us</a> before ordering.
-        </p>
+        <p class="muted product-buybox__support">Not sure it fits? <a href={`mailto:${site.contactEmail}`} class="accent">Ask before ordering.</a></p>
       </aside>
     </div>
   </section>
@@ -116,28 +103,16 @@ const schema = JSON.stringify({
     <div class="wrap product-detail__wrap">
       <div class="product-detail__content">
         <div class="prose-section product-detail__prose reveal">
-          <Content />
+          {Content ? <Content /> : <Fragment set:html={product.descriptionHtml || `<p>${product.summary}</p>`} />}
         </div>
-
-        {d.specs.length > 0 && (
-          <div class="product-specs reveal">
-            <p class="label-small accent">Specs</p>
-            <ul class="product-specs__list">
-              {d.specs.map((s) => <li>{s}</li>)}
-            </ul>
-          </div>
-        )}
+        {product.specs.length > 0 && <div class="product-specs reveal"><p class="label-small accent">Specifications</p><ul class="product-specs__list">{product.specs.map((spec) => <li>{spec}</li>)}</ul></div>}
       </div>
-
       <aside class="product-detail__rail reveal">
-          <div class="product-detail__rail-panel">
+        <div class="product-detail__rail-panel">
           <p class="label-small accent">Selection notes</p>
-          <p class="product-detail__rail-text">
-            Stroom listings connect the part to its engine platform, supporting
-            hardware, and intended use so you can narrow the choice before buying.
-          </p>
-          {d.manufacturerPartNumber && <p class="readout product-detail__mpn">MPN {d.manufacturerPartNumber}</p>}
-          {d.referenceUrl && <a href={d.referenceUrl} class="nav-link" target="_blank" rel="noreferrer">Reference details →</a>}
+          <p class="product-detail__rail-text">Review platform, supporting hardware, and intended use before ordering.</p>
+          {product.manufacturerPartNumber && <p class="readout product-detail__mpn">MPN {product.manufacturerPartNumber}</p>}
+          {product.referenceUrl && <a href={product.referenceUrl} class="nav-link" target="_blank" rel="noreferrer">Reference details →</a>}
         </div>
       </aside>
     </div>

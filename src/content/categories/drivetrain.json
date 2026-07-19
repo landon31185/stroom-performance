@@ -1,1 +1,1 @@
-{ "name": "Drivetrain", "facet": "system", "order": 3, "description": "Torque converters and driveline built to a target density altitude. Converter stall is altitude-dependent — we spec it for where you actually race." }
+{ "name": "Drivetrain", "facet": "system", "order": 3, "description": "Converters and driveline components selected around power delivery, vehicle weight, gearing, launch behavior, and intended street or track use." }

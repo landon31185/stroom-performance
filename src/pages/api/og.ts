@@ -7,7 +7,7 @@ export const prerender = false;
 // Dark, technical OG card matching the Stroom brand (Moto Stencil: orange on near-black).
 export const GET: APIRoute = async ({ url }) => {
   const title = url.searchParams.get('title') || 'Stroom Performance';
-  const sub = url.searchParams.get('description') || 'High-Altitude Performance Parts';
+  const sub = url.searchParams.get('description') || 'Curated performance parts with fitment-minded guidance';
 
   return new ImageResponse(
     {
@@ -110,7 +110,7 @@ export const GET: APIRoute = async ({ url }) => {
           },
         ],
       },
-    },
+    } as any,
     { width: 1200, height: 630 },
   );
 };

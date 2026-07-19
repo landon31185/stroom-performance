@@ -5,7 +5,7 @@ manufacturerPartNumber: IMA-01
 system: engine
 platforms: ["gm-ls"]
 raceStyles: ["street-strip", "index", "no-prep"]
-availability: coming-soon
+status: announced
 featured: true
 order: 3
 referenceUrl: "https://www.michiganmotorsports.com/intakes-throttle-body-fuel/btr-black-equalizer-1-intake-manifold-cathedral-head-brian-tooley-ima-01-ls1-ls2-ls6-4-8-5-3-5-7-6-0/"

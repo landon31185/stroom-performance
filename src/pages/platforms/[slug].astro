@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCatalogProducts } from '../../lib/catalog';
+import { platforms, site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const products = await getCatalogProducts();
+  return platforms.map((platform) => ({
+    params: { slug: platform.slug },
+    props: { platform, products: products.filter((product) => product.platforms.includes(platform.slug)) },
+  }));
+}
+
+const { platform, products } = Astro.props;
+const description = platform.slug === 'gm-ls'
+  ? 'Shop curated GM LS engine and EFI components with fitment details, specifications, and supporting-system context.'
+  : 'Browse the growing Gen III Hemi performance-parts collection as verified products and fitment details are added.';
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${platform.name} Performance Parts`,
+  description,
+  url: `${site.url}/platforms/${platform.slug}`,
+  isPartOf: { '@id': `${site.url}/#store` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: products.map((product, index) => ({
+      '@type': 'ListItem', position: index + 1, name: product.title, url: `${site.url}/products/${product.slug}`,
+    })),
+  },
+});
+---
+
+<BaseLayout
+  title={`${platform.name} Performance Parts | Stroom Performance`}
+  description={description}
+  schema={`<script type="application/ld+json">${schema}<\/script>`}
+  noindex={products.length === 0}
+>
+  <section class="collection-hero">
+    <div class="wrap collection-hero__wrap">
+      <div class="collection-hero__copy">
+        <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: platform.name }]} />
+        <h1 class="heading-section collection-hero__title reveal">{platform.name} Performance Parts</h1>
+        <p class="muted collection-hero__body reveal">{description}</p>
+      </div>
+    </div>
+  </section>
+  <section class="collection-results">
+    <div class="wrap">
+      {products.length ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {products.map((product) => (
+            <ProductCard slug={product.slug} title={product.title} brand={product.brand} system={product.system} platforms={product.platforms} summary={product.summary} status={product.status} price={product.price} partNumber={product.manufacturerPartNumber} image={product.image} imageAlt={product.imageAlt} />
+          ))}
+        </div>
+      ) : (
+        <div class="collection-empty reveal"><p class="heading-card">Catalog in preparation</p><p class="muted">Verified products and fitment details will be published here as they are confirmed.</p></div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

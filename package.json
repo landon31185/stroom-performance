@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
     "remotion:studio": "remotion studio remotion/index.ts --public-dir public",
@@ -15,7 +16,6 @@
   },
   "dependencies": {
     "@astrojs/react": "^6.0.0",
-    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.8",
     "@remotion/cli": "4.0.491",
     "@tailwindcss/vite": "^4.2.2",
@@ -29,5 +29,9 @@
   },
   "overrides": {
     "vite": "^7.3.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
   }
 }

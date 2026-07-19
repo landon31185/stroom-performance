@@ -2,10 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { getCollection } from 'astro:content';
 import { systems, raceStyles, platforms, site } from '../lib/site';
+import { getCatalogProducts } from '../lib/catalog';
 
-const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+const products = await getCatalogProducts();
 
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -18,8 +18,8 @@ const schema = JSON.stringify({
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: p.data.title,
-      url: `${site.url}/products/${p.id}`,
+      name: p.title,
+      url: `${site.url}/products/${p.slug}`,
     })),
   },
 });
@@ -54,9 +54,9 @@ const schema = JSON.stringify({
         <p class="label-small muted" style="margin-bottom:0.75rem;">By Platform</p>
         <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
           {platforms.map((platform) => (
-            <span id={platform.slug} class={`tag ${platform.slug === 'gm-ls' ? 'tag-platform' : ''}`}>
+            <a id={platform.slug} href={`/platforms/${platform.slug}`} class={`tag ${platform.slug === 'gm-ls' ? 'tag-platform' : ''}`} style="text-decoration:none;">
               {platform.name}{platform.slug === 'gen3-hemi' ? ' — products being confirmed' : ''}
-            </span>
+            </a>
           ))}
         </div>
       </div>
@@ -74,7 +74,7 @@ const schema = JSON.stringify({
   <section class="wrap" style="padding-bottom:4rem;">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {products.map((p) => (
-        <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} platforms={p.data.platforms} summary={p.data.summary} availability={p.data.availability} price={p.data.price} partNumber={p.data.manufacturerPartNumber} image={p.data.image} />
+        <ProductCard slug={p.slug} title={p.title} brand={p.brand} system={p.system} platforms={p.platforms} summary={p.summary} status={p.status} price={p.price} partNumber={p.manufacturerPartNumber} image={p.image} imageAlt={p.imageAlt} />
       ))}
     </div>
   </section>

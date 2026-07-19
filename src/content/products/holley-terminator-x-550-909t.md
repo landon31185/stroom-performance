@@ -5,7 +5,7 @@ manufacturerPartNumber: 550-909T
 system: electronics
 platforms: ["gm-ls"]
 raceStyles: ["street-strip", "index", "no-prep"]
-availability: coming-soon
+status: announced
 featured: true
 order: 4
 referenceUrl: "https://www.holley.com/products/fuel_systems/fuel_injection/terminator_x/terminator_x_and_x_max_ls_kits/ls_kits_without_handheld/parts/550-909T"

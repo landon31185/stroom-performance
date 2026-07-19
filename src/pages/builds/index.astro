@@ -1,35 +1,35 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import { getCollection } from 'astro:content';
 import { raceStyleName } from '../../lib/site';
+import { getBuilds } from '../../lib/editorial';
 
-const builds = (await getCollection('builds')).sort((a, b) => a.data.order - b.data.order);
+const builds = await getBuilds();
 ---
 
 <BaseLayout
   title="Builds | Stroom Performance"
-  description="The cars behind the store. Every part Stroom sells is proven on a real high-altitude drag build first."
+  description="Explore Stroom Performance builds and see how engine, EFI, fuel, and supporting parts work together in complete combinations."
 >
   <section class="wrap" style="padding-block:3rem 2rem;">
     <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Builds' }]} />
     <h1 class="heading-section">Builds</h1>
     <p class="muted" style="margin-top:0.75rem;max-width:60ch;line-height:1.7;">
-      The proving ground. These are the cars the parts earned their place on —
-      at real altitude, on real un-prepped surfaces.
+      Complete combinations that connect individual products to the platform,
+      supporting systems, intended use, and real-world build decisions around them.
     </p>
   </section>
 
   <section class="wrap" style="padding-bottom:4rem;">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       {builds.map((b) => (
-        <a href={`/builds/${b.id}`} class="card" style="padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:0.75rem;">
+        <a href={`/builds/${b.slug}`} class="card" style="padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:0.75rem;">
           <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
-            {b.data.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
+            {b.raceStyles.map((r) => <span class="tag tag-hazard">{raceStyleName(r)}</span>)}
           </div>
-          <h2 class="heading-card">{b.data.title}</h2>
-          <p class="readout muted" style="font-size:0.8125rem;">{b.data.altitude}</p>
-          <p class="muted" style="font-size:0.9375rem;line-height:1.6;">{b.data.description}</p>
+          <h2 class="heading-card">{b.title}</h2>
+          <p class="readout muted" style="font-size:0.8125rem;">{b.vehicle}</p>
+          <p class="muted" style="font-size:0.9375rem;line-height:1.6;">{b.description}</p>
           <span class="nav-link accent" style="margin-top:auto;">View build →</span>
         </a>
       ))}

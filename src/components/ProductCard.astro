@@ -1,6 +1,8 @@
 ---
 import { platformName, systemName } from '../lib/site';
 import ProductMedia from './ProductMedia.astro';
+import { formatMoney, statusLabels } from '../lib/catalog';
+import type { CatalogStatus, Money } from '../lib/shopify';
 interface Props {
   slug: string;
   title: string;
@@ -8,26 +10,22 @@ interface Props {
   system: string;
   platforms?: string[];
   summary: string;
-  availability: 'in-stock' | 'build-to-order' | 'coming-soon';
-  price?: number;
+  status: CatalogStatus;
+  price?: Money;
   partNumber?: string;
   image?: string;
+  imageAlt?: string;
 }
-const { slug, title, brand, system, platforms = [], summary, availability, price, partNumber, image } = Astro.props;
-const availLabel = {
-  'in-stock': 'In stock',
-  'build-to-order': 'Build to order',
-  'coming-soon': 'Coming soon',
-}[availability];
+const { slug, title, brand, system, platforms = [], summary, status, price, partNumber, image, imageAlt } = Astro.props;
 ---
 <a href={`/products/${slug}`} class="product-card">
-  <ProductMedia {slug} {title} {brand} {partNumber} {image} />
+  <ProductMedia {slug} {title} {brand} {partNumber} {image} {imageAlt} />
   <div class="product-card__top">
     <div class="product-card__facets">
       <span class="tag">{systemName(system)}</span>
       {platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
     </div>
-    <span class="readout product-card__availability">{availLabel}</span>
+    <span class="readout product-card__availability">{statusLabels[status]}</span>
   </div>
   <div class="product-card__body">
     <p class="muted product-card__brand">{brand}</p>
@@ -35,7 +33,7 @@ const availLabel = {
   </div>
   <p class="muted product-card__summary">{summary}</p>
   <div class="product-card__footer">
-    <span class="readout accent product-card__price">{price ? `$${price.toFixed(2)}` : 'Pricing soon'}</span>
+    <span class="readout accent product-card__price">{formatMoney(price)}</span>
     <span class="nav-link accent">View →</span>
   </div>
 </a>

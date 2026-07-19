@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import { getCollection } from 'astro:content';
 import { site } from '../../lib/site';
+import { getGuides } from '../../lib/editorial';
 
-const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order);
+const guides = await getGuides();
 
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -17,7 +17,7 @@ const schema = JSON.stringify({
 
 <BaseLayout
   title="Guides & How-To | Stroom Performance"
-  description="High-altitude tuning, fuel-system fabrication, and data-log analysis guides from the Stroom Performance channel. Real fixes from real runs at density altitude."
+  description="Performance-part fitment, installation, tuning, and build-planning guides from Stroom Performance. Make a better-informed choice before ordering."
   schema={`<script type="application/ld+json">${schema}<\/script>`}
 >
   <section class="resource-hero">
@@ -28,7 +28,7 @@ const schema = JSON.stringify({
         <h1 class="heading-section resource-hero__title reveal">Guides & How-To</h1>
         <p class="muted resource-hero__body reveal">
           The written version of the Stroom edge: fabrication, tuning, and
-          data-log thinking from real high-altitude runs.
+          fitment, installation, tuning, and build-planning guidance tied to real parts.
         </p>
       </div>
       <aside class="resource-hero__meta reveal">
@@ -44,18 +44,18 @@ const schema = JSON.stringify({
       <div class="resource-listing__intro reveal">
         <p class="resource-listing__text">
           These guides are part of the commercial story, not a side blog. They
-          prove the judgment behind the future catalog.
+          help customers understand a system and choose compatible parts.
         </p>
       </div>
       <div class="resource-card-grid">
         {guides.map((g) => (
-          <a href={`/guides/${g.id}`} class="resource-card reveal">
+          <a href={`/guides/${g.slug}`} class="resource-card reveal">
             <div class="resource-card__top">
-              <span class="tag">{g.data.difficulty}</span>
-              <span class="muted readout resource-card__date">{new Date(g.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              <span class="tag">{g.tags[0] || 'Guide'}</span>
+              <span class="muted readout resource-card__date">{new Date(g.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
             </div>
-            <h2 class="heading-card">{g.data.title}</h2>
-            <p class="muted resource-card__body">{g.data.description}</p>
+            <h2 class="heading-card">{g.title}</h2>
+            <p class="muted resource-card__body">{g.description}</p>
             <span class="nav-link accent resource-card__cta">Read guide →</span>
           </a>
         ))}

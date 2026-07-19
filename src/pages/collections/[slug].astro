@@ -3,20 +3,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { getCollection } from 'astro:content';
+import { getCatalogProducts } from '../../lib/catalog';
 import { site } from '../../lib/site';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
-  const products = await getCollection('products');
+  const products = await getCatalogProducts();
   return categories.map((cat) => {
     const slug = cat.id;
     const inFacet = products
       .filter((p) =>
         cat.data.facet === 'system'
-          ? p.data.system === slug
-          : p.data.raceStyles.includes(slug as never),
+          ? p.system === slug
+          : p.raceStyles.includes(slug),
       )
-      .sort((a, b) => a.data.order - b.data.order);
+      .sort((a, b) => a.order - b.order);
     return { params: { slug }, props: { category: cat.data, slug, products: inFacet } };
   });
 }
@@ -36,8 +37,8 @@ const schema = JSON.stringify({
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: p.data.title,
-      url: `${site.url}/products/${p.id}`,
+      name: p.title,
+      url: `${site.url}/products/${p.slug}`,
     })),
   },
 });
@@ -47,6 +48,7 @@ const schema = JSON.stringify({
   title={`${category.name} Parts | Stroom Performance`}
   description={category.description}
   schema={`<script type="application/ld+json">${schema}<\/script>`}
+  noindex={products.length === 0}
 >
   <section class="collection-hero">
     <div class="wrap collection-hero__wrap">
@@ -90,7 +92,7 @@ const schema = JSON.stringify({
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((p) => (
-              <ProductCard slug={p.id} title={p.data.title} brand={p.data.brand} system={p.data.system} platforms={p.data.platforms} summary={p.data.summary} availability={p.data.availability} price={p.data.price} partNumber={p.data.manufacturerPartNumber} image={p.data.image} />
+              <ProductCard slug={p.slug} title={p.title} brand={p.brand} system={p.system} platforms={p.platforms} summary={p.summary} status={p.status} price={p.price} partNumber={p.manufacturerPartNumber} image={p.image} imageAlt={p.imageAlt} />
             ))}
           </div>
         </>

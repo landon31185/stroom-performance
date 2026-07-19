@@ -5,10 +5,11 @@ interface Props {
   brand: string;
   partNumber?: string;
   image?: string;
+  imageAlt?: string;
   size?: 'card' | 'hero';
 }
 
-const { slug, title, brand, partNumber, image, size = 'card' } = Astro.props;
+const { slug, title, brand, partNumber, image, imageAlt, size = 'card' } = Astro.props;
 const drawing = slug.includes('valve-springs')
   ? 'springs'
   : slug.includes('cam')
@@ -20,7 +21,7 @@ const drawing = slug.includes('valve-springs')
 
 <figure class={`product-media product-media--${size}`} aria-label={`${title} product image placeholder`}>
   {image ? (
-    <img src={image} alt={`${brand} ${title}`} loading={size === 'card' ? 'lazy' : 'eager'} />
+    <img src={image} alt={imageAlt || `${brand} ${title}`} loading={size === 'card' ? 'lazy' : 'eager'} />
   ) : (
     <>
       <div class="product-media__grid" aria-hidden="true"></div>

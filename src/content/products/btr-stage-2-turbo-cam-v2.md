@@ -5,7 +5,7 @@ manufacturerPartNumber: BTR-TURBOSTG2
 system: engine
 platforms: ["gm-ls"]
 raceStyles: ["street-strip", "index", "no-prep"]
-availability: coming-soon
+status: announced
 featured: true
 order: 2
 referenceUrl: "https://briantooleyracing.com/btr-stage-2-turbo-camshaft-v2.html"

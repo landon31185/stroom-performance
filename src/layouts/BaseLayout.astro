@@ -13,6 +13,7 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   canonicalUrl?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -21,10 +22,11 @@ const {
   schema,
   ogImage,
   ogType = 'website',
-  canonicalUrl = Astro.url.href,
+  canonicalUrl = `${site.url}${Astro.url.pathname}`,
+  noindex = false,
 } = Astro.props;
 
-const ogSub = 'High-Altitude Performance Parts · No Prep / Index';
+const ogSub = 'Curated performance parts with fitment-minded guidance';
 // Default: per-page dynamic OG card via /api/og. Pages can override with a
 // static image (e.g. ogImage="/og-default.svg") to skip the dynamic render.
 const ogImageUrl = ogImage
@@ -49,6 +51,9 @@ const ogImageUrl = ogImage
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    {import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />}
+    {import.meta.env.PUBLIC_BING_SITE_VERIFICATION && <meta name="msvalidate.01" content={import.meta.env.PUBLIC_BING_SITE_VERIFICATION} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
@@ -82,12 +87,11 @@ const ogImageUrl = ogImage
       description: site.description,
       slogan: site.tagline,
       knowsAbout: [
-        'High-altitude drag racing',
-        'Density altitude tuning',
-        'No Prep racing',
-        'Index drag racing',
-        'Forced-induction fuel systems',
-        'Torque converter selection',
+        'GM LS performance parts',
+        'Gen III Hemi performance parts',
+        'Engine and EFI systems',
+        'Performance-part fitment',
+        'Street and strip builds',
       ],
       sameAs: [site.youtube],
     })} />
@@ -96,6 +100,17 @@ const ogImageUrl = ogImage
     {schema && <Fragment set:html={schema} />}
 
     <ClientRouter />
+    {import.meta.env.PUBLIC_GA_MEASUREMENT_ID && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}`}></script>
+        <script is:inline define:vars={{ measurementId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', measurementId);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <Header />

@@ -18,7 +18,7 @@ export const brandColors = {
 export const site = {
   name: 'Stroom Performance',
   // TODO(stroom): real production domain (placeholder until registered).
-  url: 'https://stroomperformance.com',
+  url: (import.meta.env.PUBLIC_SITE_URL || 'https://stroomperformance.com').replace(/\/$/, ''),
   tagline: 'Curated performance parts with fitment-minded guidance.',
   description:
     'Stroom Performance is a premium performance-parts storefront built around curated systems, fitment-minded guidance, and real-world product judgment. Shop fuel, engine, drivetrain, electronics, and race support with more confidence and less guesswork.',
