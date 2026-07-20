@@ -51,8 +51,8 @@ const schema = JSON.stringify({
   description={product.summary}
   ogType="website"
   ogImage={product.image}
-  schema={`<script type="application/ld+json">${schema}<\/script>`}
-  noindex={product.status === 'draft'}
+  schema={canBuy ? `<script type="application/ld+json">${schema}<\/script>` : undefined}
+  noindex={product.status !== 'available'}
 >
   <section class="product-hero">
     <div class="wrap product-hero__wrap">
@@ -81,7 +81,9 @@ const schema = JSON.stringify({
         ) : (
           <button class="btn-primary product-buybox__cta" disabled aria-disabled="true">Not available yet</button>
         )}
-        <p class="muted product-buybox__small">Secure checkout hosted by Shopify</p>
+        <p class="muted product-buybox__small">
+          {canBuy ? 'Secure checkout hosted by Shopify' : 'Product preview — pricing and purchasing are not live.'}
+        </p>
 
         {product.fitment && (
           <div class="product-fitment">

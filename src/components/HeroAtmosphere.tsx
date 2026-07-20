@@ -163,16 +163,6 @@ export default function HeroAtmosphere() {
   return (
     <div className="hero-atmosphere" aria-hidden="true">
       <canvas ref={canvasRef} className="hero-atmosphere__canvas" />
-      <div className="hero-atmosphere__hud">
-        <div className="hero-atmosphere__hud-item">
-          <span className="hero-atmosphere__label">air density</span>
-          <span className="hero-atmosphere__value">critical</span>
-        </div>
-        <div className="hero-atmosphere__hud-item">
-          <span className="hero-atmosphere__label">surface state</span>
-          <span className="hero-atmosphere__value">un-prepped</span>
-        </div>
-      </div>
     </div>
   );
 }

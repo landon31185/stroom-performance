@@ -47,6 +47,16 @@ const schema = JSON.stringify({
     <div class="prose-section" style="margin-top:2rem;border-top:1px solid var(--color-line);padding-top:2rem;border-bottom:none;">
       {Content ? <Content /> : <Fragment set:html={guide.bodyHtml} />}
     </div>
+    {local?.steps.length ? (
+      <section class="guide-steps" aria-labelledby="guide-steps-title">
+        <h2 id="guide-steps-title" class="heading-card">Process</h2>
+        <ol class="steps-list">
+          {local.steps.map((step) => (
+            <li><div><strong>{step.name}</strong><p class="muted">{step.text}</p></div></li>
+          ))}
+        </ol>
+      </section>
+    ) : null}
     {tools.length > 0 && <div style="margin-bottom:2.5rem;"><h2 class="heading-card">Tools</h2><ul class="muted">{tools.map((tool) => <li>{tool}</li>)}</ul></div>}
     {parts.length > 0 && <div class="altitude-panel"><p class="label-small hazard">Related parts</p><ul style="list-style:none;padding:0;">{parts.map((product) => <li><a href={`/products/${product.slug}`} class="nav-link accent">{product.title} →</a></li>)}</ul></div>}
   </article>

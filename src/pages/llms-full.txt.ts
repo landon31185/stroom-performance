@@ -33,7 +33,7 @@ Fitment notes: ${product.fitment?.notes || 'None supplied'}
 ## Object Model
 Product connects to Variant, Platform, System, Racing Style, Fitment, Guide, and Build. Shopify owns public product, variant, price, inventory, media, article, and checkout data. Stroom adds fitment confidence and complete-combination context through Shopify metafields and metaobjects.
 
-# Products
+# Announced Catalog
 ${productSections || 'No public products are currently listed.'}
 
 # Guides

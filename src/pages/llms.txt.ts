@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
 
 > ${site.description}
 
-## Current Products
+## Announced Catalog
 ${productLines || '* No public products are currently listed.'}
 
 ## Guides
@@ -33,6 +33,7 @@ ${buildLines || '* No builds are currently published.'}
 * [Guides](/guides)
 * [Builds](/builds)
 * [About Stroom Performance](/about)
+* [Full machine-readable context](/llms-full.txt)
 
 ## AI Usage Notes
 Product status, price, and fitment above come from the same public catalog used by the storefront. A listed product is purchasable only when its status is Available and its product page exposes Shopify checkout. Fitment notes are decision support, not a compatibility guarantee. WebMCP tools: get_products, check_fitment, get_categories, find_by_race_style, and get_guides.

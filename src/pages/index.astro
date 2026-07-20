@@ -12,9 +12,9 @@ const featured = products.filter((p) => p.featured).sort((a, b) => a.order - b.o
 const guides = (await getGuides()).slice(0, 3);
 
 const heroHighlights = [
-  { label: 'Current platform', value: 'GM LS' },
-  { label: 'Current systems', value: 'Engine + EFI' },
-  { label: 'Next platform', value: 'Gen III Hemi' },
+  { label: 'Catalog preview', value: 'GM LS' },
+  { label: 'Product focus', value: 'Engine + EFI' },
+  { label: 'In preparation', value: 'Gen III Hemi' },
 ];
 
 const trustPillars = [
@@ -75,32 +75,36 @@ const supportSpotlights = featured.slice(1, 3);
 
       {site.heroFilm.enabled && <HeroFilmLayer src={site.heroFilm.src} poster={site.heroFilm.poster} />}
 
-      <aside class="home-hero-panel reveal" aria-label="Featured focus">
-        <div class="home-hero-panel__top"><p class="home-hero-panel__stamp">Choose a platform</p></div>
-        <div class="home-hero-panel__divider"></div>
-        <div class="home-hero-panel__headline">
-          <span>Start with</span>
-          <span>your build.</span>
-        </div>
-        <p class="home-hero-panel__body">
-          Find compatible parts by platform first, then narrow the choice by
-          system, use case, and the rest of the combination.
+    </div>
+  </section>
+
+  <section class="home-platform-picker" aria-labelledby="platform-picker-title">
+    <div class="wrap home-platform-picker__wrap">
+      <div class="home-platform-picker__intro reveal">
+        <p class="home-platform-picker__stamp">Choose a platform</p>
+        <h2 id="platform-picker-title" class="heading-section">Start with your build.</h2>
+        <p class="home-platform-picker__body">
+          Find compatible parts by platform, then narrow the choice by system
+          and the job the complete combination needs to do.
         </p>
-        <div class="home-hero-panel__stack">
-          <a href="/shop#gm-ls" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">Verified first</span>
-            <strong>Shop GM LS parts and fitment details.</strong>
-          </a>
-          <a href="/shop#gen3-hemi" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">Next platform</span>
-            <strong>Explore the Gen III Hemi collection as it grows.</strong>
-          </a>
-          <a href="/builds" class="home-hero-panel__card">
-            <span class="home-hero-panel__card-label">Build context</span>
-            <strong>See how parts work together before choosing one.</strong>
-          </a>
-        </div>
-      </aside>
+      </div>
+      <nav class="home-platform-picker__options reveal" aria-label="Shop and research by platform">
+        <a href="/platforms/gm-ls" class="home-platform-picker__option">
+          <span class="home-platform-picker__index">01</span>
+          <span class="home-platform-picker__option-copy"><strong>GM LS</strong><span>View confirmed product details and fitment notes.</span></span>
+          <span class="home-platform-picker__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="/platforms/gen3-hemi" class="home-platform-picker__option">
+          <span class="home-platform-picker__index">02</span>
+          <span class="home-platform-picker__option-copy"><strong>Gen III Hemi</strong><span>Platform structure ready; products are being confirmed.</span></span>
+          <span class="home-platform-picker__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="/builds" class="home-platform-picker__option">
+          <span class="home-platform-picker__index">03</span>
+          <span class="home-platform-picker__option-copy"><strong>Build examples</strong><span>See parts in the context of a complete combination.</span></span>
+          <span class="home-platform-picker__arrow" aria-hidden="true">→</span>
+        </a>
+      </nav>
     </div>
   </section>
 

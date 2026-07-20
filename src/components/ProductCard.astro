@@ -17,6 +17,7 @@ interface Props {
   imageAlt?: string;
 }
 const { slug, title, brand, system, platforms = [], summary, status, price, partNumber, image, imageAlt } = Astro.props;
+const ctaLabel = status === 'available' ? 'View product' : 'Preview details';
 ---
 <a href={`/products/${slug}`} class="product-card">
   <ProductMedia {slug} {title} {brand} {partNumber} {image} {imageAlt} />
@@ -34,6 +35,6 @@ const { slug, title, brand, system, platforms = [], summary, status, price, part
   <p class="muted product-card__summary">{summary}</p>
   <div class="product-card__footer">
     <span class="readout accent product-card__price">{formatMoney(price)}</span>
-    <span class="nav-link accent">View →</span>
+    <span class="nav-link accent">{ctaLabel} →</span>
   </div>
 </a>

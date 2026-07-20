@@ -77,10 +77,10 @@ const ogImageUrl = ogImage
     <!-- WebMCP polyfill — exposes the store's object model to AI agents -->
     <script src="https://unpkg.com/@mcp-b/global/dist/index.min.js" is:inline></script>
 
-    <!-- Global org schema — fires on every page for entity association -->
+    <!-- Pre-commerce entity schema. Upgrade to OnlineStore when checkout is live. -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'OnlineStore',
+      '@type': 'Organization',
       '@id': `${site.url}/#store`,
       name: site.name,
       url: site.url,

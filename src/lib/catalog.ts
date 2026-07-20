@@ -66,12 +66,12 @@ export async function getCatalogProducts(): Promise<CatalogProduct[]> {
   if (isShopifyConfigured()) {
     try {
       const products = await getShopifyProducts();
-      if (products.length) return products.sort((a, b) => a.order - b.order);
+      if (products.length) return products.filter((product) => product.status !== 'draft').sort((a, b) => a.order - b.order);
     } catch (error) {
       console.warn('[catalog] Shopify unavailable; rendering the verified local fallback.', error);
     }
   }
-  return (await getLocalProducts()).sort((a, b) => a.order - b.order);
+  return (await getLocalProducts()).filter((product) => product.status !== 'draft').sort((a, b) => a.order - b.order);
 }
 
 export async function getCatalogProduct(slug: string): Promise<CatalogProduct | undefined> {

@@ -19,13 +19,13 @@ const drawing = slug.includes('valve-springs')
       : 'electronics';
 ---
 
-<figure class={`product-media product-media--${size}`} aria-label={`${title} product image placeholder`}>
+<figure class={`product-media product-media--${size}`} aria-label={image ? undefined : `${title} technical illustration`}>
   {image ? (
     <img src={image} alt={imageAlt || `${brand} ${title}`} loading={size === 'card' ? 'lazy' : 'eager'} />
   ) : (
     <>
       <div class="product-media__grid" aria-hidden="true"></div>
-      <svg class="product-media__drawing" viewBox="0 0 640 400" role="img" aria-label={`Abstract technical drawing representing ${title}`}>
+      <svg class="product-media__drawing" viewBox="0 0 640 400" role="img" aria-label={`Technical catalog illustration representing ${title}`}>
         {drawing === 'springs' && (
           <g fill="none" stroke="currentColor" stroke-width="7">
             <ellipse cx="320" cy="90" rx="105" ry="34" />
@@ -63,9 +63,9 @@ const drawing = slug.includes('valve-springs')
       </svg>
       <div class="product-media__meta">
         <span>{brand}</span>
-        <span>{partNumber ?? 'Image pending'}</span>
+        <span>{partNumber ?? 'Reference art'}</span>
       </div>
-      <span class="product-media__state">Product image pending</span>
+      <span class="product-media__state">Technical preview · photography pending</span>
     </>
   )}
 </figure>

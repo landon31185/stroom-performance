@@ -44,17 +44,17 @@ const schema = JSON.stringify({
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <p class="label-small muted" style="margin-bottom:0.75rem;">By System</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <div class="shop-filter-list">
           {systems.map((s) => (
-            <a href={`/collections/${s.slug}`} class="tag" style="text-decoration:none;">{s.name}</a>
+            <a href={`/collections/${s.slug}`} class="shop-filter-link">{s.name}</a>
           ))}
         </div>
       </div>
       <div>
         <p class="label-small muted" style="margin-bottom:0.75rem;">By Platform</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <div class="shop-filter-list">
           {platforms.map((platform) => (
-            <a id={platform.slug} href={`/platforms/${platform.slug}`} class={`tag ${platform.slug === 'gm-ls' ? 'tag-platform' : ''}`} style="text-decoration:none;">
+            <a id={platform.slug} href={`/platforms/${platform.slug}`} class="shop-filter-link">
               {platform.name}{platform.slug === 'gen3-hemi' ? ' — products being confirmed' : ''}
             </a>
           ))}
@@ -62,9 +62,9 @@ const schema = JSON.stringify({
       </div>
       <div>
         <p class="label-small muted" style="margin-bottom:0.75rem;">By Racing Style</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <div class="shop-filter-list">
           {raceStyles.map((r) => (
-            <a href={`/collections/${r.slug}`} class="tag tag-hazard" style="text-decoration:none;">{r.name}</a>
+            <a href={`/collections/${r.slug}`} class="shop-filter-link">{r.name}</a>
           ))}
         </div>
       </div>

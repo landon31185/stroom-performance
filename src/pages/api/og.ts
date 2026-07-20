@@ -98,7 +98,7 @@ export const GET: APIRoute = async ({ url }) => {
                       textTransform: 'uppercase',
                       letterSpacing: '0.03em',
                     },
-                    children: 'No Prep · Index · Density Altitude',
+                    children: 'GM LS · Engine · EFI · Fitment',
                   },
                 },
                 {
