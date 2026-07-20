@@ -1,14 +1,13 @@
 ---
 import { isShopifyConfigured } from '../lib/shopify';
-const enabled = isShopifyConfigured();
+const demo = !isShopifyConfigured();
 ---
 
-{enabled && (
-  <dialog id="cart-drawer" class="cart-drawer" aria-labelledby="cart-title">
+<dialog id="cart-drawer" class="cart-drawer" aria-labelledby="cart-title" data-cart-demo={demo ? 'true' : 'false'}>
     <div class="cart-drawer__shell">
       <header class="cart-drawer__header">
         <div>
-          <p class="label-small">Your selection</p>
+          <p class="label-small">{demo ? 'Storefront prototype' : 'Your selection'}</p>
           <h2 id="cart-title">Cart <span data-cart-count hidden>0</span></h2>
         </div>
         <button type="button" class="cart-drawer__close" data-cart-close aria-label="Close cart">Close</button>
@@ -22,17 +21,15 @@ const enabled = isShopifyConfigured();
           <span>Subtotal</span>
           <strong data-cart-subtotal></strong>
         </div>
-        <p class="muted">Shipping, taxes, and payment are calculated securely by Shopify.</p>
+        <p class="muted">{demo ? 'Demo cart only. Shopify checkout will activate after store setup.' : 'Shipping, taxes, and payment are calculated securely by Shopify.'}</p>
         <button type="button" class="btn-primary cart-drawer__checkout" data-cart-checkout>
-          Continue to secure checkout
+          {demo ? 'Preview checkout handoff' : 'Continue to secure checkout'}
         </button>
       </footer>
     </div>
   </dialog>
-)}
 
-{enabled && (
-  <script>
+<script>
     type PublicCart = {
       totalQuantity: number;
       subtotal: { amount: number; currencyCode: string };
@@ -52,6 +49,36 @@ const enabled = isShopifyConfigured();
     const money = (amount: number, currency: string) => new Intl.NumberFormat(undefined, {
       style: 'currency', currency,
     }).format(amount);
+    const demoSeed: PublicCart = {
+      totalQuantity: 1,
+      subtotal: { amount: 24, currencyCode: 'USD' },
+      lines: [{
+        id: 'demo-license-frame',
+        quantity: 1,
+        title: 'Proudly Voiding Warranties License Plate Frame',
+        variantTitle: 'Black / Standard US plate',
+        productHandle: 'stroom-proudly-voiding-warranties-license-plate-frame',
+        image: '/media/stroom-license-plate-frame.jpg',
+        imageAlt: 'Black Stroom Performance license plate frame',
+        price: { amount: 24, currencyCode: 'USD' },
+      }],
+    };
+
+    function demoCart(): PublicCart {
+      try {
+        const saved = localStorage.getItem('stroom-demo-cart');
+        if (saved) return JSON.parse(saved) as PublicCart;
+      } catch {}
+      localStorage.setItem('stroom-demo-cart', JSON.stringify(demoSeed));
+      return structuredClone(demoSeed);
+    }
+
+    function saveDemoCart(cart: PublicCart) {
+      cart.totalQuantity = cart.lines.reduce((sum, line) => sum + line.quantity, 0);
+      cart.subtotal.amount = cart.lines.reduce((sum, line) => sum + line.price.amount * line.quantity, 0);
+      localStorage.setItem('stroom-demo-cart', JSON.stringify(cart));
+      return cart;
+    }
 
     function setStatus(message: string) {
       const element = drawer()?.querySelector<HTMLElement>('[data-cart-status]');
@@ -148,6 +175,22 @@ const enabled = isShopifyConfigured();
     }
 
     async function cartRequest(method = 'GET', body?: Record<string, unknown>) {
+      if (drawer()?.dataset.cartDemo === 'true') {
+        const cart = demoCart();
+        if (method === 'PATCH') {
+          const line = cart.lines.find((item) => item.id === body?.lineId);
+          if (line) line.quantity = Number(body?.quantity || 1);
+          return { cart: saveDemoCart(cart) };
+        }
+        if (method === 'DELETE') {
+          cart.lines = cart.lines.filter((item) => item.id !== body?.lineId);
+          return { cart: saveDemoCart(cart) };
+        }
+        if (method === 'POST' && body?.action === 'checkout') {
+          throw new Error('Demo complete. Shopify checkout activates when the owner’s store is connected.');
+        }
+        return { cart };
+      }
       const response = await fetch('/api/cart', {
         method,
         headers: body ? { 'Content-Type': 'application/json' } : undefined,
@@ -219,4 +262,3 @@ const enabled = isShopifyConfigured();
       });
     }
   </script>
-)}

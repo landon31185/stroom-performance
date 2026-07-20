@@ -1154,6 +1154,7 @@ textarea.form-field { resize: vertical; }
   line-height: 1;
   text-align: center;
 }
+.header-cart__demo { color: var(--color-accent); font-size: 0.58rem; letter-spacing: 0.08em; }
 
 .product-buybox__form { display: grid; grid-template-columns: 5.75rem 1fr; gap: 0.65rem; }
 .product-quantity { display: grid; gap: 0.25rem; color: var(--color-ink-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }

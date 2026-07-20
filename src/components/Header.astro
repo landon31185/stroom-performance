@@ -7,7 +7,8 @@ const navLinks = [
   { label: 'About', href: '/about' },
 ];
 const currentPath = Astro.url.pathname;
-const commerceEnabled = isShopifyConfigured();
+const shopifyConfigured = isShopifyConfigured();
+const commerceEnabled = true;
 const accountUrl = import.meta.env.PUBLIC_SHOPIFY_ACCOUNT_URL;
 ---
 
@@ -29,7 +30,7 @@ const accountUrl = import.meta.env.PUBLIC_SHOPIFY_ACCOUNT_URL;
       {accountUrl && <a href={accountUrl} class="header-account hidden lg:inline-flex">Account</a>}
       {commerceEnabled && (
         <button type="button" class="header-cart" data-cart-open>
-          Cart <span class="header-cart__count" data-cart-count hidden>0</span>
+          Cart {!shopifyConfigured && <span class="header-cart__demo">Demo</span>} <span class="header-cart__count" data-cart-count hidden>0</span>
         </button>
       )}
       <div class="hidden lg:block">
