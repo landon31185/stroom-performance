@@ -1,0 +1,222 @@
+---
+import { isShopifyConfigured } from '../lib/shopify';
+const enabled = isShopifyConfigured();
+---
+
+{enabled && (
+  <dialog id="cart-drawer" class="cart-drawer" aria-labelledby="cart-title">
+    <div class="cart-drawer__shell">
+      <header class="cart-drawer__header">
+        <div>
+          <p class="label-small">Your selection</p>
+          <h2 id="cart-title">Cart <span data-cart-count hidden>0</span></h2>
+        </div>
+        <button type="button" class="cart-drawer__close" data-cart-close aria-label="Close cart">Close</button>
+      </header>
+
+      <p class="cart-drawer__status muted" data-cart-status aria-live="polite">Loading cart…</p>
+      <div class="cart-drawer__lines" data-cart-lines></div>
+
+      <footer class="cart-drawer__footer" data-cart-footer hidden>
+        <div class="cart-drawer__subtotal">
+          <span>Subtotal</span>
+          <strong data-cart-subtotal></strong>
+        </div>
+        <p class="muted">Shipping, taxes, and payment are calculated securely by Shopify.</p>
+        <button type="button" class="btn-primary cart-drawer__checkout" data-cart-checkout>
+          Continue to secure checkout
+        </button>
+      </footer>
+    </div>
+  </dialog>
+)}
+
+{enabled && (
+  <script>
+    type PublicCart = {
+      totalQuantity: number;
+      subtotal: { amount: number; currencyCode: string };
+      lines: Array<{
+        id: string;
+        quantity: number;
+        title: string;
+        variantTitle: string;
+        productHandle: string;
+        image?: string;
+        imageAlt?: string;
+        price: { amount: number; currencyCode: string };
+      }>;
+    };
+
+    const drawer = () => document.querySelector<HTMLDialogElement>('#cart-drawer');
+    const money = (amount: number, currency: string) => new Intl.NumberFormat(undefined, {
+      style: 'currency', currency,
+    }).format(amount);
+
+    function setStatus(message: string) {
+      const element = drawer()?.querySelector<HTMLElement>('[data-cart-status]');
+      if (element) element.textContent = message;
+    }
+
+    function updateCounts(count: number) {
+      document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((badge) => {
+        badge.textContent = String(count);
+        badge.hidden = count === 0;
+      });
+    }
+
+    function actionButton(label: string, action: string, lineId: string, quantity?: number) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = label;
+      button.dataset.cartAction = action;
+      button.dataset.lineId = lineId;
+      if (quantity != null) button.dataset.quantity = String(quantity);
+      return button;
+    }
+
+    function renderCart(cart: PublicCart | null) {
+      const root = drawer();
+      if (!root) return;
+      const lines = root.querySelector<HTMLElement>('[data-cart-lines]');
+      const footer = root.querySelector<HTMLElement>('[data-cart-footer]');
+      const subtotal = root.querySelector<HTMLElement>('[data-cart-subtotal]');
+      if (!lines || !footer || !subtotal) return;
+      lines.replaceChildren();
+      updateCounts(cart?.totalQuantity || 0);
+
+      if (!cart?.lines.length) {
+        const empty = document.createElement('div');
+        empty.className = 'cart-drawer__empty';
+        const title = document.createElement('p');
+        title.className = 'heading-card';
+        title.textContent = 'Your cart is ready when you are.';
+        const copy = document.createElement('p');
+        copy.className = 'muted';
+        copy.textContent = 'Browse parts by category, then add the right fit for your build.';
+        const link = document.createElement('a');
+        link.href = '/shop';
+        link.className = 'accent';
+        link.textContent = 'Shop parts →';
+        empty.append(title, copy, link);
+        lines.append(empty);
+        footer.hidden = true;
+        setStatus('Cart is empty.');
+        return;
+      }
+
+      cart.lines.forEach((line) => {
+        const article = document.createElement('article');
+        article.className = 'cart-line';
+        const media = document.createElement('a');
+        media.href = `/products/${line.productHandle}`;
+        media.className = 'cart-line__media';
+        if (line.image) {
+          const image = new Image();
+          image.src = line.image;
+          image.alt = line.imageAlt || line.title;
+          image.loading = 'lazy';
+          media.append(image);
+        }
+        const body = document.createElement('div');
+        body.className = 'cart-line__body';
+        const title = document.createElement('a');
+        title.href = media.href;
+        title.className = 'cart-line__title';
+        title.textContent = line.title;
+        const variant = document.createElement('p');
+        variant.className = 'muted cart-line__variant';
+        variant.textContent = line.variantTitle === 'Default Title' ? '' : line.variantTitle;
+        const price = document.createElement('strong');
+        price.textContent = money(line.price.amount * line.quantity, line.price.currencyCode);
+        const controls = document.createElement('div');
+        controls.className = 'cart-line__controls';
+        controls.append(
+          actionButton('−', 'quantity', line.id, Math.max(1, line.quantity - 1)),
+          Object.assign(document.createElement('span'), { textContent: String(line.quantity) }),
+          actionButton('+', 'quantity', line.id, Math.min(10, line.quantity + 1)),
+          actionButton('Remove', 'remove', line.id),
+        );
+        body.append(title, variant, price, controls);
+        article.append(media, body);
+        lines.append(article);
+      });
+
+      subtotal.textContent = money(cart.subtotal.amount, cart.subtotal.currencyCode);
+      footer.hidden = false;
+      setStatus(`${cart.totalQuantity} item${cart.totalQuantity === 1 ? '' : 's'} in cart.`);
+    }
+
+    async function cartRequest(method = 'GET', body?: Record<string, unknown>) {
+      const response = await fetch('/api/cart', {
+        method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Cart is temporarily unavailable.');
+      return payload;
+    }
+
+    async function openCart() {
+      const root = drawer();
+      if (!root) return;
+      if (!root.open) root.showModal();
+      setStatus('Loading cart…');
+      try { renderCart((await cartRequest()).cart); }
+      catch (error) { setStatus(error instanceof Error ? error.message : 'Cart is temporarily unavailable.'); }
+    }
+
+    if (!(window as any).__stroomCartBound) {
+      (window as any).__stroomCartBound = true;
+      document.addEventListener('click', async (event) => {
+        const target = event.target as HTMLElement;
+        if (target.closest('[data-cart-open]')) { event.preventDefault(); await openCart(); return; }
+        if (target.closest('[data-cart-close]')) { drawer()?.close(); return; }
+        const action = target.closest<HTMLButtonElement>('[data-cart-action]');
+        if (action) {
+          action.disabled = true;
+          setStatus('Updating cart…');
+          try {
+            const payload = action.dataset.cartAction === 'remove'
+              ? await cartRequest('DELETE', { lineId: action.dataset.lineId })
+              : await cartRequest('PATCH', { lineId: action.dataset.lineId, quantity: Number(action.dataset.quantity) });
+            renderCart(payload.cart);
+          } catch (error) { setStatus(error instanceof Error ? error.message : 'Cart is temporarily unavailable.'); }
+          return;
+        }
+        if (target.closest('[data-cart-checkout]')) {
+          const button = target.closest<HTMLButtonElement>('[data-cart-checkout]');
+          if (button) button.disabled = true;
+          setStatus('Opening secure checkout…');
+          try { window.location.assign((await cartRequest('POST', { action: 'checkout' })).checkoutUrl); }
+          catch (error) {
+            if (button) button.disabled = false;
+            setStatus(error instanceof Error ? error.message : 'Checkout is temporarily unavailable.');
+          }
+        }
+      });
+
+      document.addEventListener('submit', async (event) => {
+        const form = (event.target as HTMLElement).closest<HTMLFormElement>('[data-add-to-cart]');
+        if (!form) return;
+        event.preventDefault();
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        if (button) button.disabled = true;
+        try {
+          const data = new FormData(form);
+          const payload = await cartRequest('POST', {
+            action: 'add', variantId: data.get('variantId'), quantity: Number(data.get('quantity') || 1),
+          });
+          const root = drawer();
+          if (root && !root.open) root.showModal();
+          renderCart(payload.cart);
+        } catch (error) {
+          const root = drawer();
+          if (root && !root.open) root.showModal();
+          setStatus(error instanceof Error ? error.message : 'Cart is temporarily unavailable.');
+        } finally { if (button) button.disabled = false; }
+      });
+    }
+  </script>
+)}

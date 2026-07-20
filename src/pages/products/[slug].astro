@@ -74,16 +74,20 @@ const schema = JSON.stringify({
         <p class="product-buybox__price readout accent">{formatMoney(product.price)}</p>
         <p class="muted product-buybox__availability">{statusLabels[product.status]}</p>
         {canBuy ? (
-          <form method="POST" action="/api/cart">
+          <form method="POST" action="/api/cart" data-add-to-cart class="product-buybox__form">
+            <input type="hidden" name="action" value="add" />
             <input type="hidden" name="variantId" value={product.variantId} />
-            <input type="hidden" name="quantity" value="1" />
-            <button class="btn-primary product-buybox__cta" type="submit">Buy with Shopify</button>
+            <label class="product-quantity">
+              <span>Quantity</span>
+              <input type="number" name="quantity" value="1" min="1" max="10" inputmode="numeric" />
+            </label>
+            <button class="btn-primary product-buybox__cta" type="submit">Add to cart</button>
           </form>
         ) : (
           <button class="btn-primary product-buybox__cta" disabled aria-disabled="true">Not available yet</button>
         )}
         <p class="muted product-buybox__small">
-          {canBuy ? 'Secure checkout hosted by Shopify' : 'Product preview — pricing and purchasing are not live.'}
+          {canBuy ? 'Cart and secure checkout powered by Shopify' : 'Product preview — pricing and purchasing are not live.'}
         </p>
 
         {product.fitment && (

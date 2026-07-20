@@ -52,13 +52,20 @@ Colors are duplicated in `src/lib/site.ts` (`brandColors`) because `@vercel/og` 
 
 - Real domain — `site.ts` and `astro.config.mjs` still point at a placeholder `stroomperformance.com`
 - Shopify store domain + Storefront API token — integration code exists in `src/lib/shopify.ts`, nothing to point it at yet
+- Shopify admin setup: Headless channel, payment provider, shipping profiles, taxes, policies, checkout branding, and new Customer Accounts
 - Real logo SVG + exact sampled orange hex (see Brand section above)
 - Fitment model: application+altitude (recommended, Stroom-native) vs. YMME — not yet decided
 - Whether Build / Data Log become first-class objects (currently leaning Guides-first)
 
 ## Unblocked next work
 
-- Connect the Shopify Storefront API and map live variants, pricing, availability, cart, and checkout.
+- Connect the Shopify Storefront API and map live variants, pricing, and availability. The persistent cart UI and secure Shopify-checkout handoff are already implemented and remain hidden until credentials exist.
 - Add client-confirmed Gen III Hemi products and fitment details.
 - Add product photography without changing product URLs or the content-object model.
 - Expand SEO/GEO content around the verified product and platform taxonomy.
+
+## Commerce boundary
+
+Astro owns product discovery and the cart drawer. The server-side `/api/cart` endpoint keeps Shopify's secret-bearing cart ID in an HttpOnly cookie and supports add, update, remove, and checkout actions. Shopify owns checkout, payments, shipping, taxes, discounts, orders, and sensitive customer data; never build custom card-entry fields into this frontend.
+
+To activate commerce, install Shopify's Headless channel, set the Storefront API environment variables in Vercel, publish products to that channel, and configure payments/shipping/taxes/policies in Shopify admin. Enable Shopify's new Customer Accounts and set `PUBLIC_SHOPIFY_ACCOUNT_URL` when its hosted account URL is ready. A fully custom account dashboard can later use the Customer Account API, but is intentionally deferred from launch.

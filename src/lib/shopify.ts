@@ -9,6 +9,26 @@ export interface Money {
   currencyCode: string;
 }
 
+export interface ShopifyCartLine {
+  id: string;
+  quantity: number;
+  title: string;
+  variantTitle: string;
+  productHandle: string;
+  image?: string;
+  imageAlt?: string;
+  price: Money;
+}
+
+export interface ShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  subtotal: Money;
+  total: Money;
+  lines: ShopifyCartLine[];
+}
+
 export interface CatalogFitment {
   application: string;
   requiredMods: string[];
@@ -184,7 +204,11 @@ export function isShopifyConfigured(): boolean {
   return Boolean(STORE_DOMAIN && STOREFRONT_TOKEN);
 }
 
-export async function storefront<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
+export async function storefront<T>(
+  query: string,
+  variables: Record<string, unknown> = {},
+  buyerIp?: string,
+): Promise<T> {
   if (!isShopifyConfigured()) throw new Error('Shopify Storefront API credentials are not configured.');
 
   const response = await fetch(`https://${STORE_DOMAIN}/api/${API_VERSION}/graphql.json`, {
@@ -192,6 +216,7 @@ export async function storefront<T>(query: string, variables: Record<string, unk
     headers: {
       'Content-Type': 'application/json',
       'X-Shopify-Storefront-Access-Token': STOREFRONT_TOKEN as string,
+      ...(buyerIp ? { 'Shopify-Storefront-Buyer-IP': buyerIp } : {}),
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -223,21 +248,141 @@ export async function getShopifyProduct(handle: string): Promise<ShopifyProduct 
   return data.product ? normalizeProduct(data.product) : undefined;
 }
 
-export async function createShopifyCheckout(variantId: string, quantity = 1): Promise<string> {
-  const data = await storefront<{
-    cartCreate: { cart?: { checkoutUrl: string }; userErrors: Array<{ message: string }> };
-  }>(`
+const CART_FIELDS = `
+  id
+  checkoutUrl
+  totalQuantity
+  cost {
+    subtotalAmount { amount currencyCode }
+    totalAmount { amount currencyCode }
+  }
+  lines(first: 50) {
+    nodes {
+      id
+      quantity
+      merchandise {
+        ... on ProductVariant {
+          title
+          price { amount currencyCode }
+          image { url altText }
+          product { handle title featuredImage { url altText } }
+        }
+      }
+    }
+  }
+`;
+
+interface CartNode {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  cost: {
+    subtotalAmount: { amount: string; currencyCode: string };
+    totalAmount: { amount: string; currencyCode: string };
+  };
+  lines: { nodes: Array<{
+    id: string;
+    quantity: number;
+    merchandise: {
+      title: string;
+      price: { amount: string; currencyCode: string };
+      image?: { url: string; altText?: string };
+      product: { handle: string; title: string; featuredImage?: { url: string; altText?: string } };
+    };
+  }> };
+}
+
+function normalizeCart(cart: CartNode): ShopifyCart {
+  return {
+    id: cart.id,
+    checkoutUrl: cart.checkoutUrl,
+    totalQuantity: cart.totalQuantity,
+    subtotal: {
+      amount: Number(cart.cost.subtotalAmount.amount),
+      currencyCode: cart.cost.subtotalAmount.currencyCode,
+    },
+    total: {
+      amount: Number(cart.cost.totalAmount.amount),
+      currencyCode: cart.cost.totalAmount.currencyCode,
+    },
+    lines: cart.lines.nodes.map((line) => ({
+      id: line.id,
+      quantity: line.quantity,
+      title: line.merchandise.product.title,
+      variantTitle: line.merchandise.title,
+      productHandle: line.merchandise.product.handle,
+      image: line.merchandise.image?.url || line.merchandise.product.featuredImage?.url,
+      imageAlt: line.merchandise.image?.altText || line.merchandise.product.featuredImage?.altText,
+      price: {
+        amount: Number(line.merchandise.price.amount),
+        currencyCode: line.merchandise.price.currencyCode,
+      },
+    })),
+  };
+}
+
+type CartPayload = { cart?: CartNode | null; userErrors: Array<{ message: string }> };
+
+function cartFromPayload(payload: CartPayload): ShopifyCart {
+  if (!payload.cart || payload.userErrors.length) {
+    throw new Error(payload.userErrors.map((error) => error.message).join('; ') || 'Cart could not be updated.');
+  }
+  return normalizeCart(payload.cart);
+}
+
+export async function createShopifyCart(variantId: string, quantity = 1, buyerIp?: string): Promise<ShopifyCart> {
+  const data = await storefront<{ cartCreate: CartPayload }>(`
     mutation CreateCart($input: CartInput!) {
       cartCreate(input: $input) {
-        cart { checkoutUrl }
+        cart { ${CART_FIELDS} }
         userErrors { message }
       }
     }
-  `, { input: { lines: [{ merchandiseId: variantId, quantity }] } });
-  if (!data.cartCreate.cart || data.cartCreate.userErrors.length) {
-    throw new Error(data.cartCreate.userErrors.map((error) => error.message).join('; ') || 'Cart could not be created.');
-  }
-  return data.cartCreate.cart.checkoutUrl;
+  `, { input: { lines: [{ merchandiseId: variantId, quantity }] } }, buyerIp);
+  return cartFromPayload(data.cartCreate);
+}
+
+export async function getShopifyCart(cartId: string, buyerIp?: string): Promise<ShopifyCart | undefined> {
+  const data = await storefront<{ cart: CartNode | null }>(`
+    query Cart($id: ID!) { cart(id: $id) { ${CART_FIELDS} } }
+  `, { id: cartId }, buyerIp);
+  return data.cart ? normalizeCart(data.cart) : undefined;
+}
+
+export async function addShopifyCartLine(cartId: string, variantId: string, quantity = 1, buyerIp?: string): Promise<ShopifyCart> {
+  const data = await storefront<{ cartLinesAdd: CartPayload }>(`
+    mutation AddCartLines($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
+        cart { ${CART_FIELDS} }
+        userErrors { message }
+      }
+    }
+  `, { cartId, lines: [{ merchandiseId: variantId, quantity }] }, buyerIp);
+  return cartFromPayload(data.cartLinesAdd);
+}
+
+export async function updateShopifyCartLine(cartId: string, lineId: string, quantity: number, buyerIp?: string): Promise<ShopifyCart> {
+  const data = await storefront<{ cartLinesUpdate: CartPayload }>(`
+    mutation UpdateCartLines($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+      cartLinesUpdate(cartId: $cartId, lines: $lines) {
+        cart { ${CART_FIELDS} }
+        userErrors { message }
+      }
+    }
+  `, { cartId, lines: [{ id: lineId, quantity }] }, buyerIp);
+  return cartFromPayload(data.cartLinesUpdate);
+}
+
+export async function removeShopifyCartLine(cartId: string, lineId: string, buyerIp?: string): Promise<ShopifyCart> {
+  const data = await storefront<{ cartLinesRemove: CartPayload }>(`
+    mutation RemoveCartLines($cartId: ID!, $lineIds: [ID!]!) {
+      cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+        cart { ${CART_FIELDS} }
+        userErrors { message }
+      }
+    }
+  `, { cartId, lineIds: [lineId] }, buyerIp);
+  return cartFromPayload(data.cartLinesRemove);
 }
 
 export async function getShopifyGuides(limit = 50): Promise<ShopifyGuide[]> {
