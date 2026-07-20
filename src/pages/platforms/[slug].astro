@@ -46,6 +46,21 @@ const schema = JSON.stringify({
         <h1 class="heading-section collection-hero__title reveal">{platform.name} Performance Parts</h1>
         <p class="muted collection-hero__body reveal">{description}</p>
       </div>
+      {platform.slug === 'gen3-hemi' && (
+        <figure class="platform-editorial reveal">
+          <img
+            src="/media/gen3-hemi-hellcat.jpg"
+            alt="Supercharged Dodge Challenger SRT Hellcat Gen III Hemi engine"
+            width="1800"
+            height="1195"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <figcaption>
+            Dodge Challenger SRT Hellcat engine. Photo by <a href="https://unsplash.com/@asuki_photo" target="_blank" rel="noopener noreferrer">Olivie Zemanova</a> on <a href="https://unsplash.com/photos/MJDeFIWMnAI" target="_blank" rel="noopener noreferrer">Unsplash</a>.
+          </figcaption>
+        </figure>
+      )}
     </div>
   </section>
   <section class="collection-results">
