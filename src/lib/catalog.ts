@@ -47,6 +47,7 @@ async function getLocalProducts(): Promise<CatalogProduct[]> {
     price: entry.data.price ? { amount: entry.data.price, currencyCode: 'USD' } : undefined,
     availableForSale: entry.data.status === 'available' && Boolean(entry.data.price),
     image: entry.data.image,
+    imageAlt: entry.data.imageAlt,
     manufacturerPartNumber: entry.data.manufacturerPartNumber,
     specs: entry.data.specs,
     fitment: entry.data.fitment ? {

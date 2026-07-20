@@ -23,7 +23,8 @@ export async function getStaticPaths() {
 }
 
 const { category, slug, products } = Astro.props;
-const facetLabel = category.facet === 'system' ? 'System' : 'Racing Style';
+const isMerchandise = slug === 'merchandise';
+const facetLabel = isMerchandise ? 'Merchandise' : category.facet === 'system' ? 'System' : 'Racing Style';
 
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -86,8 +87,9 @@ const schema = JSON.stringify({
           <div class="collection-results__intro reveal">
             <p class="label-small accent">Current Listings</p>
             <p class="collection-results__text">
-              Compare verified product details by system, platform, and intended
-              use before deciding what belongs in the complete combination.
+              {isMerchandise
+                ? 'Preview Stroom-branded goods as final pricing, materials, and inventory are prepared for launch.'
+                : 'Compare verified product details by system, platform, and intended use before deciding what belongs in the complete combination.'}
             </p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

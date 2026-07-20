@@ -10,6 +10,7 @@ import { getGuides } from '../lib/editorial';
 const products = await getCatalogProducts();
 const featured = products.filter((p) => p.featured).sort((a, b) => a.order - b.order);
 const guides = (await getGuides()).slice(0, 3);
+const buildSystems = systems.filter((system) => system.slug !== 'merchandise');
 
 const heroHighlights = [
   { label: 'Catalog preview', value: 'GM LS' },
@@ -117,7 +118,7 @@ const supportSpotlights = featured.slice(1, 3);
         <a href="/shop" class="nav-link">View all categories →</a>
       </div>
       <div class="home-system-rail__grid">
-        {systems.map((s, index) => (
+        {buildSystems.map((s, index) => (
           <a href={`/collections/${s.slug}`} class="home-system-tile reveal">
             <span class="home-system-tile__index">{String(index + 1).padStart(2, '0')}</span>
             <div class="home-system-tile__content">

@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const rendered = await getProductDescription(product);
 const Content = rendered?.Content;
+const isMerchandise = product.system === 'merchandise';
 
 const confidenceLabel: Record<string, string> = {
   'verified-on-car': 'Verified on our car',
@@ -96,7 +97,10 @@ const schema = JSON.stringify({
             {product.fitment.notes && <p class="muted product-fitment__notes">{product.fitment.notes}</p>}
           </div>
         )}
-        <p class="muted product-buybox__support">Not sure it fits? <a href={`mailto:${site.contactEmail}`} class="accent">Ask before ordering.</a></p>
+        <p class="muted product-buybox__support">
+          {isMerchandise ? 'Questions about this item? ' : 'Not sure it fits? '}
+          <a href={`mailto:${site.contactEmail}`} class="accent">Ask before ordering.</a>
+        </p>
       </aside>
     </div>
   </section>
@@ -111,8 +115,12 @@ const schema = JSON.stringify({
       </div>
       <aside class="product-detail__rail reveal">
         <div class="product-detail__rail-panel">
-          <p class="label-small accent">Selection notes</p>
-          <p class="product-detail__rail-text">Review platform, supporting hardware, and intended use before ordering.</p>
+          <p class="label-small accent">{isMerchandise ? 'Product notes' : 'Selection notes'}</p>
+          <p class="product-detail__rail-text">
+            {isMerchandise
+              ? 'Final price, materials, included hardware, and inventory will be confirmed before checkout opens.'
+              : 'Review platform, supporting hardware, and intended use before ordering.'}
+          </p>
           {product.manufacturerPartNumber && <p class="readout product-detail__mpn">MPN {product.manufacturerPartNumber}</p>}
           {product.referenceUrl && <a href={product.referenceUrl} class="nav-link" target="_blank" rel="noreferrer">Reference details →</a>}
         </div>

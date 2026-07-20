@@ -34,16 +34,15 @@ const schema = JSON.stringify({
     <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop' }]} />
     <h1 class="heading-section">Shop All Parts</h1>
     <p class="muted" style="margin-top:0.75rem;max-width:60ch;">
-      A focused catalog for GM LS and Gen III Hemi builds. The first verified LS
-      products are listed now; Mopar-specific part numbers and live Stroom pricing
-      will appear as they are confirmed.
+      A focused catalog for GM LS and Gen III Hemi builds, plus Stroom-branded
+      merchandise. Product details and live pricing will appear as they are confirmed.
     </p>
   </section>
 
   <section class="wrap" style="padding-bottom:2.5rem;">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <p class="label-small muted" style="margin-bottom:0.75rem;">By System</p>
+        <p class="label-small muted" style="margin-bottom:0.75rem;">By Category</p>
         <div class="shop-filter-list">
           {systems.map((s) => (
             <a href={`/collections/${s.slug}`} class="shop-filter-link">{s.name}</a>

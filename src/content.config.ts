@@ -2,7 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // System + racing-style facets from the ORCA object map.
-const SYSTEMS = ['fuel', 'engine', 'drivetrain', 'electronics', 'safety'] as const;
+const SYSTEMS = ['fuel', 'engine', 'drivetrain', 'electronics', 'safety', 'merchandise'] as const;
 const RACE_STYLES = ['no-prep', 'index', 'street-strip'] as const;
 const PLATFORMS = ['gm-ls', 'gen3-hemi'] as const;
 
@@ -19,6 +19,7 @@ const products = defineCollection({
     brand: z.string(),                       // Squash Performance, Motion Race Works, Holley…
     manufacturerPartNumber: z.string().optional(),
     image: z.string().optional(),
+    imageAlt: z.string().optional(),
     system: z.enum(SYSTEMS),
     platforms: z.array(z.enum(PLATFORMS)).default([]),
     raceStyles: z.array(z.enum(RACE_STYLES)).default([]),

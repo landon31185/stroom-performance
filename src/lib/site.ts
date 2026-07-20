@@ -40,6 +40,7 @@ export const systems = [
   { slug: 'drivetrain', name: 'Drivetrain', blurb: 'Converters and driveline pieces chosen around repeatability, launch, and use case.' },
   { slug: 'electronics', name: 'Electronics', blurb: 'EFI, boost control, sensors, and data tools for cleaner decision-making.' },
   { slug: 'safety', name: 'Safety', blurb: 'Containment and race support essentials for serious builds and harder passes.' },
+  { slug: 'merchandise', name: 'Merchandise', blurb: 'Stroom-branded garage, vehicle, and track-day goods.' },
 ] as const;
 
 // ── Shop by Racing Style (Category facet) ──
