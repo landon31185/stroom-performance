@@ -6,10 +6,13 @@ interface Props {
   partNumber?: string;
   image?: string;
   imageAlt?: string;
+  images?: Array<{ url: string; altText?: string }>;
   size?: 'card' | 'hero';
 }
 
-const { slug, title, brand, partNumber, image, imageAlt, size = 'card' } = Astro.props;
+const { slug, title, brand, partNumber, image, imageAlt, images = [], size = 'card' } = Astro.props;
+const gallery = images.length ? images : image ? [{ url: image, altText: imageAlt }] : [];
+const primary = gallery[0];
 const drawing = slug.includes('valve-springs')
   ? 'springs'
   : slug.includes('cam')
@@ -19,9 +22,15 @@ const drawing = slug.includes('valve-springs')
       : 'electronics';
 ---
 
-<figure class={`product-media product-media--${size}`} aria-label={image ? undefined : `${title} technical illustration`}>
-  {image ? (
-    <img src={image} alt={imageAlt || `${brand} ${title}`} loading={size === 'card' ? 'lazy' : 'eager'} />
+<div class={`product-gallery product-gallery--${size}`}>
+<figure class={`product-media product-media--${size}`} aria-label={primary ? undefined : `${title} technical illustration`}>
+  {primary ? (
+    <img
+      src={primary.url}
+      alt={primary.altText || `${brand} ${title}`}
+      loading={size === 'card' ? 'lazy' : 'eager'}
+      data-product-gallery-main
+    />
   ) : (
     <>
       <div class="product-media__grid" aria-hidden="true"></div>
@@ -69,3 +78,37 @@ const drawing = slug.includes('valve-springs')
     </>
   )}
 </figure>
+{size === 'hero' && gallery.length > 1 && (
+  <div class="product-gallery__rail" aria-label={`${title} image gallery`}>
+    {gallery.map((item, index) => (
+      <button
+        type="button"
+        class="product-gallery__thumb"
+        aria-label={`View image ${index + 1} of ${gallery.length}`}
+        aria-pressed={index === 0 ? 'true' : 'false'}
+        data-gallery-src={item.url}
+        data-gallery-alt={item.altText || `${brand} ${title}`}
+      >
+        <img src={item.url} alt="" loading="lazy" />
+      </button>
+    ))}
+  </div>
+)}
+</div>
+
+{size === 'hero' && gallery.length > 1 && (
+  <script>
+    document.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-gallery-src]');
+      if (!button) return;
+      const gallery = button.closest<HTMLElement>('.product-gallery');
+      const main = gallery?.querySelector<HTMLImageElement>('[data-product-gallery-main]');
+      if (!main) return;
+      main.src = button.dataset.gallerySrc || main.src;
+      main.alt = button.dataset.galleryAlt || main.alt;
+      gallery?.querySelectorAll<HTMLButtonElement>('[data-gallery-src]').forEach((thumb) => {
+        thumb.setAttribute('aria-pressed', String(thumb === button));
+      });
+    });
+  </script>
+)}

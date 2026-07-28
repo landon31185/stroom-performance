@@ -5,6 +5,8 @@ import {
   type CatalogFitment,
   type CatalogStatus,
   type Money,
+  type ShopifyProductImage,
+  type ShopifyProductVariant,
 } from './shopify';
 
 export interface CatalogProduct {
@@ -22,8 +24,10 @@ export interface CatalogProduct {
   availableForSale: boolean;
   image?: string;
   imageAlt?: string;
+  images: ShopifyProductImage[];
   manufacturerPartNumber?: string;
   variantId?: string;
+  variants: ShopifyProductVariant[];
   specs: string[];
   fitment?: CatalogFitment;
   featured: boolean;
@@ -48,7 +52,9 @@ async function getLocalProducts(): Promise<CatalogProduct[]> {
     availableForSale: entry.data.status === 'available' && Boolean(entry.data.price),
     image: entry.data.image,
     imageAlt: entry.data.imageAlt,
+    images: entry.data.image ? [{ url: entry.data.image, altText: entry.data.imageAlt }] : [],
     manufacturerPartNumber: entry.data.manufacturerPartNumber,
+    variants: [],
     specs: entry.data.specs,
     fitment: entry.data.fitment ? {
       application: entry.data.fitment.application,

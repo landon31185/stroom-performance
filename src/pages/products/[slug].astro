@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import ProductMedia from '../../components/ProductMedia.astro';
+import ProductCard from '../../components/ProductCard.astro';
 import { getCatalogProducts, getProductDescription, formatMoney, statusLabels } from '../../lib/catalog';
 import { site, systemName, raceStyleName, platformName } from '../../lib/site';
 
@@ -14,18 +15,25 @@ const { product } = Astro.props;
 const rendered = await getProductDescription(product);
 const Content = rendered?.Content;
 const isMerchandise = product.system === 'merchandise';
+const catalog = await getCatalogProducts();
+const relatedProducts = catalog
+  .filter((candidate) => candidate.slug !== product.slug)
+  .filter((candidate) =>
+    candidate.system === product.system
+    || candidate.platforms.some((platform) => product.platforms.includes(platform)))
+  .slice(0, 3);
 
 const confidenceLabel: Record<string, string> = {
   'verified-on-car': 'Verified on our car',
   'vendor-stated': 'Vendor-stated',
   inferred: 'Inferred — confirm before purchase',
 };
+const initialVariant = product.variants.find((variant) => variant.availableForSale) || product.variants[0];
 const canBuy = product.source === 'shopify'
   && product.status === 'available'
   && product.availableForSale
-  && product.price
-  && product.variantId;
-const purchasablePrice = canBuy ? product.price : undefined;
+  && initialVariant;
+const purchasablePrice = canBuy ? initialVariant.price : undefined;
 const offer = canBuy ? {
   '@type': 'Offer',
   availability: 'https://schema.org/InStock',
@@ -59,24 +67,57 @@ const schema = JSON.stringify({
     <div class="wrap product-hero__wrap">
       <div class="product-hero__copy">
         <Breadcrumb crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, { label: systemName(product.system), href: `/collections/${product.system}` }, { label: product.title }]} />
-        <ProductMedia slug={product.slug} title={product.title} brand={product.brand} partNumber={product.manufacturerPartNumber} image={product.image} imageAlt={product.imageAlt} size="hero" />
+        <div class="product-hero__identity">
+          <p class="product-hero__brand">{product.brand}</p>
+          <h1 class="heading-section product-hero__title">{product.title}</h1>
+          <p class="body-large muted product-hero__body">{product.summary}</p>
+        </div>
+        <ProductMedia
+          slug={product.slug}
+          title={product.title}
+          brand={product.brand}
+          partNumber={product.manufacturerPartNumber}
+          image={product.image}
+          imageAlt={product.imageAlt}
+          images={product.images}
+          size="hero"
+        />
         <div class="product-hero__tags reveal">
           <span class="tag">{systemName(product.system)}</span>
           {product.platforms.map((platform) => <span class="tag tag-platform">{platformName(platform)}</span>)}
           {product.raceStyles.map((style) => <span class="tag tag-hazard">{raceStyleName(style)}</span>)}
         </div>
-        <p class="muted product-hero__brand reveal">{product.brand}</p>
-        <h1 class="heading-section product-hero__title reveal">{product.title}</h1>
-        <p class="body-large muted product-hero__body reveal">{product.summary}</p>
       </div>
 
       <aside class="product-buybox reveal">
-        <p class="product-buybox__price readout accent">{formatMoney(product.price)}</p>
-        <p class="muted product-buybox__availability">{statusLabels[product.status]}</p>
+        <div class="product-buybox__status">
+          <span>{canBuy ? 'Ready to order' : 'Catalog preview'}</span>
+          <span class="readout">{statusLabels[product.status]}</span>
+        </div>
+        <p class:list={['product-buybox__price', { 'product-buybox__price--preview': !canBuy }]} data-product-price>
+          {canBuy ? formatMoney(purchasablePrice) : product.price ? formatMoney(product.price) : 'Pricing to be confirmed'}
+        </p>
         {canBuy ? (
           <form method="POST" action="/api/cart" data-add-to-cart class="product-buybox__form">
             <input type="hidden" name="action" value="add" />
-            <input type="hidden" name="variantId" value={product.variantId} />
+            {product.variants.length > 1 ? (
+              <label class="product-option">
+                <span>Configuration</span>
+                <select name="variantId" data-variant-select>
+                  {product.variants.map((variant) => (
+                    <option
+                      value={variant.id}
+                      disabled={!variant.availableForSale}
+                      data-price={formatMoney(variant.price)}
+                    >
+                      {variant.title}{variant.availableForSale ? '' : ' — unavailable'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : (
+              <input type="hidden" name="variantId" value={initialVariant.id} />
+            )}
             <label class="product-quantity">
               <span>Quantity</span>
               <input type="number" name="quantity" value="1" min="1" max="10" inputmode="numeric" />
@@ -84,27 +125,27 @@ const schema = JSON.stringify({
             <button class="btn-primary product-buybox__cta" type="submit">Add to cart</button>
           </form>
         ) : (
-          <button class="btn-primary product-buybox__cta" disabled aria-disabled="true">Not available yet</button>
-        )}
-        <p class="muted product-buybox__small">
-          {canBuy ? 'Cart and secure checkout powered by Shopify' : 'Product preview — pricing and purchasing are not live.'}
-        </p>
-
-        {product.fitment && (
-          <div class="product-fitment">
-            <p class="label-small hazard">Fitment & Compatibility</p>
-            <dl class="product-fitment__list">
-              <dt>Application</dt><dd>{product.fitment.application}</dd>
-              {product.fitment.requiredMods.length > 0 && <><dt>Required Mods</dt><dd>{product.fitment.requiredMods.join('; ')}</dd></>}
-              <dt>Confidence</dt><dd>{confidenceLabel[product.fitment.confidence]}</dd>
-            </dl>
-            {product.fitment.notes && <p class="muted product-fitment__notes">{product.fitment.notes}</p>}
+          <div class="product-buybox__preview-actions">
+            <a
+              class="btn-primary product-buybox__cta"
+              href={`mailto:${site.contactEmail}?subject=${encodeURIComponent(`Stroom product question: ${product.title}`)}`}
+            >
+              Ask about this part
+            </a>
+            <a class="btn-secondary product-buybox__secondary" href="/shop">Browse the catalog</a>
           </div>
         )}
-        <p class="muted product-buybox__support">
-          {isMerchandise ? 'Questions about this item? ' : 'Not sure it fits? '}
-          <a href={`mailto:${site.contactEmail}`} class="accent">Ask before ordering.</a>
+        <p class="muted product-buybox__small">
+          {canBuy
+            ? 'Availability and secure checkout are provided by Shopify.'
+            : 'This reference page is not a purchase offer. Final price, availability, and fulfillment will come from Shopify.'}
         </p>
+
+        <dl class="product-buybox__facts">
+          {product.manufacturerPartNumber && <><dt>Part number</dt><dd>{product.manufacturerPartNumber}</dd></>}
+          <dt>Category</dt><dd>{systemName(product.system)}</dd>
+          {product.platforms.length > 0 && <><dt>Engine family</dt><dd>{product.platforms.map(platformName).join(', ')}</dd></>}
+        </dl>
       </aside>
     </div>
   </section>
@@ -112,12 +153,28 @@ const schema = JSON.stringify({
   <section class="product-detail">
     <div class="wrap product-detail__wrap">
       <div class="product-detail__content">
-        <div class="prose-section product-detail__prose reveal">
+        {product.fitment && (
+          <section class="product-fitment" aria-labelledby="fitment-title">
+            <div class="product-fitment__heading">
+              <p class="label-small">Fitment review</p>
+              <h2 id="fitment-title" class="heading-card">What must match</h2>
+            </div>
+            <dl class="product-fitment__list">
+              <div><dt>Application</dt><dd>{product.fitment.application}</dd></div>
+              {product.fitment.requiredMods.length > 0 && (
+                <div><dt>Confirm before ordering</dt><dd>{product.fitment.requiredMods.join('; ')}</dd></div>
+              )}
+              <div><dt>Evidence</dt><dd>{confidenceLabel[product.fitment.confidence]}</dd></div>
+            </dl>
+            {product.fitment.notes && <p class="muted product-fitment__notes">{product.fitment.notes}</p>}
+          </section>
+        )}
+        <div class="prose-section product-detail__prose">
           {Content ? <Content /> : <Fragment set:html={product.descriptionHtml || `<p>${product.summary}</p>`} />}
         </div>
-        {product.specs.length > 0 && <div class="product-specs reveal"><p class="label-small accent">Specifications</p><ul class="product-specs__list">{product.specs.map((spec) => <li>{spec}</li>)}</ul></div>}
+        {product.specs.length > 0 && <div class="product-specs"><p class="label-small accent">Specifications</p><ul class="product-specs__list">{product.specs.map((spec) => <li>{spec}</li>)}</ul></div>}
       </div>
-      <aside class="product-detail__rail reveal">
+      <aside class="product-detail__rail">
         <div class="product-detail__rail-panel">
           <p class="label-small accent">{isMerchandise ? 'Product notes' : 'Selection notes'}</p>
           <p class="product-detail__rail-text">
@@ -126,9 +183,54 @@ const schema = JSON.stringify({
               : 'Review platform, supporting hardware, and intended use before ordering.'}
           </p>
           {product.manufacturerPartNumber && <p class="readout product-detail__mpn">MPN {product.manufacturerPartNumber}</p>}
-          {product.referenceUrl && <a href={product.referenceUrl} class="nav-link" target="_blank" rel="noreferrer">Reference details →</a>}
+          <a href={`mailto:${site.contactEmail}?subject=${encodeURIComponent(`Fitment question: ${product.title}`)}`} class="nav-link">
+            Ask a fitment question →
+          </a>
         </div>
       </aside>
     </div>
   </section>
+
+  {relatedProducts.length > 0 && (
+    <section class="product-related">
+      <div class="wrap">
+        <div class="product-related__heading">
+          <div>
+            <p class="label-small">Keep comparing</p>
+            <h2 class="heading-section">Related catalog entries</h2>
+          </div>
+          <a href="/shop" class="nav-link">View all parts →</a>
+        </div>
+        <div class="product-related__grid">
+          {relatedProducts.map((related) => (
+            <ProductCard
+              slug={related.slug}
+              title={related.title}
+              brand={related.brand}
+              system={related.system}
+              platforms={related.platforms}
+              summary={related.summary}
+              status={related.status}
+              price={related.price}
+              partNumber={related.manufacturerPartNumber}
+              image={related.image}
+              imageAlt={related.imageAlt}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {canBuy && product.variants.length > 1 && (
+    <script>
+      document.addEventListener('change', (event) => {
+        const select = (event.target as HTMLElement).closest<HTMLSelectElement>('[data-variant-select]');
+        if (!select) return;
+        const price = document.querySelector<HTMLElement>('[data-product-price]');
+        const selected = select.selectedOptions[0];
+        if (price && selected?.dataset.price) price.textContent = selected.dataset.price;
+      });
+    </script>
+  )}
 </BaseLayout>

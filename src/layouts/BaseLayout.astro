@@ -188,6 +188,7 @@ const ogImageUrl = ogImage
 
       <div style="margin-top:auto;padding-top:2rem;">
         <a href="/shop" class="btn-primary" style="width:100%;justify-content:center;">Shop Parts</a>
+        <button type="button" data-cart-open class="mobile-nav-cart">Open cart</button>
         <p style="margin-top:1rem;text-align:center;font-size:0.8125rem;" class="muted">
           Follow the builds on <a href={site.youtube} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);">YouTube</a>
         </p>
@@ -222,6 +223,14 @@ const ogImageUrl = ogImage
         hamburger.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') return; e.preventDefault(); e.stopPropagation(); openNav(); });
         closeBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); closeNav(); });
         panel.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', function () { closeNav(); }); });
+        panel.querySelectorAll('[data-cart-open]').forEach(function (button) {
+          button.addEventListener('click', function () {
+            panel.style.display = 'none';
+            panel.classList.remove('is-leaving');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.classList.remove('is-open');
+          });
+        });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && panel.style.display !== 'none') closeNav(); });
       })();
     </script>

@@ -9,6 +9,22 @@ export interface Money {
   currencyCode: string;
 }
 
+export interface ShopifyProductImage {
+  url: string;
+  altText?: string;
+}
+
+export interface ShopifyProductVariant {
+  id: string;
+  title: string;
+  sku?: string;
+  availableForSale: boolean;
+  price: Money;
+  compareAtPrice?: Money;
+  selectedOptions: Array<{ name: string; value: string }>;
+  image?: ShopifyProductImage;
+}
+
 export interface ShopifyCartLine {
   id: string;
   quantity: number;
@@ -52,8 +68,10 @@ export interface ShopifyProduct {
   availableForSale: boolean;
   image?: string;
   imageAlt?: string;
+  images: ShopifyProductImage[];
   manufacturerPartNumber?: string;
   variantId?: string;
+  variants: ShopifyProductVariant[];
   specs: string[];
   fitment?: CatalogFitment;
   featured: boolean;
@@ -100,12 +118,16 @@ interface ProductNode {
   descriptionHtml: string;
   availableForSale: boolean;
   featuredImage?: { url: string; altText?: string };
+  images: { nodes: Array<{ url: string; altText?: string }> };
   variants: { nodes: Array<{
     id: string;
+    title: string;
     sku?: string;
     availableForSale: boolean;
     price: { amount: string; currencyCode: string };
     compareAtPrice?: { amount: string; currencyCode: string };
+    selectedOptions: Array<{ name: string; value: string }>;
+    image?: { url: string; altText?: string };
   }> };
   system?: { value: string };
   platforms?: { value: string };
@@ -128,8 +150,18 @@ const PRODUCT_FIELDS = `
   descriptionHtml
   availableForSale
   featuredImage { url altText }
-  variants(first: 1) {
-    nodes { id sku availableForSale price { amount currencyCode } compareAtPrice { amount currencyCode } }
+  images(first: 12) { nodes { url altText } }
+  variants(first: 50) {
+    nodes {
+      id
+      title
+      sku
+      availableForSale
+      price { amount currencyCode }
+      compareAtPrice { amount currencyCode }
+      selectedOptions { name value }
+      image { url altText }
+    }
   }
   system: metafield(namespace: "stroom", key: "system") { value }
   platforms: metafield(namespace: "stroom", key: "platforms") { value }
@@ -161,7 +193,19 @@ function statusValue(node: ProductNode): CatalogStatus {
 }
 
 function normalizeProduct(node: ProductNode): ShopifyProduct {
-  const variant = node.variants.nodes[0];
+  const variants: ShopifyProductVariant[] = node.variants.nodes.map((variant) => ({
+    id: variant.id,
+    title: variant.title,
+    sku: variant.sku,
+    availableForSale: variant.availableForSale,
+    price: { amount: Number(variant.price.amount), currencyCode: variant.price.currencyCode },
+    compareAtPrice: variant.compareAtPrice
+      ? { amount: Number(variant.compareAtPrice.amount), currencyCode: variant.compareAtPrice.currencyCode }
+      : undefined,
+    selectedOptions: variant.selectedOptions,
+    image: variant.image,
+  }));
+  const variant = variants.find((item) => item.availableForSale) || variants[0];
   const confidence = node.fitmentConfidence?.value;
   const fitmentConfidence = confidence === 'verified-on-car' || confidence === 'vendor-stated'
     ? confidence
@@ -179,15 +223,15 @@ function normalizeProduct(node: ProductNode): ShopifyProduct {
     platforms: listValue(node.platforms),
     raceStyles: listValue(node.raceStyles),
     status: statusValue(node),
-    price: variant ? { amount: Number(variant.price.amount), currencyCode: variant.price.currencyCode } : undefined,
-    compareAtPrice: variant?.compareAtPrice
-      ? { amount: Number(variant.compareAtPrice.amount), currencyCode: variant.compareAtPrice.currencyCode }
-      : undefined,
+    price: variant?.price,
+    compareAtPrice: variant?.compareAtPrice,
     availableForSale: Boolean(node.availableForSale && variant?.availableForSale),
     image: node.featuredImage?.url,
     imageAlt: node.featuredImage?.altText,
+    images: node.images.nodes,
     manufacturerPartNumber: variant?.sku,
     variantId: variant?.id,
+    variants,
     specs: listValue(node.specs),
     fitment: application ? {
       application,
