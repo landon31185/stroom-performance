@@ -5,3 +5,5 @@ These files are source photographs supplied by the Stroom owner. They are preser
 Before use, confirm the subject, product identity, usage permission, and any necessary crop or color treatment. Export web-optimized derivatives into `public/media/` with descriptive names; keep these originals unchanged.
 
 The screen-recording source remains outside this directory and is intentionally not included here.
+
+See `docs/OWNER_MEDIA_INVENTORY.md` for the current subject notes and recommended future placements.

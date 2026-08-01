@@ -54,6 +54,11 @@ price, and Shopify reports it as available for sale.
 
 ## 4. Initial product migration
 
+Before creating a record, have the owner complete
+[`OWNER_PRODUCT_AND_MEDIA_INTAKE.md`](./OWNER_PRODUCT_AND_MEDIA_INTAKE.md).
+It collects the price, source, fulfillment, fitment, and media facts that make
+a product safely publishable.
+
 Enter the four verified GM LS products as **Draft** Shopify products first:
 
 - PAC 1218 Beehive Valve Springs
