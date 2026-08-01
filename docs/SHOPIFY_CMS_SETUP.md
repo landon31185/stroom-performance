@@ -5,6 +5,10 @@ falls back to `src/content` only until the Shopify catalog is populated.
 
 ## 1. Store and API access
 
+For the owner-facing version of this request, use
+[`OWNER_NEXT_STEPS.md`](./OWNER_NEXT_STEPS.md). This document is the technical
+implementation guide after access is granted.
+
 1. Create or open the Stroom Shopify store.
 2. Install Shopify's **Headless** sales channel.
 3. Create Storefront API credentials with public read access for products,

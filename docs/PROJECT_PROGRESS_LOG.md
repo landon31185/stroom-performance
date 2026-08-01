@@ -44,6 +44,7 @@
 ## Key references
 
 - [`SHOPIFY_CMS_SETUP.md`](./SHOPIFY_CMS_SETUP.md) - technical Shopify configuration
+- [`OWNER_NEXT_STEPS.md`](./OWNER_NEXT_STEPS.md) - sendable owner launch instructions
 - [`OWNER_PRODUCT_AND_MEDIA_INTAKE.md`](./OWNER_PRODUCT_AND_MEDIA_INTAKE.md) - owner product worksheet
 - [`OWNER_MEDIA_INVENTORY.md`](./OWNER_MEDIA_INVENTORY.md) - source-photo subjects and future roles
 - [`SEO_LAUNCH_CHECKLIST.md`](./SEO_LAUNCH_CHECKLIST.md) - final search and launch validation
